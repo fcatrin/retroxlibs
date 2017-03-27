@@ -1,0 +1,91 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/keyboard_panel"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/pal_base1"
+    android:clickable="true"
+    android:orientation="vertical"
+    android:visibility="invisible" >
+
+    <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        >
+    <ImageView 
+        android:layout_width="@dimen/gamepad_width"
+        android:layout_height="@dimen/gamepad_height"
+        android:src="@drawable/gamepad"
+        />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+            
+            <TextView
+                android:id="@+id/txtGamepadMappingMessage"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3" 
+                android:gravity="right"
+                android:textSize="@dimen/text_normal"
+                android:text="Select gamepad button to map"
+                android:layout_marginRight="@dimen/spacing_small"
+                />
+            
+            <Button
+                android:id="@+id/btnGamepadButtonPrev"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_normal"
+                android:layout_marginRight="@dimen/spacing_small"
+                android:text="&lt;-" />
+
+            <TextView
+                android:id="@+id/txtGamepadButtonName"
+                android:layout_width="0dp"
+                android:text="Button A"
+                android:layout_weight="1" 
+                android:textSize="@dimen/text_normal"
+                android:layout_marginRight="@dimen/spacing_small"
+                android:gravity="center"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/btnGamepadButtonNext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_normal"
+                android:layout_marginRight="@dimen/spacing_small"
+                android:text="->" />
+
+            <TextView
+                android:id="@+id/txtGamepadSelectedKey"
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:textSize="@dimen/text_normal"
+                android:text="Mapped to -> Key ALT"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <retrobox.keyboard.KeyboardView
+            android:id="@+id/keyboard_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@color/pal_base2"
+            android:nextFocusDown="@id/keyboard_view"
+            android:nextFocusLeft="@id/keyboard_view"
+            android:nextFocusRight="@id/keyboard_view"
+            android:nextFocusUp="@id/keyboard_view" >
+        </retrobox.keyboard.KeyboardView>
+    </LinearLayout>
+
+</LinearLayout>
