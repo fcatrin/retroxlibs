@@ -413,7 +413,7 @@ public class RetroBoxDialog {
 
 	private static boolean isVisible(Activity activity, int dialogResourceId) {
 		View dialog = activity.findViewById(dialogResourceId);
-		return dialog.getVisibility() == View.VISIBLE;
+		return dialog !=null && dialog.getVisibility() == View.VISIBLE;
 	}
 
 	private static View getVisibleDialog(Activity activity) {

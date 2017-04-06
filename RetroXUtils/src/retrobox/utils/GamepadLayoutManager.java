@@ -108,6 +108,7 @@ public class GamepadLayoutManager {
 
 		public void layout(Activity activity, float ratioWidth, float ratioHeight) {
 			View v = activity.findViewById(labelResourceId);
+			if (v == null) return;
 
 			int top = 0;
 			int left = 0;
