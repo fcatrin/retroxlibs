@@ -2,12 +2,15 @@ package retrobox.vinput;
 
 import android.annotation.TargetApi;
 import android.os.Build;
+import android.util.Log;
 import android.view.InputDevice;
 import android.view.MotionEvent;
 
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 public class AnalogGamepad {
-	public enum Axis {MIN, CENTER, MAX};
+	private static final String LOGTAG = AnalogGamepad.class.getSimpleName();
+	public enum Axis {MIN, CENTER, MAX}
+	
 	float deadzone = 0.2f;
 	
 	Axis axisX = Axis.CENTER;
@@ -74,6 +77,11 @@ public class AnalogGamepad {
 		if (event.getAction() == MotionEvent.ACTION_MOVE && (event.getSource() & InputDevice.SOURCE_CLASS_JOYSTICK) == InputDevice.SOURCE_CLASS_JOYSTICK) {
 			GenericGamepad gamepad = Mapper.instance.resolveGamepad(event.getDevice().getDescriptor(), event.getDeviceId());
 			
+			if (gamepad == null) {
+				Log.d(LOGTAG, "Event from unknown descriptor " + event.getDevice().getDescriptor());
+				return false;
+			}
+			
 			float axisRx = 0;
 			float axisRy = 0;
 			
@@ -114,6 +122,7 @@ public class AnalogGamepad {
 			}
 			
 			listener.onTriggers(deviceDescriptor, deviceId, Math.abs(triggerL)>=deadzone, Math.abs(triggerR)>=deadzone);
+			listener.onTriggersAnalog(gamepad, deviceId, triggerL, triggerR);
 
 			return true;
 

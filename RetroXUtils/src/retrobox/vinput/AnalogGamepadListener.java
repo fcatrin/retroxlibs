@@ -9,4 +9,5 @@ public interface AnalogGamepadListener {
 	public void onDigitalX(GenericGamepad gamepad, Axis axis, boolean on);
 	public void onDigitalY(GenericGamepad gamepad, Axis axis, boolean on);
 	public void onTriggers(String deviceDescriptor, int deviceId, boolean left, boolean right);
+	public void onTriggersAnalog(GenericGamepad gamepad, int deviceId, float left, float right);
 }
