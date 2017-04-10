@@ -1,5 +1,6 @@
 package xtvapps.core;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,11 +22,19 @@ public final class AndroidFonts {
 	public static Typeface getFont(Context context, String name) {
 		Typeface font = knownFonts.get(name);
 		if (font == null) {
-			font = Typeface.createFromAsset(context.getAssets(),"fonts/" + name);
+			if (name.startsWith("/")) {
+				font = Typeface.createFromFile(name);
+			} else {
+				font = Typeface.createFromAsset(context.getAssets(),"fonts/" + name);
+			}
 			knownFonts.put(name, font);
 		}
 		//Log.d(LOGTAG, "typeface for " + name + " is " + (font == null?"null":"not null"));
 		return font;
+	}
+	
+	public static void setViewFont(View v, File file) {
+		setViewFont(v, file.getAbsolutePath());
 	}
 	
 	public static void setViewFont(View v, String name) {
