@@ -307,8 +307,10 @@ public class Mapper {
 	}
 	
 	public static boolean hasGamepads() {
-		boolean hasGamepads =  genericGamepads[0].deviceDescriptor!=null || genericGamepads[1].deviceDescriptor!=null;
-		return hasGamepads;
+		return hasGamepad(0) || hasGamepad(1);  // check player one or two
 	}
-	
+
+	public static boolean hasGamepad(int player) {
+		return genericGamepads[player].deviceDescriptor!=null;
+	}
 }
