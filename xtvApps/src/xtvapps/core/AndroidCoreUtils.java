@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
+import android.widget.Toast;
 
 public final class AndroidCoreUtils {
 	
@@ -18,6 +19,10 @@ public final class AndroidCoreUtils {
 		} catch (android.content.ActivityNotFoundException anfe) {
 		    context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + packageName)));
 		}
+	}
+
+	public static void toast(Context context, String message) {
+		Toast.makeText(context, message, Toast.LENGTH_LONG).show();
 	}
 
 }
