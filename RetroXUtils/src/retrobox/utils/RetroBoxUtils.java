@@ -1,12 +1,7 @@
 package retrobox.utils;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URLEncoder;
@@ -18,8 +13,6 @@ import java.util.Map;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
@@ -94,44 +87,16 @@ public class RetroBoxUtils {
 	}
 	
 	
-	private static String getLastFatalLog(Activity activity) {
-		String fatalLog = logcatFatal();
-		if (!Utils.isEmptyString(fatalLog)) {
-			SharedPreferences sharedPreferences = activity.getSharedPreferences("fatal_traces", Activity.MODE_PRIVATE);
-			String hash = Utils.md5(fatalLog);
-			String savedHash = sharedPreferences.getString("last_fatal_trace", ""); 
-			if (!hash.equals(savedHash)) {
-				Editor editor = sharedPreferences.edit();
-				editor.putString("last_fatal_trace", hash);
-				editor.commit();
-				return fatalLog;
-			}
-		}
-		return null;
-	}
-	
 	public static void initExceptionHandler(Activity activity, String appName, String userName) {
 		final File traceFile = new File(activity.getFilesDir(), "rxtrace.log");
-		String trace = "";
 		if (traceFile.exists()) {
 			try {
-				trace = Utils.loadString(traceFile);
+				String trace = Utils.loadString(traceFile);
 				traceFile.delete();
+				sendTrace(activity, appName, userName, trace);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		}
-		
-		String fatalLog = getLastFatalLog(activity);
-		if (!Utils.isEmptyString(fatalLog)) {
-			if (!Utils.isEmptyString(trace)) {
-				trace += "\n\n";
-			}
-			trace += fatalLog;
-		}
-		
-		if (!Utils.isEmptyString(trace)) {
-			sendTrace(activity, appName, userName, trace);
 		}
 		
 		
@@ -223,68 +188,4 @@ public class RetroBoxUtils {
 		return (man + " " + model).trim();
 	}
 	
-	private static String getShellOutput(String cmdline[]) {
-		StringBuilder log = new StringBuilder();
-
-		Process mLogcatProc = null;
-		BufferedReader reader = null;
-		String line;
-		
-		try {
-			mLogcatProc = Runtime.getRuntime().exec(cmdline);
-			reader = new BufferedReader(new InputStreamReader(
-					mLogcatProc.getInputStream()));
-	
-			while ((line = reader.readLine()) != null) {
-				log.append(line);
-				log.append("\n");
-			}
-			reader.close();
-		} catch (IOException e) {
-			log.append(e.toString());
-		} finally {
-			if (reader!=null) {
-				try {
-					reader.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		log.append("\n");
-		return log.toString();
-	}
-	
-	/*
-	private static String logcat(String packageName) {
-		final StringBuilder log = new StringBuilder();
-		log.append("AndroidRuntime Output\n");
-		log.append(getShellOutput(
-				new String[] { "logcat", "-d", "AndroidRuntime:E *:S" }));
-		
-		log.append("Fatal Output\n");
-		log.append(logcatFatal());
-
-		log.append("Application Output\n");
-		int PID = android.os.Process.getUidForName(packageName);
-		log.append(getShellOutput(
-				new String[] { "logcat", "-d", "|", "grep " + PID}));
-		
-		return log.toString();
-	}
-	*/
-	
-	private static String logcatFatal() {
-		String logcat = getShellOutput(
-				new String[] { "logcat", "-d"});
-		try {
-			Utils.saveString(new File("/sdcard/logcat.txt"), logcat);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-
 }
