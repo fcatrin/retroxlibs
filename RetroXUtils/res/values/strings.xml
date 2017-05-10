@@ -18,6 +18,7 @@
     <string name="addon_rbx_missing_no">Cancel</string>
     
     <string name="no_browser">Your device doesn\'t seem to have a web browser\n\nPlease open\n{url}\nin any other device</string>
+    <string name="browser_required">This action requires a web browser like Google Chrome or Firefox to be installed in your device</string>
     
     <string name="slot_empty">EMPTY</string>
     <string name="slot_latest">latest</string>

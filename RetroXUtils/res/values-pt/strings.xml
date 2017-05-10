@@ -18,6 +18,8 @@
     <string name="addon_rbx_missing_no">Cancelar</string>
     
     <string name="no_browser">Seu dispositivo não parece ter um navegador Web \n\n Por favor, acesse o endereço \n {url} \n em qualquer outro dispositivo</string>
+    <!--  TODO TRANSLATE -->
+    <string name="browser_required">This action requires a web browser like Google Chrome or Firefox to be installed in your device</string>
     
     <string name="slot_empty">VAZIO</string>
     <string name="slot_latest">mais recentes</string>
