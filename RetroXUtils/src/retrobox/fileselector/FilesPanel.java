@@ -1,5 +1,7 @@
 package retrobox.fileselector;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -46,6 +48,7 @@ public class FilesPanel {
 		long totalSpace;
 		public int nElements;
 		String error;
+		Exception e;
 	}
 	
 	public FilesPanel(Activity activity, VirtualFile sysRoot, ListView listView, TextView txtStorage, ImageView iconStorage, TextView txtPanelStatus1, TextView txtPanelStatus2,
@@ -205,6 +208,8 @@ public class FilesPanel {
 				
 				if (folderInfo.error != null) {
 					RetroBoxDialog.showAlert(activity, folderInfo.error);
+				} else if (folderInfo.e != null) {
+					RetroBoxDialog.showException(activity, folderInfo.e, null);
 				}
 			}
 		});
@@ -263,7 +268,7 @@ public class FilesPanel {
 			folderInfo.totalSpace = dir.getTotalSpace();
 			folderInfo.nElements = tmpList.size();
 		} catch (Exception e) {
-			folderInfo.error = e.getMessage();
+			folderInfo.e = e;
 		}
 		
 		folderInfo.list = list;

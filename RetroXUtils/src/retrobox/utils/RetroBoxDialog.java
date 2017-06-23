@@ -85,7 +85,7 @@ public class RetroBoxDialog {
 		final TextView text = (TextView)activity.findViewById(R.id.txtDialogAction);
 		text.setTextSize(12);
 			
-		String msg =  e.getMessage() + "\n" + sw.toString();
+		String msg =  e.toString() + "\n" + e.getMessage() + "\n" + sw.toString();
 		showAlert(activity, "Error", msg, callback);
 	}
 	
