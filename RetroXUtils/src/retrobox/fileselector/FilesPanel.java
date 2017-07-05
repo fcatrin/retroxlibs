@@ -23,6 +23,7 @@ import retrobox.utils.RetroBoxDialog.FileChooserConfig;
 import retrobox.utils.RetroBoxUtils;
 import retrobox.utils.ThreadedBackgroundTask;
 import xtvapps.core.Callback;
+import xtvapps.core.UserVisibleException;
 import xtvapps.vfile.VirtualFile;
 
 public class FilesPanel {
@@ -268,7 +269,11 @@ public class FilesPanel {
 			folderInfo.totalSpace = dir.getTotalSpace();
 			folderInfo.nElements = tmpList.size();
 		} catch (Exception e) {
-			folderInfo.e = e;
+			if (e instanceof UserVisibleException) {
+				folderInfo.error = e.getMessage();
+			} else {
+				folderInfo.e = e;
+			}
 		}
 		
 		folderInfo.list = list;
