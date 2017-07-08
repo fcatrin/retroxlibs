@@ -12,6 +12,7 @@ import java.util.Map;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -186,6 +187,14 @@ public class RetroBoxUtils {
 		if (model.toLowerCase(Locale.US).contains(man.toLowerCase(Locale.US))) man = "";
 		
 		return (man + " " + model).trim();
+	}
+	
+	public static void tryStartActivity(Activity parent, Intent intent) {
+		try {
+			parent.startActivity(intent);
+		} catch (ActivityNotFoundException e) {
+			RetroBoxDialog.showAlert(parent, "Cannot start activity"); // TODO Translate
+		}
 	}
 	
 }
