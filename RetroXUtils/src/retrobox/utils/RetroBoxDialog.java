@@ -9,9 +9,11 @@ import java.util.Locale;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
+import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
@@ -167,6 +169,91 @@ public class RetroBoxDialog {
 		});
 
 	}
+
+	public static void showAlertCustom(final Activity activity, int viewResourceId, 
+			Callback<View> customViewCallback, 
+			final Callback<View> customViewFocusCallback, 
+			String optYes, String optNo, 
+			final SimpleCallback callback, 
+			final SimpleCallback callbackNo) {
+		
+		activity.findViewById(R.id.modal_dialog_custom).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				closeDialog(activity, R.id.modal_dialog_custom, new SimpleCallback(){
+					@Override
+					public void onResult() {
+						if (callback!=null) {
+							callback.onError();
+							callback.onFinally();
+						}
+					}
+				});
+			}
+		});
+		
+		ViewGroup container = (ViewGroup)activity.findViewById(R.id.modal_dialog_custom_container);
+		container.removeAllViews();
+		
+		LayoutInflater layoutInflater = activity.getLayoutInflater();
+		View customView = layoutInflater.inflate(viewResourceId, container);
+		if (customViewCallback!=null) customViewCallback.onResult(customView);
+
+		
+		final Button btnYes = (Button)activity.findViewById(R.id.btnDialogCustomPositive);
+		final Button btnNo = (Button)activity.findViewById(R.id.btnDialogCustomNegative);
+		
+		if (Utils.isEmptyString(optYes)) optYes = "OK";
+		
+		btnYes.setText(optYes);
+		
+		btnYes.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				closeDialog(activity, R.id.modal_dialog_custom, callback);
+			}
+		});
+		
+		final boolean hasNoButton = !Utils.isEmptyString(optNo);
+		
+		if (hasNoButton) {
+			btnNo.setVisibility(View.VISIBLE);
+			btnNo.setText(optNo);
+			btnNo.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					closeDialog(activity, R.id.modal_dialog_custom, new SimpleCallback() {
+						@Override
+						public void onResult() {
+							if (callbackNo!=null) callbackNo.onResult();
+							if (callback!=null) callback.onError();
+							
+							if (callbackNo!=null) callbackNo.onFinally();
+							if (callback!=null) callback.onFinally();
+						}
+					});
+				}
+			});
+		} else {
+			btnNo.setVisibility(View.GONE);
+		}
+		
+		openDialog(activity, R.id.modal_dialog_custom, new SimpleCallback(){
+			@Override
+			public void onResult() {
+				if (customViewFocusCallback!=null) {
+					customViewFocusCallback.onResult(activity.findViewById(R.id.modal_dialog_custom));
+				} else {
+					Button activeButton = hasNoButton?btnNo:btnYes; 
+					activeButton.setFocusable(true);
+					activeButton.setFocusableInTouchMode(true);
+					activeButton.requestFocus();
+				}
+			}
+		});
+
+	}
+
 	
 	public static void showLogin(final Activity activity, String title, String user, String password, String optLogin, String optCancel, final Callback<LoginInfo> callback) {
 		
@@ -424,6 +511,7 @@ public class RetroBoxDialog {
 		View gamepadDialog = activity.findViewById(R.id.modal_dialog_gamepad);
 		View saveStateDialog = activity.findViewById(R.id.modal_dialog_savestates);
 		View loginDialog = activity.findViewById(R.id.modal_dialog_login);
+		View customDialog = activity.findViewById(R.id.modal_dialog_custom);
 		
 		View dialog =
 			isVisible(gamepadDialog)? gamepadDialog :
@@ -432,6 +520,7 @@ public class RetroBoxDialog {
 			isVisible(dialogChooser)   ? dialogChooser :
 			isVisible(saveStateDialog) ? saveStateDialog :
 			isVisible(loginDialog) ? loginDialog : 
+			isVisible(customDialog) ? customDialog :
 			isVisible(sideBar)      ? sideBar : null;
 		return dialog;
 	}
