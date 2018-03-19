@@ -54,7 +54,8 @@
                 <Button
                     android:id="@+id/btnDialogCustomPositive"
                     style="@style/ActionButton"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:paddingLeft="@dimen/spacing_normal"
                     android:paddingRight="@dimen/spacing_normal"
                     android:nextFocusRight="@+id/btnDialogCustomNegative"
@@ -64,7 +65,8 @@
                 <Button
                     android:id="@id/btnDialogCustomNegative"
                     style="@style/ActionButton"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:paddingLeft="@dimen/spacing_normal"
                     android:paddingRight="@dimen/spacing_normal"
                     android:nextFocusRight="@id/btnDialogCustomPositive"
