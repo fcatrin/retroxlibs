@@ -16,6 +16,8 @@ public class ListOptionAdapter extends BaseAdapter {
 	boolean hasIcons = false;
 	List<ListOption>options;
 
+	public static String fontName = RetroBoxUtils.FONT_DEFAULT_R;
+	
 	public ListOptionAdapter(List<ListOption> options) {
 		this.options = options;
 		for(ListOption option : options) {
@@ -48,8 +50,8 @@ public class ListOptionAdapter extends BaseAdapter {
 		TextView txtName = (TextView)optionView.findViewById(R.id.optionName);
 		TextView txtValue = (TextView)optionView.findViewById(R.id.optionValue);
 		
-		AndroidFonts.setViewFont(txtName, RetroBoxUtils.FONT_DEFAULT_R);
-		AndroidFonts.setViewFont(txtValue, RetroBoxUtils.FONT_DEFAULT_R);
+		AndroidFonts.setViewFont(txtName, fontName);
+		AndroidFonts.setViewFont(txtValue, fontName);
 		
 		ListOption kv = options.get(position);
 		String name = kv.getValue();
