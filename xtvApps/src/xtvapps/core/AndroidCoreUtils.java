@@ -1,5 +1,8 @@
 package xtvapps.core;
 
+import java.io.File;
+import java.io.IOException;
+
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -23,6 +26,17 @@ public final class AndroidCoreUtils {
 
 	public static void toast(Context context, String message) {
 		Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+	}
+	
+	public static void createNoMediaFile(File folder) {
+		File nomediaFile = new File(folder, ".nomedia");
+		if (!nomediaFile.exists()) {
+			try {
+				nomediaFile.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 }
