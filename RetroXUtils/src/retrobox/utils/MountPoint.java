@@ -8,6 +8,7 @@ public class MountPoint {
 	File dir;
 	String description;
 	String filesystem = "unknown";
+	boolean isWritable = false;
 	
 	public MountPoint(String path) {
 		this.dir = new File(path);
@@ -54,6 +55,15 @@ public class MountPoint {
 		return Utils.size2humanDetailed(getFreeSpace()) + " free of " + Utils.size2humanDetailed(getTotalSpace());
 	}
 	
+	
+	public boolean isWritable() {
+		return isWritable;
+	}
+
+	public void setWritable(boolean isWritable) {
+		this.isWritable = isWritable;
+	}
+
 	@Override
 	public String toString() {
 		return String.format("path:%s, desc:%s", dir!=null?dir.getAbsolutePath():"null", description);
