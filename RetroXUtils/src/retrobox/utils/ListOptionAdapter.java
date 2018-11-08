@@ -16,6 +16,8 @@ public class ListOptionAdapter extends BaseAdapter {
 	boolean hasIcons = false;
 	List<ListOption>options;
 
+	static ViewCustomizer viewCustomizer = null;
+	
 	public static String fontName = RetroBoxUtils.FONT_DEFAULT_R;
 	
 	public ListOptionAdapter(List<ListOption> options) {
@@ -77,8 +79,19 @@ public class ListOptionAdapter extends BaseAdapter {
 			icon.setVisibility(View.GONE);
 		}
 		
+		if (viewCustomizer!=null) {
+			viewCustomizer.customize(icon, txtName, txtValue);
+		}
+		
 		return optionView;
 	}
 
+	public static void setViewCustomizer(ViewCustomizer viewCustomizer) {
+		ListOptionAdapter.viewCustomizer = viewCustomizer;
+	}
 
+	public interface ViewCustomizer {
+		public void customize(ImageView icon, TextView txtName, TextView txtValue);
+	}
+	
 }
