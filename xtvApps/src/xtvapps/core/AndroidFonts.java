@@ -14,12 +14,21 @@ import android.widget.TextView;
 public final class AndroidFonts {
 	private static final String LOGTAG = AndroidFonts.class.getSimpleName();
 	
+	private static Map<String, String>   namedFonts = new HashMap<String, String>();
 	private static Map<String, Typeface> knownFonts = new HashMap<String, Typeface>();
 	
 	private AndroidFonts() {
 	}
 	
+	public static void addNamedFont(String name, String spec) {
+		namedFonts.put(name, spec);
+	}
+	
 	public static Typeface getFont(Context context, String name) {
+		String namedFont = namedFonts.get(name);
+		
+		if (namedFont!=null) name = namedFont;
+		
 		Typeface font = knownFonts.get(name);
 		if (font == null) {
 			if (name.startsWith("/")) {
