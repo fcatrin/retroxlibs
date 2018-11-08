@@ -13,6 +13,7 @@
         android:layout_weight="1" />
 
     <LinearLayout
+        android:id="@+id/modal_dialog_chooser_border"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_margin="@dimen/spacing_normal"
@@ -23,6 +24,7 @@
         android:padding="@dimen/spacing_fine" >
 
         <LinearLayout
+            android:id="@+id/modal_dialog_chooser_background"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
@@ -41,6 +43,7 @@
                 android:textColor="@color/pal_text3" />
 
             <LinearLayout
+                android:id="@+id/modal_dialog_chooser_device"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -88,6 +91,7 @@
                 android:nextFocusUp="@id/lstDialogChooser" />
 
             <LinearLayout
+                android:id="@+id/modal_dialog_chooser_footer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/pal_base2"

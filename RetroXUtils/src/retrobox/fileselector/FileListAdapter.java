@@ -7,16 +7,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import retrobox.utils.R;
 import retrobox.utils.RetroBoxUtils;
 import xtvapps.core.AndroidFonts;
+import xtvapps.core.TintableImageView;
 import xtvapps.vfile.VirtualFile;
 
 public class FileListAdapter extends BaseAdapter {
 
+	private static ViewCustomizer viewCustomizer;
 	boolean hasIcons = false;
 	List<VirtualFile>files;
 
@@ -52,7 +53,7 @@ public class FileListAdapter extends BaseAdapter {
 		AndroidFonts.setViewFont(txtName, RetroBoxUtils.FONT_DEFAULT_R);
 		AndroidFonts.setViewFont(txtSize, RetroBoxUtils.FONT_DEFAULT_R);
 		
-		ImageView icon = (ImageView)fileView.findViewById(R.id.listFileIcon);
+		TintableImageView icon = (TintableImageView)fileView.findViewById(R.id.listFileIcon);
 		ProgressBar iconLoading = (ProgressBar)fileView.findViewById(R.id.listFileLoading);
 
 		VirtualFile vf = (VirtualFile)getItem(position);
@@ -83,6 +84,18 @@ public class FileListAdapter extends BaseAdapter {
 			iconLoading.setVisibility(View.GONE);
 		}
 		
+		if (viewCustomizer!=null) {
+			viewCustomizer.customize(icon, iconLoading, txtName, txtSize);
+		}
+		
 		return fileView;
+	}
+	
+	public static void setViewCustomizer(ViewCustomizer viewCustomizer) {
+		FileListAdapter.viewCustomizer = viewCustomizer;
+	}
+
+	public interface ViewCustomizer {
+		public void customize(TintableImageView icon, ProgressBar iconLoading, TextView txtName, TextView txtSize);
 	}
 }
