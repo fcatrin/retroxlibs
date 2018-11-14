@@ -18,7 +18,7 @@ import android.os.Environment;
 import android.util.Log;
 
 public class DriveUtils {
-	private static final String validFileSystems[] = {"vfat", "sdcardfs", "fuse", "fuseblk", "ntfs", "esdfs", "smb", "cifs"};
+	private static final String validFileSystems[] = {"vfat", "sdcardfs", "fuse", "fuseblk", "ntfs", "esdfs", "smb", "cifs", "tntfs"};
 
 	private static final String LOGTAG = DriveUtils.class.getSimpleName();
 	
