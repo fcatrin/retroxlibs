@@ -29,13 +29,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="@color/pal_base2"
+            android:background="@color/pal_base1"
+            android:padding="@dimen/spacing_big"
             android:gravity="center"
             android:orientation="vertical" >
             <FrameLayout 
                android:id="@+id/modal_dialog_custom_container"
-               android:background="@color/pal_base1"
-               android:padding="@dimen/spacing_big"
 	            android:layout_width="match_parent"
 	            android:layout_height="wrap_content" />
 
@@ -43,10 +42,9 @@
 				android:id="@+id/modal_dialog_custom_buttons"                
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/pal_base1"
+                android:layout_marginTop="@dimen/spacing_normal"
                 android:gravity="center"
-                android:orientation="horizontal"
-                android:padding="@dimen/spacing_normal" >
+                android:orientation="horizontal" >
 
                 <Button
                     android:id="@+id/btnDialogCustomPositive"
