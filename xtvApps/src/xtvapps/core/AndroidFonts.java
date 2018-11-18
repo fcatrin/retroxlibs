@@ -24,6 +24,10 @@ public final class AndroidFonts {
 		namedFonts.put(name, spec);
 	}
 	
+	public static String getNamedFont(String name) {
+		return namedFonts.get(name);
+	}
+	
 	public static Typeface getFont(Context context, String name) {
 		String namedFont = namedFonts.get(name);
 		
