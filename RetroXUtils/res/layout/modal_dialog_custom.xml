@@ -35,10 +35,7 @@
             <FrameLayout 
                android:id="@+id/modal_dialog_custom_container"
                android:background="@color/pal_base1"
-               android:paddingTop="@dimen/spacing_normal"
-               android:paddingLeft="@dimen/spacing_big"
-               android:paddingRight="@dimen/spacing_big"
-               android:paddingBottom="@dimen/spacing_normal"
+               android:padding="@dimen/spacing_big"
 	            android:layout_width="match_parent"
 	            android:layout_height="wrap_content" />
 
