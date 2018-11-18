@@ -210,7 +210,15 @@ public class RetroBoxDialog {
 		btnYes.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				closeDialog(activity, R.id.modal_dialog_custom, callback);
+				closeDialog(activity, R.id.modal_dialog_custom, new SimpleCallback() {
+					@Override
+					public void onResult() {
+						if (callback!=null) {
+							callback.onResult();
+							callback.onFinally();
+						}
+					}
+				});
 			}
 		});
 		
