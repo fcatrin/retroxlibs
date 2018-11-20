@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.List;
-import java.util.Locale;
 
 import android.app.Activity;
 import android.os.AsyncTask;
@@ -203,47 +202,55 @@ public class RetroBoxDialog {
 		final Button btnYes = (Button)activity.findViewById(R.id.btnDialogCustomPositive);
 		final Button btnNo = (Button)activity.findViewById(R.id.btnDialogCustomNegative);
 		
-		if (Utils.isEmptyString(optYes)) optYes = "OK";
-		
-		btnYes.setText(optYes);
-		
-		btnYes.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				closeDialog(activity, R.id.modal_dialog_custom, new SimpleCallback() {
-					@Override
-					public void onResult() {
-						if (callback!=null) {
-							callback.onResult();
-							callback.onFinally();
-						}
-					}
-				});
-			}
-		});
-		
 		final boolean hasNoButton = !Utils.isEmptyString(optNo);
+		final boolean hasButtons = optYes != null || optNo != null;
 		
-		if (hasNoButton) {
-			btnNo.setVisibility(View.VISIBLE);
-			btnNo.setText(optNo);
-			btnNo.setOnClickListener(new OnClickListener() {
+		View actions = activity.findViewById(R.id.modal_dialog_custom_buttons);
+		if (!hasButtons) {
+			actions.setVisibility(View.GONE);
+		} else {
+			actions.setVisibility(View.VISIBLE);
+		
+			if (Utils.isEmptyString(optYes)) optYes = "OK";
+			
+			btnYes.setText(optYes);
+			
+			btnYes.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					closeDialog(activity, R.id.modal_dialog_custom, new SimpleCallback() {
 						@Override
 						public void onResult() {
-							if (callbackNo!=null) callbackNo.onResult();
-							if (callback!=null) callback.onError();
-							
-							if (callbackNo!=null) callbackNo.onFinally();
-							if (callback!=null) callback.onFinally();
+							if (callback!=null) {
+								callback.onResult();
+								callback.onFinally();
+							}
 						}
 					});
 				}
 			});
-		} else {
-			btnNo.setVisibility(View.GONE);
+			
+			if (hasNoButton) {
+				btnNo.setVisibility(View.VISIBLE);
+				btnNo.setText(optNo);
+				btnNo.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						closeDialog(activity, R.id.modal_dialog_custom, new SimpleCallback() {
+							@Override
+							public void onResult() {
+								if (callbackNo!=null) callbackNo.onResult();
+								if (callback!=null) callback.onError();
+								
+								if (callbackNo!=null) callbackNo.onFinally();
+								if (callback!=null) callback.onFinally();
+							}
+						});
+					}
+				});
+			} else {
+				btnNo.setVisibility(View.GONE);
+			}
 		}
 		
 		openDialog(activity, R.id.modal_dialog_custom, new SimpleCallback(){
@@ -252,10 +259,12 @@ public class RetroBoxDialog {
 				if (customViewFocusCallback!=null) {
 					customViewFocusCallback.onResult(activity.findViewById(R.id.modal_dialog_custom));
 				} else {
-					Button activeButton = hasNoButton?btnNo:btnYes; 
-					activeButton.setFocusable(true);
-					activeButton.setFocusableInTouchMode(true);
-					activeButton.requestFocus();
+					if (hasButtons) {
+						Button activeButton = hasNoButton?btnNo:btnYes; 
+						activeButton.setFocusable(true);
+						activeButton.setFocusableInTouchMode(true);
+						activeButton.requestFocus();
+					}
 				}
 			}
 		});
