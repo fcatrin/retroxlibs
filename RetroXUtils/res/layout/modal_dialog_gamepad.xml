@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/modal_background_gamepad"
     android:clickable="true"
+    android:focusable="true"
     android:gravity="center"
     android:orientation="vertical"
     android:visibility="gone" >

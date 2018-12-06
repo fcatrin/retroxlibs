@@ -7,6 +7,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -416,7 +417,13 @@ public class RetroBoxDialog {
 		dialog.updateGamepadVisible(activity);
 		
 		dialog.setInfo(textTop, textBottom);
-		openDialog(activity, R.id.modal_dialog_gamepad, null);
+		openDialog(activity, R.id.modal_dialog_gamepad, new SimpleCallback() {
+			
+			@Override
+			public void onResult() {
+				activity.findViewById(R.id.modal_dialog_gamepad).requestFocus();
+			}
+		});
 	}
 	
 	public static void showListDialog(final Activity activity, String title, List<ListOption> options, Callback<KeyValue> callback) {
@@ -547,8 +554,9 @@ public class RetroBoxDialog {
 	}
 	
 	public static boolean onKeyDown(Activity activity, int keyCode, final KeyEvent event) {
-		// TODO use gamepad mappings
-		//Log.v("RetroBoxDialog", "DOWN keyCode: " + keyCode);
+		if (isVisible(activity, R.id.modal_dialog_gamepad)) {
+			return true;
+		}
 		return false;
 	}
 	
