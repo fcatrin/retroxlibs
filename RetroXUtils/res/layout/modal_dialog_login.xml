@@ -3,9 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/modal_background"
-    android:orientation="horizontal"
     android:clickable="true"
-    android:focusable="true"
+    android:orientation="horizontal"
     android:visibility="invisible" >
 
     <TextView
@@ -14,79 +13,94 @@
         android:layout_weight="1" />
 
     <LinearLayout
+        android:id="@+id/modal_dialog_login_border"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_weight="2"
         android:background="@color/pal_base2"
-        android:gravity="center"
         android:clickable="true"
-        android:padding="@dimen/spacing_fine"
-        android:orientation="horizontal" >
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="@dimen/spacing_fine" >
 
         <LinearLayout
+            android:id="@+id/modal_dialog_login_background"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:padding="@dimen/spacing_big"
             android:background="@color/pal_base1"
             android:gravity="center"
             android:orientation="vertical" >
 
-            <TextView
-                android:id="@+id/txtDialogLogin"
-                style="@style/NormalFont"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/spacing_small"
-                android:layout_marginBottom="@dimen/spacing_normal"
-                android:gravity="center" />
-           
-            <TextView
-                style="@style/NormalFont"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/spacing_small"
-                android:labelFor="@+id/txtDialogLoginUser"
-                android:text="@string/login_user"/>
-            <EditText
-                android:id="@id/txtDialogLoginUser"
-                style="@style/NormalFont"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/spacing_small"
-                android:background="@color/pal_base2"
-                android:imeOptions="flagNoExtractUi|actionNext"
-                android:nextFocusRight="@+id/txtDialogLoginPassword"
-                android:nextFocusLeft="@id/txtDialogLoginPassword"
-                android:nextFocusUp="@id/txtDialogLoginPassword"
-                android:nextFocusDown="@id/txtDialogLoginPassword"
-                android:nextFocusForward="@id/txtDialogLoginPassword"
-                android:singleLine="true" />
-            <TextView
-                style="@style/NormalFont"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/spacing_small"
-                android:labelFor="@id/txtDialogLoginPassword"
-                android:text="@string/login_pass" />
-            <EditText
-                android:id="@id/txtDialogLoginPassword"
-                style="@style/NormalFont"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/spacing_small"
-                android:background="@color/pal_base2"
-                android:inputType="textPassword"
-                android:imeOptions="flagNoExtractUi|actionSend"
-				android:nextFocusRight="@+id/txtDialogLoginUser"
-                android:nextFocusLeft="@id/txtDialogLoginUser"
-                android:nextFocusUp="@id/txtDialogLoginUser"
-                android:nextFocusDown="@+id/btnDialogLoginPositive"
-                
-                android:singleLine="true"/>
+                android:orientation="vertical"
+                android:padding="@dimen/spacing_normal" >
+
+                <TextView
+                    android:id="@+id/txtDialogLogin"
+                    style="@style/NormalFont"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing_normal"
+                    android:gravity="center"
+                    android:padding="@dimen/spacing_small" />
+
+                <TextView
+                    android:id="@+id/txtDialogLoginUserLabel"
+                    style="@style/NormalFont"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:labelFor="@+id/txtDialogLoginUser"
+                    android:padding="@dimen/spacing_small"
+                    android:text="@string/login_user" />
+
+                <EditText
+                    android:id="@id/txtDialogLoginUser"
+                    style="@style/NormalFont"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/pal_base2"
+                    android:imeOptions="flagNoExtractUi|actionNext"
+                    android:nextFocusDown="@+id/txtDialogLoginPassword"
+                    android:nextFocusForward="@id/txtDialogLoginPassword"
+                    android:nextFocusLeft="@id/txtDialogLoginPassword"
+                    android:nextFocusRight="@id/txtDialogLoginPassword"
+                    android:nextFocusUp="@id/txtDialogLoginPassword"
+                    android:padding="@dimen/spacing_small"
+                    android:textCursorDrawable="@null"
+                    android:singleLine="true" />
+
+                <TextView
+                    android:id="@+id/txtDialogLoginPasswordLabel"
+                    style="@style/NormalFont"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:labelFor="@id/txtDialogLoginPassword"
+                    android:padding="@dimen/spacing_small"
+                    android:text="@string/login_pass" />
+
+                <EditText
+                    android:id="@id/txtDialogLoginPassword"
+                    style="@style/NormalFont"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/pal_base2"
+                    android:imeOptions="flagNoExtractUi|actionSend"
+                    android:inputType="textPassword"
+                    android:nextFocusDown="@+id/btnDialogLoginPositive"
+                    android:nextFocusLeft="@id/txtDialogLoginUser"
+                    android:nextFocusRight="@+id/txtDialogLoginUser"
+                    android:nextFocusUp="@id/txtDialogLoginUser"
+                    android:padding="@dimen/spacing_small"
+                    android:textCursorDrawable="@null"
+                    android:singleLine="true" />
+            </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/modal_dialog_login_buttons"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/pal_base1"
@@ -98,27 +112,26 @@
                     android:id="@id/btnDialogLoginPositive"
                     style="@style/ActionButton"
                     android:layout_width="wrap_content"
+                    android:nextFocusDown="@id/txtDialogLoginUser"
+                    android:nextFocusLeft="@+id/btnDialogLoginNegative"
+                    android:nextFocusRight="@id/btnDialogLoginNegative"
+                    android:nextFocusUp="@id/txtDialogLoginPassword"
                     android:paddingLeft="@dimen/spacing_normal"
                     android:paddingRight="@dimen/spacing_normal"
-                    android:nextFocusRight="@+id/btnDialogLoginNegative"
-                    android:nextFocusDown="@id/txtDialogLoginUser"
-                    android:nextFocusLeft="@id/btnDialogLoginNegative"
-                    android:nextFocusUp="@id/txtDialogLoginPassword"
-                    android:text="@string/login_yes"
-                 	/>
+                    android:text="@string/login_yes" />
+
                 <Button
                     android:id="@id/btnDialogLoginNegative"
                     style="@style/ActionButton"
                     android:layout_width="wrap_content"
-                    android:paddingLeft="@dimen/spacing_normal"
-                    android:paddingRight="@dimen/spacing_normal"
-                    android:nextFocusRight="@id/btnDialogLoginPositive"
                     android:nextFocusDown="@id/txtDialogLoginUser"
                     android:nextFocusLeft="@id/btnDialogLoginPositive"
+                    android:nextFocusRight="@id/btnDialogLoginPositive"
                     android:nextFocusUp="@id/txtDialogLoginPassword"
-                    android:text="@string/login_no"
-                     />
-                </LinearLayout>
+                    android:paddingLeft="@dimen/spacing_normal"
+                    android:paddingRight="@dimen/spacing_normal"
+                    android:text="@string/login_no" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
