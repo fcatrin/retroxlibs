@@ -570,6 +570,10 @@ public class RetroBoxDialog {
 				return true;
 			}
 			
+			if (cbGamepadDialog!=null) {
+				cbGamepadDialog.onError();
+			}
+			
 			cbGamepadDialog = null;
 			cancelDialog(activity);
 			return true;
