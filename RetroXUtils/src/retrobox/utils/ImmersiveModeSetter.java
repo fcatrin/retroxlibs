@@ -3,10 +3,13 @@ package retrobox.utils;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 
 public abstract class ImmersiveModeSetter {
+	private static final String LOGTAG = ImmersiveModeSetter.class.getSimpleName();
+	
 	public static ImmersiveModeSetter get() {
 		if (android.os.Build.VERSION.SDK_INT>=android.os.Build.VERSION_CODES.KITKAT) {
 			return ImmersiveModeSetterKitKat.instance;
@@ -25,6 +28,27 @@ public abstract class ImmersiveModeSetter {
 				get().setImmersiveMode(window, stable);
 			}
 		}, 1000);
+	}
+	
+	private static boolean postPeriodic = false;
+	
+	public static void stop() {
+		postPeriodic = false;
+	}
+	
+	public static void postImmersiveModePeriodic(final Handler handler, final Window window, final boolean stable, final long period) {
+		postPeriodic = true;
+		final Runnable task = new Runnable(){
+			@Override
+			public void run() {
+				get().setImmersiveMode(window, stable);
+				if (postPeriodic) {
+					postImmersiveModePeriodic(handler, window, stable, period);
+				}
+			}
+		};
+		
+		handler.postDelayed(task, period);
 	}
 	
 	private static class ImmersiveModeSetterLegacy extends ImmersiveModeSetter {
