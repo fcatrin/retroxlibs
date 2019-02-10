@@ -219,26 +219,44 @@ public final class Utils {
 			return "";
 		}
 	}
-	
-	public static String md5(byte[] data) {
-		try {
-			// Create MD5 Hash
-			MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
-			digest.update(data);
-			byte messageDigest[] = digest.digest();
 
-			// Create Hex String
-			StringBuffer hexString = new StringBuffer();
-			for (int i = 0; i < messageDigest.length; i++) {
-				String s = Integer.toHexString(BYTE_MASK & messageDigest[i]);
-				if (s.length()<2) s = "0" + s;
-				hexString.append(s);
-			}
-			return hexString.toString();
+	public static String sha1(String s) {
+		try {
+			return sha1(s.getBytes("UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			return "";
+		}
+	}
+
+	public static String md5(byte[] data) {
+		return digest("MD5", data);
+	}
+	
+	public static String sha1(byte[] data) {
+		return digest("SHA-1", data);
+	}
+	
+	private static String digest(String method, byte[] data) {
+		try {
+			MessageDigest digest = java.security.MessageDigest.getInstance(method);
+			digest.update(data);
+			return hexString(digest.digest());
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		}
 		return "";
+	}
+	
+	public static String hexString(byte[] data) {
+		// Create Hex String
+		StringBuffer hexString = new StringBuffer();
+		for (int i = 0; i < data.length; i++) {
+			String s = Integer.toHexString(BYTE_MASK & data[i]);
+			if (s.length()<2) s = "0" + s;
+			hexString.append(s);
+		}
+		return hexString.toString();
 	}
 
 	public static boolean isEmptyString(String s) {
