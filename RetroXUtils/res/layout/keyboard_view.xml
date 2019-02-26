@@ -13,10 +13,10 @@
         android:layout_weight="1"
         android:gravity="center"
         >
-    <ImageView 
+    <retrobox.utils.GamepadView 
+        android:id="@+id/keyboardMapGamepad"
         android:layout_width="@dimen/gamepad_width"
         android:layout_height="@dimen/gamepad_height"
-        android:src="@drawable/gamepad"
         />
     </LinearLayout>
     <LinearLayout

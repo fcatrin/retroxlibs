@@ -42,5 +42,15 @@
 	<color name="pal_text_hl">#F0FFCC66</color>
 		
 	<color name="pal_hl_background">#D0FF6600</color>
-			
+	
+    <color name="gamepad_press_end">#E0F0F0F0</color>
+    <color name="gamepad_press_center">#E0FF0000</color>
+    <color name="gamepad_press_start">#E0E0E0E0</color>
+    <color name="gamepad_press_border">#E0E04040</color>
+
+    <color name="gamepad_press_analog_end">#E0F0F0F0</color>
+    <color name="gamepad_press_analog_center">#E00000FF</color>
+    <color name="gamepad_press_analog_start">#E0E0E0E0</color>
+    <color name="gamepad_press_analog_border">#E04040E0</color>
+				
 </resources>
