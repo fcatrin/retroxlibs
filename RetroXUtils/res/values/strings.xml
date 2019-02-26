@@ -37,4 +37,22 @@
     <string name="login_pass">Password</string>
     <string name="login_yes">Log in</string>
     <string name="login_no">Cancel</string>
+    
+    <string name="gamepad_label_up">Up</string>
+    <string name="gamepad_label_down">Down</string>
+    <string name="gamepad_label_left">Left</string>
+    <string name="gamepad_label_right">Right</string>
+    <string name="gamepad_label_a">Button A</string>
+    <string name="gamepad_label_b">Button B</string>
+    <string name="gamepad_label_x">Button X</string>
+    <string name="gamepad_label_y">Button Y</string>
+    <string name="gamepad_label_tl">Button L</string>
+    <string name="gamepad_label_tr">Button R</string>
+    <string name="gamepad_label_tl2">Button L2</string>
+    <string name="gamepad_label_tr2">Button R2</string>
+    <string name="gamepad_label_tl3">Button L3</string>
+    <string name="gamepad_label_tr3">Button R3</string>
+    <string name="gamepad_label_select">Select</string>
+    <string name="gamepad_label_start">Start</string>
+    
 </resources>

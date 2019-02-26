@@ -2,6 +2,7 @@ package retrobox.vinput;
 
 import android.util.SparseBooleanArray;
 import android.view.KeyEvent;
+import retrobox.utils.R;
 
 public class GenericGamepad {
 	
@@ -12,6 +13,25 @@ public class GenericGamepad {
 		"BTN_A", "BTN_B", "BTN_X", "BTN_Y", 
 		"TL", "TR", "TL2", "TR2",
 		"TL3", "TR3", "SELECT", "START"
+	};
+	
+	public static int eventLabelResourceIds[] = {
+			R.string.gamepad_label_up,
+			R.string.gamepad_label_down,
+			R.string.gamepad_label_left,
+			R.string.gamepad_label_right,
+			R.string.gamepad_label_a,
+			R.string.gamepad_label_b,
+			R.string.gamepad_label_x,
+			R.string.gamepad_label_y,
+			R.string.gamepad_label_tl,
+			R.string.gamepad_label_tr,
+			R.string.gamepad_label_tl2,
+			R.string.gamepad_label_tr2,
+			R.string.gamepad_label_tl3,
+			R.string.gamepad_label_tr3,
+			R.string.gamepad_label_select,
+			R.string.gamepad_label_start,
 	};
 
 	SparseBooleanArray triggerState = new SparseBooleanArray();
