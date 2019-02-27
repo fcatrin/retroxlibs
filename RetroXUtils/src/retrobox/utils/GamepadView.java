@@ -3,17 +3,17 @@ package retrobox.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import retrobox.utils.GamepadLayoutManager.ButtonId;
-import retrobox.utils.GamepadLayoutManager.ButtonLabelBox;
+import xtvapps.core.AndroidFonts;
 
 public class GamepadView extends FrameLayout {
-	private static final int REF_GAMEPAD_WIDTH = 540;
-	private static final int REF_GAMEPAD_HEIGHT = 360;
+	private static final int REF_GAMEPAD_WIDTH = 458;
+	private static final int REF_GAMEPAD_HEIGHT = 300;
 
 	public enum EventId {
 		UP, DOWN, LEFT, RIGHT,
@@ -31,7 +31,9 @@ public class GamepadView extends FrameLayout {
 			"RX", "RY"
 		};
 	
-	ButtonLabelBox labelBoxes[] = new ButtonLabelBox[eventNames.length]; 
+	ButtonLabelBox labelBoxes[] = new ButtonLabelBox[eventNames.length];
+	private int textSize;
+	private int textColor; 
 
 	public GamepadView(Context context) {
 		super(context);
@@ -46,21 +48,33 @@ public class GamepadView extends FrameLayout {
 	}
 	
 	public void init() {
-		new ButtonLabelBox(this, ButtonId.BTN_L2, 92, 8);
-		new ButtonLabelBox(this, ButtonId.BTN_L1, 92, 40);
-		new ButtonLabelBox(this, ButtonId.BTN_R2, 420, 8);
-		new ButtonLabelBox(this, ButtonId.BTN_R1, 420, 40);
-		new ButtonLabelBox(this, ButtonId.BTN_L3, 175, 204);
-		new ButtonLabelBox(this, ButtonId.BTN_R3, 334, 204);
-		new ButtonLabelBox(this, ButtonId.BTN_A, 451, 127);
-		new ButtonLabelBox(this, ButtonId.BTN_B, 415, 163);
-		new ButtonLabelBox(this, ButtonId.BTN_X, 415, 92);
-		new ButtonLabelBox(this, ButtonId.BTN_Y, 379, 127);
-		new ButtonLabelBox(this, ButtonId.BTN_SELECT, 225, 126);
-		new ButtonLabelBox(this, ButtonId.BTN_START, 285, 126);
+
+		textSize = getResources().getDimensionPixelSize(R.dimen.text_small);
+		textColor = getResources().getColor(R.color.pal_text_hl);
+		
+		new ButtonLabelBox(this, EventId.UP, 95, 90);
+		new ButtonLabelBox(this, EventId.DOWN, 95, 146);
+		new ButtonLabelBox(this, EventId.LEFT, 65, 118);
+		new ButtonLabelBox(this, EventId.RIGHT, 124, 118);
+		
+		new ButtonLabelBox(this, EventId.BTN_L2, 90, 15);
+		new ButtonLabelBox(this, EventId.BTN_L1, 90, 45);
+		new ButtonLabelBox(this, EventId.BTN_R2, 368, 15);
+		new ButtonLabelBox(this, EventId.BTN_R1, 368, 45);
+		new ButtonLabelBox(this, EventId.BTN_L3, 161, 183);
+		new ButtonLabelBox(this, EventId.BTN_R3, 296, 183);
+
+		new ButtonLabelBox(this, EventId.RX, 339, 183);
+		new ButtonLabelBox(this, EventId.RY, 296, 227);
+		
+		new ButtonLabelBox(this, EventId.BTN_A, 394, 118);
+		new ButtonLabelBox(this, EventId.BTN_B, 364, 150);
+		new ButtonLabelBox(this, EventId.BTN_X, 333, 118);
+		new ButtonLabelBox(this, EventId.BTN_Y, 364, 87);
+		new ButtonLabelBox(this, EventId.BTN_SELECT, 203, 116);
+		new ButtonLabelBox(this, EventId.BTN_START, 252, 116);
 		
 		setBackgroundResource(R.drawable.gamepad);
-		setAlpha(0.5f);
 		
 		this.post(new Runnable(){
 
@@ -81,16 +95,16 @@ public class GamepadView extends FrameLayout {
 	}
 	
 	public class ButtonLabelBox {
-		ButtonId buttonId;
+		EventId eventId;
 		float x;
 		float y;
 		String label;
 		TextView  textView;
 		ImageView imageView;
 		
-		public ButtonLabelBox(ViewGroup parent, ButtonId buttonId, float x, float y) {
-			this.buttonId = buttonId;
-			labelBoxes[buttonId.ordinal()] = this;
+		public ButtonLabelBox(ViewGroup parent, EventId eventId, float x, float y) {
+			this.eventId = eventId;
+			labelBoxes[eventId.ordinal()] = this;
 			
 			this.x = x / REF_GAMEPAD_WIDTH;
 			this.y = y / REF_GAMEPAD_HEIGHT;
@@ -100,9 +114,16 @@ public class GamepadView extends FrameLayout {
 			
 			parent.addView(imageView);
 			parent.addView(textView);
-			
+
+			AndroidFonts.setViewFont(textView, RetroBoxUtils.FONT_DEFAULT_R);
+			textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
+			textView.setTextColor(textColor);
 			textView.setText("BUTTON");
-			imageView.setImageResource(R.drawable.gamepad_press);
+			
+			int buttonResourceId = eventId == EventId.RX || eventId == EventId.RY ?
+					R.drawable.gamepad_press_analog : R.drawable.gamepad_press;
+			
+			imageView.setImageResource(buttonResourceId);
 		}
 		
 		public void setLabel(Activity activity, String label) {
@@ -128,8 +149,8 @@ public class GamepadView extends FrameLayout {
 			imageLayoutParams.width = buttonWidth;
 			imageLayoutParams.height = buttonHeight;
 			imageLayoutParams.leftMargin = (int) (x * gamepadWidth - buttonWidth / 2);
-			imageLayoutParams.topMargin  = (int) (y * gamepadHeight - buttonHeight /2); 
-			
+			imageLayoutParams.topMargin  = (int) (y * gamepadHeight - buttonHeight /2);
+
 		}
 		
 	}
