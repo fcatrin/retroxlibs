@@ -11,7 +11,8 @@ public class KeyboardLayout {
 	public void addRow(String labels[], int codes[]) {
 		List<KeyDef> row = new ArrayList<KeyDef>();
 		for(int i=0; i<labels.length; i++) {
-			row.add(new KeyDef(labels[i], codes[i]));
+			// row.add(new KeyDef(labels[i], codes[i]));
+			row.add(new KeyDef(labels[i], 0)); // easier testing
 		}
 		keys.add(row);
 	}

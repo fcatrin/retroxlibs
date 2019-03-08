@@ -3,9 +3,14 @@ package retrobox.keyboard;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.ContextThemeWrapper;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -63,15 +68,22 @@ public class KeyboardView extends FrameLayout {
 		KeyboardLayout keylayout = keylayouts.get(index);
 		for(List<KeyDef> row : keylayout.getKeys()) {
 			for(KeyDef keydef : row) {
-				final Button view = new Button(ctx);
+				final Button view = new Button(new ContextThemeWrapper(ctx, R.style.KeyButton), null, 0);
 				view.setLayoutParams(new LinearLayout.LayoutParams(
-				                                     LinearLayout.LayoutParams.MATCH_PARENT,
-				                                     LinearLayout.LayoutParams.WRAP_CONTENT));
-				view.setBackgroundResource(R.drawable.button_bar);
-				view.setTextSize(ctx.getResources().getDimensionPixelSize(R.dimen.text_normal));
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT));
+
+				/*
+				view.setBackgroundDrawable(null);
+				view.setMinHeight(0);
+				view.setMinWidth(0);s
+				view.setPadding(0, 0, 0, 0);
+				// view.setBackgroundResource(R.drawable.button_bar);
+				view.setTextSize(TypedValue.COMPLEX_UNIT_PX, ctx.getResources().getDimensionPixelSize(R.dimen.text_normal));
+				*/
+				view.setGravity(Gravity.CENTER);
 				view.setText(keydef.getLabel());
 				view.setTag(keydef.getValue());
-				
 				AndroidFonts.setViewFont(view, RetroBoxUtils.FONT_DEFAULT_R);
 				
 				keydef.setView(view);
@@ -79,6 +91,7 @@ public class KeyboardView extends FrameLayout {
 				view.setOnClickListener(listener);
 				
 				addView(view);
+
 			}
 		}
 		
@@ -115,12 +128,13 @@ public class KeyboardView extends FrameLayout {
 				}
 				
 				Button view = (Button)keydef.getView();
+				view.layout(left, top, left + w, top + rowHeight);
+
 				// force relayout inside the button
 				view.measure(
 						MeasureSpec.makeMeasureSpec(w, MeasureSpec.EXACTLY), 
-						MeasureSpec.makeMeasureSpec(LinearLayout.LayoutParams.WRAP_CONTENT, MeasureSpec.AT_MOST));
+						MeasureSpec.makeMeasureSpec(rowHeight, MeasureSpec.EXACTLY));
 				
-				view.layout(left, top, left + w, top + rowHeight);
 				Log.d("KEYB", "onLayout " + keydef.getLabel() + " " + left + "," + top + " " + w + "," + rowHeight);
 				left += w;
 			}
@@ -137,14 +151,9 @@ public class KeyboardView extends FrameLayout {
 		
 		KeyboardLayout keylayout = keylayouts.get(activeLayout);
 		
-		// measure one child to get height
-		View sampleChild = getChildAt(0);
-		getChildAt(0).measure(
-				MeasureSpec.makeMeasureSpec(LinearLayout.LayoutParams.MATCH_PARENT, MeasureSpec.AT_MOST), 
-				MeasureSpec.makeMeasureSpec(LinearLayout.LayoutParams.WRAP_CONTENT, MeasureSpec.AT_MOST));
-		Log.d("KEYB", "measured button " + getChildAt(0).getMeasuredHeight());
+		int buttonHeight = getScreenHeight() / 16;
 		
-		int height = keylayout.getKeys().size() * sampleChild.getMeasuredHeight();
+		int height = keylayout.getKeys().size() * buttonHeight;
 		int width = MeasureSpec.getSize(widthMeasureSpec);
 		setMeasuredDimension(width, height);
 		Log.d("KEYB", "onMeasured " + width + "," + height);
@@ -152,6 +161,14 @@ public class KeyboardView extends FrameLayout {
 	
 	public void setOnKeyListener(OnKeyListener listener) {
 		this.onKeyListener = listener;
+	}
+	
+	private int getScreenHeight() {
+		DisplayMetrics displayMetrics = new DisplayMetrics();
+		
+		((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+		
+		return displayMetrics.heightPixels;
 	}
 	
 }

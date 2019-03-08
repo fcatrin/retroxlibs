@@ -31,6 +31,14 @@ public class GamepadView extends FrameLayout {
 			"RX", "RY"
 		};
 	
+	public static String eventLabels[] = { 
+			"UP", "DOWN", "LEFT", "RIGHT", 
+			"A", "B", "X", "Y", 
+			"L", "R", "L2", "R2",
+			"L3", "R3", "SELECT", "START",
+			"RX", "RY"
+		};
+	
 	ButtonLabelBox labelBoxes[] = new ButtonLabelBox[eventNames.length];
 	private int textSize;
 	private int textColor; 
@@ -84,7 +92,23 @@ public class GamepadView extends FrameLayout {
 			}
 		});
 	}
+
+	public ButtonLabelBox getButton(int index) {
+		return labelBoxes[index];
+	}
+
+	public void highLightButton(ButtonLabelBox button) {
+		for(ButtonLabelBox labelBox : labelBoxes) {
+			if (labelBox.eventId == button.eventId) {
+				labelBox.hightlight();
+			} else {
+				labelBox.dim();
+			}
+		}
+		
+	}
 	
+
 	public void layout() {
 		int gamepadWidth  = getMeasuredWidth();
 		int gamepadHeight = getMeasuredHeight();
@@ -111,6 +135,7 @@ public class GamepadView extends FrameLayout {
 			
 			textView = new TextView(parent.getContext());
 			imageView = new ImageView(parent.getContext());
+			imageView.setAlpha(0.1f);
 			
 			parent.addView(imageView);
 			parent.addView(textView);
@@ -118,16 +143,34 @@ public class GamepadView extends FrameLayout {
 			AndroidFonts.setViewFont(textView, RetroBoxUtils.FONT_DEFAULT_R);
 			textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
 			textView.setTextColor(textColor);
-			textView.setText("BUTTON");
 			
 			int buttonResourceId = eventId == EventId.RX || eventId == EventId.RY ?
 					R.drawable.gamepad_press_analog : R.drawable.gamepad_press;
 			
 			imageView.setImageResource(buttonResourceId);
+			
+			setLabel(eventLabels[eventId.ordinal()]);
 		}
 		
-		public void setLabel(Activity activity, String label) {
+		private void dim() {
+			setButtonAlpha(0.1f);
+		}
+
+		private void hightlight() {
+			setButtonAlpha(0.8f);
+		}
+
+		private void setButtonAlpha(float alpha) {
+			imageView.setAlpha(alpha);
+		}
+		
+		public void setLabel(String label) {
+			this.label = label;
 			textView.setText(label);
+		}
+		
+		public String getLabel() {
+			return label;
 		}
 		
 		public void layout(int gamepadWidth, int gamepadHeight) {
@@ -152,8 +195,6 @@ public class GamepadView extends FrameLayout {
 			imageLayoutParams.topMargin  = (int) (y * gamepadHeight - buttonHeight /2);
 
 		}
-		
 	}
-
-
+	
 }
