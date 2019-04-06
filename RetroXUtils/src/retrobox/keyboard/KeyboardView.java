@@ -18,13 +18,14 @@ import android.widget.LinearLayout;
 import retrobox.utils.R;
 import retrobox.utils.RetroBoxUtils;
 import xtvapps.core.AndroidFonts;
+import xtvapps.core.Utils;
 
 public class KeyboardView extends FrameLayout {
 	
-	public static final int SWITCH_LAYOUT = 0x1000000;
+	public static final String SWITCH_LAYOUT = "SWITCH_LAYOUT_";
 
 	private List<KeyboardLayout> keylayouts = new ArrayList<KeyboardLayout>();
-	private OnKeyListener onKeyListener;
+	private VirtualKeyListener onKeyListener;
 	int activeLayout = 0;
 
 	public KeyboardView(Context context) {
@@ -54,13 +55,14 @@ public class KeyboardView extends FrameLayout {
 		OnClickListener listener = new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				int keyCode = (Integer)view.getTag();
-				if ((keyCode & SWITCH_LAYOUT) != 0) {
-					switchLayout(ctx, keyCode & ~SWITCH_LAYOUT);
+				String keyCode = (String)view.getTag();
+				if (keyCode.startsWith(SWITCH_LAYOUT)) {
+					int layout = Utils.str2i(keyCode.substring(SWITCH_LAYOUT.length()));
+					switchLayout(ctx, layout);
 					getChildAt(0).requestFocus();
 				}
 				if (onKeyListener!=null) {
-					onKeyListener.onKey(view, keyCode, null);
+					onKeyListener.onKeyPressed(keyCode);
 				}
 			}
 		};
@@ -159,7 +161,7 @@ public class KeyboardView extends FrameLayout {
 		Log.d("KEYB", "onMeasured " + width + "," + height);
 	}
 	
-	public void setOnKeyListener(OnKeyListener listener) {
+	public void setOnKeyListener(VirtualKeyListener listener) {
 		this.onKeyListener = listener;
 	}
 	

@@ -5,11 +5,11 @@ import android.view.View;
 public class KeyDef {
 
 	private String label;
-	private int value;
+	private String value;
 	private int size = 1;
 	private View view;
 
-	public KeyDef(String label, int value) {
+	public KeyDef(String label, String value) {
 		this.label = label;
 		this.value = value;
 	}
@@ -22,11 +22,11 @@ public class KeyDef {
 		this.label = label;
 	}
 
-	public int getValue() {
+	public String getValue() {
 		return value;
 	}
 
-	public void setValue(int value) {
+	public void setValue(String value) {
 		this.value = value;
 	}
 
