@@ -40,18 +40,30 @@ public class KeyTranslator {
 		keys.put("KEY_RIGHTALT", KeyEvent.KEYCODE_ALT_RIGHT);
 		keys.put("KEY_LEFTCTRL", KeyEvent.KEYCODE_CTRL_LEFT);
 		keys.put("KEY_RIGHTCTRL", KeyEvent.KEYCODE_CTRL_RIGHT);
+		keys.put("KEY_LEFTMETA", KeyEvent.KEYCODE_META_LEFT);
+		keys.put("KEY_RIGHTMETA", KeyEvent.KEYCODE_META_RIGHT);
+
+		keys.put("KEY_LEFTBRACKET", KeyEvent.KEYCODE_LEFT_BRACKET);
+		keys.put("KEY_RIGHTBRACKET", KeyEvent.KEYCODE_RIGHT_BRACKET);
+
+		
 		keys.put("KEY_UP", KeyEvent.KEYCODE_DPAD_UP);
 		keys.put("KEY_DOWN", KeyEvent.KEYCODE_DPAD_DOWN);
 		keys.put("KEY_LEFT", KeyEvent.KEYCODE_DPAD_LEFT);
 		keys.put("KEY_RIGHT", KeyEvent.KEYCODE_DPAD_RIGHT);
-
+		
 		keys.put("KEY_PAGEDOWN", KeyEvent.KEYCODE_PAGE_DOWN);
 		keys.put("KEY_PAGEUP", KeyEvent.KEYCODE_PAGE_UP);
+		keys.put("KEY_END", KeyEvent.KEYCODE_MOVE_END);
+		keys.put("KEY_HOME", KeyEvent.KEYCODE_MOVE_HOME);
+		
 		keys.put("KEY_KPPLUS", KeyEvent.KEYCODE_PLUS);
+		keys.put("KEY_KPDOT", KeyEvent.KEYCODE_NUMPAD_DOT);
 
 		keys.put("KEY_BACKSPACE", KeyEvent.KEYCODE_BACK);
 		keys.put("KEY_DOT", KeyEvent.KEYCODE_PERIOD);
 		keys.put("KEY_ESC", KeyEvent.KEYCODE_ESCAPE);
+		
 		
 		keys.put("KEY_MOUSE_TOGGLE", KeyEvent.KEYCODE_BUTTON_MODE);
 		
