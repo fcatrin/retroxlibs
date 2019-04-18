@@ -149,6 +149,7 @@ public class KeyboardView extends FrameLayout {
 		Log.d("KEYB", "onMeasure " + widthMeasureSpec + ", " + heightMeasureSpec);
 		if (keylayouts.size() == 0) {
 			super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+			return;
 		}
 		
 		KeyboardLayout keylayout = keylayouts.get(activeLayout);
