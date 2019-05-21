@@ -18,15 +18,18 @@ import android.widget.LinearLayout;
 import retrobox.utils.R;
 import retrobox.utils.RetroBoxUtils;
 import xtvapps.core.AndroidFonts;
+import xtvapps.core.SimpleCallback;
 import xtvapps.core.Utils;
 
 public class KeyboardView extends FrameLayout {
 	
 	public static final String SWITCH_LAYOUT = "SWITCH_LAYOUT_";
+	public static final String TOGGLE_POSITION = "TOGGLE_POSITION";
 
 	private List<KeyboardLayout> keylayouts = new ArrayList<KeyboardLayout>();
 	private VirtualKeyListener onKeyListener;
 	int activeLayout = 0;
+	private SimpleCallback onTogglePositionCallback;
 
 	public KeyboardView(Context context) {
 		super(context);
@@ -60,6 +63,10 @@ public class KeyboardView extends FrameLayout {
 					int layout = Utils.str2i(keyCode.substring(SWITCH_LAYOUT.length()));
 					switchLayout(ctx, layout);
 					getChildAt(0).requestFocus();
+					return;
+				}
+				if (keyCode.equals(TOGGLE_POSITION) && onTogglePositionCallback!=null) {
+					onTogglePositionCallback.onResult();
 				}
 				if (onKeyListener!=null) {
 					onKeyListener.onKeyPressed(keyCode);
@@ -126,7 +133,7 @@ public class KeyboardView extends FrameLayout {
 				
 				if (k+1 == row.size()) {
 					// fill all remaining space
-					w = width - left;
+					w = width - left + getPaddingLeft();
 				}
 				
 				Button view = (Button)keydef.getView();
@@ -156,7 +163,7 @@ public class KeyboardView extends FrameLayout {
 		
 		int buttonHeight = getScreenHeight() / 16;
 		
-		int height = keylayout.getKeys().size() * buttonHeight;
+		int height = keylayout.getKeys().size() * buttonHeight + getPaddingTop() + getPaddingBottom();
 		int width = MeasureSpec.getSize(widthMeasureSpec);
 		setMeasuredDimension(width, height);
 		Log.d("KEYB", "onMeasured " + width + "," + height);
@@ -164,6 +171,10 @@ public class KeyboardView extends FrameLayout {
 	
 	public void setOnKeyListener(VirtualKeyListener listener) {
 		this.onKeyListener = listener;
+	}
+	
+	public void setOnTogglePositionCallback(SimpleCallback callback) {
+		this.onTogglePositionCallback = callback;
 	}
 	
 	private int getScreenHeight() {
