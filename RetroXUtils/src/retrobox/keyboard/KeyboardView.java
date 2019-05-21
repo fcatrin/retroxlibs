@@ -8,13 +8,13 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import retrobox.utils.R;
 import retrobox.utils.RetroBoxUtils;
 import xtvapps.core.AndroidFonts;
@@ -93,8 +93,9 @@ public class KeyboardView extends FrameLayout {
 				view.setGravity(Gravity.CENTER);
 				view.setText(keydef.getLabel());
 				view.setTag(keydef.getValue());
+				view.setFocusable(true);
+				view.setFocusableInTouchMode(true);
 				AndroidFonts.setViewFont(view, RetroBoxUtils.FONT_DEFAULT_R);
-				
 				keydef.setView(view);
 				
 				view.setOnClickListener(listener);
@@ -103,9 +104,8 @@ public class KeyboardView extends FrameLayout {
 
 			}
 		}
-		
 	}
-
+	
 	@Override
 	protected void onLayout(boolean changed, int l, int t, int r, int b) {
 		Log.d("KEYB", "onLayout "  + l + "," + t + " " + r + ", " + b);
