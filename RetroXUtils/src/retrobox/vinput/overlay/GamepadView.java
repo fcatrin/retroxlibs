@@ -44,12 +44,16 @@ public class GamepadView extends View {
     	return _viewGroup != null;
     }
 
+    private boolean isInViewGroup() {
+    	return null != getParent();
+    }
+    
     public boolean isVisible() {
-        return (null != getParent());
+        return (isInViewGroup() && getVisibility() == View.VISIBLE);
     }
     
     public void toggleView() {
-    	if (isVisible()) hidePanel();
+    	if (isInViewGroup()) hidePanel();
     	else showPanel();
     }
 }
