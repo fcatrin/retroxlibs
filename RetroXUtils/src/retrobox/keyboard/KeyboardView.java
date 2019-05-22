@@ -170,7 +170,7 @@ public class KeyboardView extends FrameLayout {
 		Log.d("KEYB", "onMeasured " + width + "," + height);
 	}
 	
-	public void setOnKeyListener(VirtualKeyListener listener) {
+	public void setOnVirtualKeyListener(VirtualKeyListener listener) {
 		this.onKeyListener = listener;
 	}
 	
