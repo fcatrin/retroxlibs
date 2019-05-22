@@ -59,6 +59,7 @@ public class KeyboardView extends FrameLayout {
 			@Override
 			public void onClick(View view) {
 				String keyCode = (String)view.getTag();
+				Log.d("KEYB", "keyCode " + keyCode);
 				if (keyCode.startsWith(SWITCH_LAYOUT)) {
 					int layout = Utils.str2i(keyCode.substring(SWITCH_LAYOUT.length()));
 					switchLayout(ctx, layout);
@@ -94,7 +95,7 @@ public class KeyboardView extends FrameLayout {
 				view.setText(keydef.getLabel());
 				view.setTag(keydef.getValue());
 				view.setFocusable(true);
-				view.setFocusableInTouchMode(true);
+				// view.setFocusableInTouchMode(true);
 				AndroidFonts.setViewFont(view, RetroBoxUtils.FONT_DEFAULT_R);
 				keydef.setView(view);
 				
