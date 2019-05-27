@@ -1,6 +1,7 @@
 package retrobox.keyboard;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import android.app.Activity;
@@ -43,11 +44,10 @@ public class KeyboardView extends FrameLayout {
 		super(context, attrs);
 	}
 	
-	public void init(Context ctx, KeyboardLayout keylayout) {
+	public void init(Context ctx, KeyboardLayout keyboradLayout[]) {
 		Log.d("KEYB", "init");
-		keylayouts.add(keylayout);
-		if (keylayouts.size() == 1) switchLayout(ctx, 0);
-		
+		keylayouts.addAll(Arrays.asList(keyboradLayout));
+		if (keylayouts.size() > 0) switchLayout(ctx, 0);
 	}
 	
 	private void switchLayout(final Context ctx, int index) {
