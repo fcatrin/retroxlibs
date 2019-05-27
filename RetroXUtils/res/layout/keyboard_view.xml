@@ -41,6 +41,7 @@
                 />
             
             <Button
+                style="@style/ActionButton"
                 android:id="@+id/btnGamepadButtonPrev"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -58,6 +59,7 @@
                 android:layout_height="wrap_content" />
 
             <Button
+                style="@style/ActionButton"
                 android:id="@+id/btnGamepadButtonNext"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -79,7 +81,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:background="@color/pal_base2"
+            android:background="@color/pal_base4"
+            android:padding="@dimen/spacing_tiny"
             android:nextFocusDown="@id/keyboard_view"
             android:nextFocusLeft="@id/keyboard_view"
             android:nextFocusRight="@id/keyboard_view"

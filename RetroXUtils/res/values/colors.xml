@@ -32,7 +32,9 @@
 	<color name="pal_base15">#FF1C1C1C</color>
 	<color name="pal_base2">#FF242424</color>
 	<color name="pal_base3">#FF2C2C2C</color>
-	
+   <color name="pal_base4">#FF3C3C3C</color>
+	<color name="pal_base5">#FF4C4C4C</color>
+   	
 	<color name="pal_text_disabled">#30FFFFFF</color>
 	<color name="pal_text_dim2">#80FFFFFF</color>
 	<color name="pal_text_dim">#90FFFFFF</color>
