@@ -22,6 +22,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/spacing_normal"
         android:orientation="vertical" >
 
         <LinearLayout
@@ -41,7 +42,7 @@
                 />
             
             <Button
-                style="@style/ActionButton"
+                style="@style/KeyButton"
                 android:id="@+id/btnGamepadButtonPrev"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -59,7 +60,7 @@
                 android:layout_height="wrap_content" />
 
             <Button
-                style="@style/ActionButton"
+                style="@style/KeyButton"
                 android:id="@+id/btnGamepadButtonNext"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
