@@ -3,22 +3,63 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/pal_base1"
-    android:clickable="true"
     android:orientation="vertical"
     android:visibility="invisible" >
 
-    <LinearLayout 
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:gravity="center"
-        >
-    <retrobox.utils.GamepadView 
-        android:id="@+id/keyboardMapGamepad"
-        android:layout_width="@dimen/gamepad_width"
-        android:layout_height="@dimen/gamepad_height"
-        />
+        android:orientation="horizontal" >
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3" >
+        <retrobox.utils.GamepadView
+            android:id="@+id/keyboardMapGamepad"
+            android:layout_width="@dimen/gamepad_width"
+            android:layout_height="@dimen/gamepad_height"
+            android:layout_gravity="center"/>
+         </FrameLayout>
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="vertical" >
+
+                <Button
+                    style="@style/ActionButtonVertical"
+                    android:layout_marginBottom="@dimen/spacing_small"
+                    android:text="Load DOS defaults" />
+
+                <Button
+                    style="@style/ActionButtonVertical"
+                    android:text="Save DOS defaults" />
+
+                <Button
+                    style="@style/ActionButtonVertical"
+                    android:layout_marginBottom="@dimen/spacing_small"
+                    android:layout_marginTop="@dimen/spacing_normal"
+                    android:text="Load for this game" />
+
+                <Button
+                    style="@style/ActionButtonVertical"
+                    android:layout_marginBottom="@dimen/spacing_normal"
+                    android:text="Save for this game" />
+
+                <Button
+                    style="@style/ActionButtonVertical"
+                    android:text="Close" />
+            </LinearLayout>
+        </FrameLayout>
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -28,50 +69,47 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/spacing_normal"
-            
             android:orientation="horizontal" >
-            
+
             <TextView
                 android:id="@+id/txtGamepadMappingMessage"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" 
+                android:layout_marginRight="@dimen/spacing_small"
+                android:layout_weight="1"
                 android:gravity="right|center_vertical"
-                android:textSize="@dimen/text_normal"
-                android:textColor="@color/pal_text_dim2"
                 android:text="Select gamepad button to map"
-                android:layout_marginRight="@dimen/spacing_small"
-                />
-            
-            <Button
-                style="@style/KeyButton"
-                android:id="@+id/btnGamepadButtonPrev"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/spacing_tiny"
-                android:textSize="@dimen/text_normal"
-                android:layout_marginRight="@dimen/spacing_small"
-                android:text="&lt;-" />
+                android:textColor="@color/pal_text_dim2"
+                android:textSize="@dimen/text_normal" />
 
             <Button
+                android:id="@+id/btnGamepadButtonPrev"
                 style="@style/KeyButton"
-                android:id="@+id/btnGamepadButtonNext"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/spacing_tiny"
-                android:textSize="@dimen/text_normal"
                 android:layout_marginRight="@dimen/spacing_small"
-                android:text="->" />
-            
+                android:padding="@dimen/spacing_tiny"
+                android:text="&lt;-"
+                android:textSize="@dimen/text_normal" />
+
+            <Button
+                android:id="@+id/btnGamepadButtonNext"
+                style="@style/KeyButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/spacing_small"
+                android:padding="@dimen/spacing_tiny"
+                android:text="->"
+                android:textSize="@dimen/text_normal" />
+
             <TextView
                 android:id="@+id/txtGamepadButtonName"
                 android:layout_width="0dp"
-                android:layout_weight="1" 
-                android:textSize="@dimen/text_normal"
+                android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/spacing_small"
+                android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:layout_height="wrap_content" />
-
+                android:textSize="@dimen/text_normal" />
         </LinearLayout>
 
         <retrobox.keyboard.KeyboardView
@@ -80,11 +118,11 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:background="@color/pal_base4"
-            android:padding="@dimen/spacing_fine"
             android:nextFocusDown="@id/keyboard_view"
             android:nextFocusLeft="@id/keyboard_view"
             android:nextFocusRight="@id/keyboard_view"
-            android:nextFocusUp="@id/keyboard_view" >
+            android:nextFocusUp="@id/keyboard_view"
+            android:padding="@dimen/spacing_fine" >
         </retrobox.keyboard.KeyboardView>
     </LinearLayout>
 

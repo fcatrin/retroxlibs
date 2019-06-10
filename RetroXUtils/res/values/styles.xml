@@ -36,7 +36,12 @@
 		<item name="android:layout_marginLeft">@dimen/spacing_small</item>
 		<item name="android:layout_marginRight">@dimen/spacing_small</item>
 	</style>
-    
+
+	  <style name="ActionButtonVertical" parent="ActionButton">
+	      <item name="android:layout_width">match_parent</item>
+	      <item name="android:paddingLeft">@dimen/spacing_small</item>
+	      <item name="android:paddingRight">@dimen/spacing_small</item>
+	</style>
     <style name="GamepadLabel">
         <item name="android:textSize">@dimen/text_small</item>
         <item name="android:textColor">@color/pal_text_hl</item>
