@@ -68,6 +68,7 @@ public class KeyboardView extends FrameLayout {
 				}
 				if (keyCode.equals(TOGGLE_POSITION) && onTogglePositionCallback!=null) {
 					onTogglePositionCallback.onResult();
+					return;
 				}
 				if (onKeyListener!=null) {
 					onKeyListener.onKeyPressed(keyCode);
@@ -162,7 +163,7 @@ public class KeyboardView extends FrameLayout {
 		
 		KeyboardLayout keylayout = keylayouts.get(activeLayout);
 		
-		int buttonHeight = getScreenHeight() / 16;
+		int buttonHeight = getScreenHeight() / 18;
 		
 		int height = keylayout.getKeys().size() * buttonHeight + getPaddingTop() + getPaddingBottom();
 		int width = MeasureSpec.getSize(widthMeasureSpec);

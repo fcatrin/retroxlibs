@@ -22,21 +22,23 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/spacing_normal"
         android:orientation="vertical" >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/spacing_normal"
+            
             android:orientation="horizontal" >
             
             <TextView
                 android:id="@+id/txtGamepadMappingMessage"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="3" 
-                android:gravity="right"
+                android:layout_weight="1" 
+                android:gravity="right|center_vertical"
                 android:textSize="@dimen/text_normal"
+                android:textColor="@color/pal_text_dim2"
                 android:text="Select gamepad button to map"
                 android:layout_marginRight="@dimen/spacing_small"
                 />
@@ -46,35 +48,30 @@
                 android:id="@+id/btnGamepadButtonPrev"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:padding="@dimen/spacing_tiny"
                 android:textSize="@dimen/text_normal"
                 android:layout_marginRight="@dimen/spacing_small"
                 android:text="&lt;-" />
-
-            <TextView
-                android:id="@+id/txtGamepadButtonName"
-                android:layout_width="0dp"
-                android:layout_weight="1" 
-                android:textSize="@dimen/text_normal"
-                android:layout_marginRight="@dimen/spacing_small"
-                android:gravity="center"
-                android:layout_height="wrap_content" />
 
             <Button
                 style="@style/KeyButton"
                 android:id="@+id/btnGamepadButtonNext"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:padding="@dimen/spacing_tiny"
                 android:textSize="@dimen/text_normal"
                 android:layout_marginRight="@dimen/spacing_small"
                 android:text="->" />
-
+            
             <TextView
-                android:id="@+id/txtGamepadSelectedKey"
+                android:id="@+id/txtGamepadButtonName"
                 android:layout_width="0dp"
-                android:layout_weight="3"
+                android:layout_weight="1" 
                 android:textSize="@dimen/text_normal"
-                android:text="Mapped to -> Key ALT"
+                android:layout_marginRight="@dimen/spacing_small"
+                android:gravity="center_vertical"
                 android:layout_height="wrap_content" />
+
         </LinearLayout>
 
         <retrobox.keyboard.KeyboardView
@@ -83,7 +80,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:background="@color/pal_base4"
-            android:padding="@dimen/spacing_tiny"
+            android:padding="@dimen/spacing_fine"
             android:nextFocusDown="@id/keyboard_view"
             android:nextFocusLeft="@id/keyboard_view"
             android:nextFocusRight="@id/keyboard_view"
