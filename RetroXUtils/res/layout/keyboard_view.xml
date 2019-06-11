@@ -11,53 +11,25 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="horizontal" >
-
+                <Button
+                    style="@style/ActionButtonMapping"
+                    android:layout_marginBottom="@dimen/spacing_normal"
+                    android:text="Save" />
+        
         <FrameLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="3" >
+            android:layout_weight="5" >
         <retrobox.utils.GamepadView
             android:id="@+id/keyboardMapGamepad"
             android:layout_width="@dimen/gamepad_width"
             android:layout_height="@dimen/gamepad_height"
             android:layout_gravity="center"/>
          </FrameLayout>
-        <FrameLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2" >
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:orientation="vertical" >
-
-                <Button
-                    style="@style/ActionButtonVertical"
-                    android:layout_marginBottom="@dimen/spacing_small"
-                    android:text="Load DOS defaults" />
-
-                <Button
-                    style="@style/ActionButtonVertical"
-                    android:text="Save DOS defaults" />
-
-                <Button
-                    style="@style/ActionButtonVertical"
-                    android:layout_marginBottom="@dimen/spacing_small"
-                    android:layout_marginTop="@dimen/spacing_normal"
-                    android:text="Load for this game" />
-
-                <Button
-                    style="@style/ActionButtonVertical"
-                    android:layout_marginBottom="@dimen/spacing_normal"
-                    android:text="Save for this game" />
-
-                <Button
-                    style="@style/ActionButtonVertical"
+                         <Button
+                    style="@style/ActionButtonMapping"
                     android:text="Close" />
-            </LinearLayout>
-        </FrameLayout>
+        
     </LinearLayout>
 
     <LinearLayout

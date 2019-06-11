@@ -37,10 +37,13 @@
 		<item name="android:layout_marginRight">@dimen/spacing_small</item>
 	</style>
 
-	  <style name="ActionButtonVertical" parent="ActionButton">
-	      <item name="android:layout_width">match_parent</item>
+	  <style name="ActionButtonMapping" parent="ActionButton">
+	      <item name="android:layout_width">wrap_content</item>
 	      <item name="android:paddingLeft">@dimen/spacing_small</item>
 	      <item name="android:paddingRight">@dimen/spacing_small</item>
+	      <item name="android:layout_marginLeft">@dimen/spacing_big</item>
+	      <item name="android:layout_marginRight">@dimen/spacing_big</item>
+	      <item name="android:layout_gravity">center_vertical</item>
 	</style>
     <style name="GamepadLabel">
         <item name="android:textSize">@dimen/text_small</item>
