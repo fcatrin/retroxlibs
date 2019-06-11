@@ -1,6 +1,9 @@
 package retrobox.utils;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -9,6 +12,7 @@ import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Properties;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -197,4 +201,21 @@ public class RetroBoxUtils {
 		}
 	}
 	
+	public static Map<String, String> loadMapping(File file) throws IOException {
+		Properties p = new Properties();
+		p.load(new FileInputStream(file));
+		
+		Map<String, String> result = new HashMap<String, String>();
+		for(Object oKey : p.keySet()) {
+			String key = oKey.toString();
+			result.put(key, p.getProperty(key));
+		}
+		return result;
+	}
+	
+	public static void saveMapping(File file, Map<String, String> map) throws IOException {
+		Properties p = new Properties();
+		p.putAll(map);
+		p.store(new FileOutputStream(file), null);
+	}
 }

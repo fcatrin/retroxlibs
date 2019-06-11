@@ -11,25 +11,29 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="horizontal" >
-                <Button
-                    style="@style/ActionButtonMapping"
-                    android:layout_marginBottom="@dimen/spacing_normal"
-                    android:text="Save" />
-        
+
+        <Button
+            android:id="@+id/btnKeymapSave"
+            style="@style/ActionButtonMapping"
+            android:layout_marginBottom="@dimen/spacing_normal"
+            android:text="Save" />
+
         <FrameLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="5" >
-        <retrobox.utils.GamepadView
-            android:id="@+id/keyboardMapGamepad"
-            android:layout_width="@dimen/gamepad_width"
-            android:layout_height="@dimen/gamepad_height"
-            android:layout_gravity="center"/>
-         </FrameLayout>
-                         <Button
-                    style="@style/ActionButtonMapping"
-                    android:text="Close" />
-        
+
+            <retrobox.utils.GamepadView
+                android:id="@+id/keyboardMapGamepad"
+                android:layout_width="@dimen/gamepad_width"
+                android:layout_height="@dimen/gamepad_height"
+                android:layout_gravity="center" />
+        </FrameLayout>
+
+        <Button
+            android:id="@+id/btnKeymapClose"
+            style="@style/ActionButtonMapping"
+            android:text="Close" />
     </LinearLayout>
 
     <LinearLayout
