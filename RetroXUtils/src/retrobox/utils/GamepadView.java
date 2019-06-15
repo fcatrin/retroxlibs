@@ -57,6 +57,8 @@ public class GamepadView extends FrameLayout {
 	
 	public void init() {
 
+		removeAllViews();
+		
 		textSize = getResources().getDimensionPixelSize(R.dimen.text_small);
 		textColor = getResources().getColor(R.color.pal_text_hl);
 		
