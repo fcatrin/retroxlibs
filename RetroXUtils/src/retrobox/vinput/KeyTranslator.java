@@ -85,6 +85,10 @@ public class KeyTranslator {
 			return new VirtualEvent(MouseButton.RIGHT);
 		}
 		
+		if (!name.contains("+") && !name.startsWith("KEY_")) {
+			name = "KEY_" + name;
+		}
+		
 		VirtualEvent ve = new VirtualEvent();
 		
 		String parts[] = name.split("\\+");
