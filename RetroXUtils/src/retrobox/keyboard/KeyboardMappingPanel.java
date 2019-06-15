@@ -46,11 +46,13 @@ public class KeyboardMappingPanel {
 	};
 
 	private File keymapFile;
-	KeyboardView kbView;
+	private KeyboardView kbView;
+	private SimpleCallback callback;
 
 	public KeyboardMappingPanel(final Activity activity, File keymapFile, KeyboardLayout keyboardLayout[], final SimpleCallback callback) {
 		this.activity = activity; 
 		this.keymapFile = keymapFile;
+		this.callback = callback;
 
 		load();
 		
@@ -120,12 +122,20 @@ public class KeyboardMappingPanel {
 			
 			@Override
 			public void onClick(View v) {
-				close();
-				callback.onError();
+				dismiss();
 			}
 		});
 	}
+	
+	public boolean isVisible() {
+		return activity.findViewById(R.id.keyboard_mapping_panel).getVisibility() == View.VISIBLE;	
+	}
 
+	public void dismiss() {
+		close();
+		callback.onError();
+	}
+	
 	protected void setKeyMap(String code) {
 		int eventIndex = orderedEvents[currentButtonIndex].ordinal();
 		keymap.put(GamepadView.eventNames[eventIndex], code);

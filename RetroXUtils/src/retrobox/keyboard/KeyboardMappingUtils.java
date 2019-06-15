@@ -17,6 +17,8 @@ import xtvapps.core.content.KeyValue;
 
 public class KeyboardMappingUtils {
 
+	private static KeyboardMappingPanel keyboardMappingPanel = null;
+	
 	public static void openKeymapSettings(final Activity activity, final KeyboardLayout keyboardLayout[], final SimpleCallback returnHereCallback) {
 		List<ListOption> options = new ArrayList<ListOption>();
 		for(int i=0; i<Mapper.MAX_GAMEPADS; i++) {
@@ -60,6 +62,7 @@ public class KeyboardMappingUtils {
 
 			@Override
 			public void onResult() {
+				keyboardMappingPanel = null;
 				try {
 					Mapper.loadVirtualEvents(gamepad-1, keymapFile);
 				} catch (IOException e) {
@@ -70,12 +73,21 @@ public class KeyboardMappingUtils {
 			
 			@Override
 			public void onError() {
+				keyboardMappingPanel = null;
 				returnCallback.onError();
 			}
 			
 		};
 		
-		KeyboardMappingPanel keyboardMappingPanel = new KeyboardMappingPanel(activity, keymapFile, keyboardLayout, resultCallback);
+		keyboardMappingPanel = new KeyboardMappingPanel(activity, keymapFile, keyboardLayout, resultCallback);
 		keyboardMappingPanel.open();
+	}
+	
+	public static boolean isKeyMapperVisible() {
+		return keyboardMappingPanel!=null && keyboardMappingPanel.isVisible();
+	}
+	
+	public static void closeKeyMapper() {
+		if (keyboardMappingPanel!=null) keyboardMappingPanel.dismiss();
 	}
 }
