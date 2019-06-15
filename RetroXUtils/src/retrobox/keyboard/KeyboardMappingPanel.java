@@ -46,6 +46,7 @@ public class KeyboardMappingPanel {
 	};
 
 	private File keymapFile;
+	KeyboardView kbView;
 
 	public KeyboardMappingPanel(final Activity activity, File keymapFile, KeyboardLayout keyboardLayout[], final SimpleCallback callback) {
 		this.activity = activity; 
@@ -59,11 +60,11 @@ public class KeyboardMappingPanel {
 		AndroidFonts.setViewFont(txtMapperLeft,   RetroBoxUtils.FONT_DEFAULT_R);
 		AndroidFonts.setViewFont(txtMapperButton, RetroBoxUtils.FONT_DEFAULT_R);
 
-		KeyboardView kb = (KeyboardView)activity.findViewById(R.id.keyboard_view);
+		kbView = (KeyboardView)activity.findViewById(R.id.keyboard_map_view);
 
-		kb.init(activity, keyboardLayout);
+		kbView.init(activity, keyboardLayout);
 		
-		kb.setOnVirtualKeyListener(new VirtualKeyListener() {
+		kbView.setOnVirtualKeyListener(new VirtualKeyListener() {
 			
 			@Override
 			public void onKeyPressed(String code) {
@@ -138,12 +139,11 @@ public class KeyboardMappingPanel {
 	public void open() {
 		setVisible(true);
 		
-		final KeyboardView kb = (KeyboardView)activity.findViewById(R.id.keyboard_view);
-		kb.post(new Runnable() {
+		kbView.post(new Runnable() {
 
 			@Override
 			public void run() {
-				kb.getChildAt(0).requestFocus();
+				kbView.getChildAt(0).requestFocus();
 			}
 		});
 	}
