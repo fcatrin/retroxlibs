@@ -1,5 +1,9 @@
 package retrobox.vinput;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Map;
+
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
@@ -9,6 +13,7 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import retrobox.utils.RetroBoxUtils;
 
 public class Mapper {
 	
@@ -63,6 +68,20 @@ public class Mapper {
 	private void initVirtualEvents(Intent intent) {
 		Log.d("REMAP", "Intent " + intent.getExtras());
 		for(int player = 0; player<MAX_GAMEPADS; player++) {
+			
+			// first try to load from file
+			String keymapFileKey = "KEYMAP_" + (player+1);
+			String keymapFileName = intent.getStringExtra(keymapFileKey);
+			if (keymapFileName!=null) {
+				try {
+					loadVirtualEvents(player, new File(keymapFileName));
+					continue;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			
+			// if anything fails, read the old way
 	    	String prefix = "kmap" + (player+1);
 		    for(int i=0; i<GenericGamepad.eventNames.length; i++) {
 		    	String keyName = GenericGamepad.eventNames[i];
@@ -79,6 +98,28 @@ public class Mapper {
 		}
 	}
 	
+	public static void loadVirtualEvents(int player, File keymapFile) throws IOException {
+		Map<String, String> mapping = RetroBoxUtils.loadMapping(keymapFile);
+		Log.d("KEYMAPFILE", "load " + keymapFile.getAbsolutePath() + " as " + mapping);
+		for(int i=0; i<GenericGamepad.eventNames.length; i++) {
+	    	String keyName = GenericGamepad.eventNames[i];
+	    	String keyNameLinux = mapping.get(keyName);
+	    	
+	    	VirtualEvent event = null;
+	    	
+	    	if (keyNameLinux!=null) {
+	    		event = KeyTranslator.translate(keyNameLinux);
+	    	}
+	    	genericGamepads[player].virtualEvents[i] = event;
+	    	Log.d("KEYMAPFILE", "Linux key " + keyNameLinux + " mapped to event " + event);
+		}
+		genericGamepads[player].keymapFile = keymapFile;
+	}
+	
+	public static File getKeymapFile(int player) {
+		return genericGamepads[player-1].keymapFile;
+	}
+
 	private void initGenericJoystick(Intent intent) {
 		for(int player = 0; player<MAX_GAMEPADS; player++) {
 	    	String prefix = "j" + (player+1);

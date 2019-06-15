@@ -47,7 +47,7 @@ public class KeyboardMappingPanel {
 
 	private File keymapFile;
 
-	public KeyboardMappingPanel(final Activity activity, File keymapFile, final SimpleCallback callback) {
+	public KeyboardMappingPanel(final Activity activity, File keymapFile, KeyboardLayout keyboardLayout[], final SimpleCallback callback) {
 		this.activity = activity; 
 		this.keymapFile = keymapFile;
 
@@ -61,9 +61,7 @@ public class KeyboardMappingPanel {
 
 		KeyboardView kb = (KeyboardView)activity.findViewById(R.id.keyboard_view);
 
-		PCKeyboardLayout kl = new PCKeyboardLayout();
-		
-		kb.init(activity, kl.getKeyboardLayout());
+		kb.init(activity, keyboardLayout);
 		
 		kb.setOnVirtualKeyListener(new VirtualKeyListener() {
 			

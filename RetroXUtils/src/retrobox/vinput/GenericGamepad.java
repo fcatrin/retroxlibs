@@ -1,5 +1,7 @@
 package retrobox.vinput;
 
+import java.io.File;
+
 import android.util.SparseBooleanArray;
 import android.view.KeyEvent;
 import retrobox.utils.R;
@@ -39,6 +41,8 @@ public class GenericGamepad {
 	String deviceDescriptor;
 	int deviceId;
 	public int player;
+	
+	public File keymapFile;
 	
 	public int originCodes[] = {
 		KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_DPAD_DOWN, KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.KEYCODE_DPAD_RIGHT,
