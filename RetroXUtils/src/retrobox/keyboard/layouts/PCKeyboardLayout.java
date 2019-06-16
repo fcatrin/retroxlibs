@@ -14,7 +14,7 @@ public class PCKeyboardLayout {
 	
 	String labels_b1[] = {"Mouse Left", "Mouse Right", "Up", "Down", "Left", "Right"};
 	String labels_b2[] = {"|","F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12"};
-	String labels_b3[] = {"Up/Down", ":", ";", "@", "!", "\"", "#", "$", "%", "&", "/", "(", ")", "="};
+	String labels_b3[] = {"Move Up/Down", ":", ";", "@", "!", "\"", "#", "$", "%", "&", "/", "(", ")", "="};
 	String labels_b4[] = {"<", ">", "*", "+", "\\", "Ins", "Del", "Home", "End", "Pg Up", "Pg Down"};
 	String labels_b5[] = {"[abc]", "KP .", "KP0", "KP1", "KP2", "KP3", "KP4", "KP5", "KP6", "KP7", "KP8", "KP9"};
 				

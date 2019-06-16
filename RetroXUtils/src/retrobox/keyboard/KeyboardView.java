@@ -66,8 +66,8 @@ public class KeyboardView extends FrameLayout {
 					getChildAt(0).requestFocus();
 					return;
 				}
-				if (keyCode.equals(TOGGLE_POSITION) && onTogglePositionCallback!=null) {
-					onTogglePositionCallback.onResult();
+				if (keyCode.equals(TOGGLE_POSITION)) {
+					if (onTogglePositionCallback!=null)	onTogglePositionCallback.onResult();
 					return;
 				}
 				if (onKeyListener!=null) {
