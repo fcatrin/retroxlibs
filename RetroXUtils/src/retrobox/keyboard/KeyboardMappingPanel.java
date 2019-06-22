@@ -203,6 +203,7 @@ public class KeyboardMappingPanel {
 	
 	private String event2human(String event) {
 		if (event.startsWith("KEY_")) return event.substring("KEY_".length());
+		if (event.startsWith("ATR_")) return event.substring("ATR_".length());
 		if (event.startsWith("BTN_")) return "Button " + event.substring("BTN_".length());
 		if (event.equals("RX")) return "Analog Right X";
 		if (event.equals("RY")) return "Analog Right Y";
