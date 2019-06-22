@@ -85,7 +85,9 @@ public class KeyTranslator {
 			return new VirtualEvent(MouseButton.RIGHT);
 		}
 		
-		if (!name.contains("+") && !name.startsWith("KEY_")) {
+		if (!name.contains("+") && 
+			!name.startsWith("KEY_") &&
+			!name.startsWith("ATR_")) {
 			name = "KEY_" + name;
 		}
 		
