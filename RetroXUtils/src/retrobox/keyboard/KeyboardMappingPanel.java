@@ -141,7 +141,7 @@ public class KeyboardMappingPanel {
 		keymap.put(GamepadView.eventNames[eventIndex], code);
 		
 		ButtonLabelBox button = gamepadView.getButton(eventIndex); 
-		button.setLabel(code);
+		button.setLabel(event2human(code));
 		
 		updateButtonDisplay();
 	}

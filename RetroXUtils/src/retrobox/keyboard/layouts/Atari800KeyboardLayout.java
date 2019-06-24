@@ -29,6 +29,20 @@ public class Atari800KeyboardLayout {
 			
 
 	public KeyboardLayout[] getKeyboardLayout() {
+		
+		String all_codes[][] = {
+				codes_a1, codes_a2, codes_a3, codes_a4, codes_a5,
+				codes_b1, codes_b2, codes_b3
+		};
+		
+		for(String codes[] : all_codes) {
+			for(int i=0; i<codes.length; i++) {
+				if (codes[i].length()!=0 && !codes[i].startsWith("ATR_")) {
+					codes[i] = "ATR_" + codes[i];
+				}
+			}
+		}
+		
 		KeyboardLayout layout[] = new KeyboardLayout[2];
 		
 		KeyboardLayout kl = new KeyboardLayout();
