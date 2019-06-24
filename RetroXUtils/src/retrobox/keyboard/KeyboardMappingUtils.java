@@ -50,6 +50,11 @@ public class KeyboardMappingUtils {
 					openKeyMapper(activity, gamepad, gamepadFile, keyboardLayout, resultCallback);
 				}
 			}
+			
+			@Override
+			public void onError() {
+				returnHereCallback.onResult();
+			}
 		});
 	}
 
