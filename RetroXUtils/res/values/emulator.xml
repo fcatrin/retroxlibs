@@ -14,6 +14,8 @@
     <string name="emu_opt_disk_change">Change disk</string>
     <string name="emu_opt_disk_swap">Swap disk</string>
     <string name="emu_opt_extra_buttons">Extra Buttons</string>
+    <string name="emu_opt_open_keyboard">Show keyboard</string>
+    <string name="emu_opt_open_mapper">Map gamepad buttons</string>
     <string name="emu_opt_help">Help</string>
     <string name="emu_opt_quit">Quit</string>
     

@@ -14,6 +14,8 @@
     <string name="emu_opt_disk_change">Cambiar de disco</string>
     <string name="emu_opt_disk_swap">Cambiar de disco</string>
     <string name="emu_opt_extra_buttons">Botones adicionales</string>
+    <string name="emu_opt_open_keyboard">Mostrar teclado</string>
+    <string name="emu_opt_open_mapper">Mapear botones del control</string>
     <string name="emu_opt_help">Ayuda</string>
     <string name="emu_opt_quit">Salir</string>
     
