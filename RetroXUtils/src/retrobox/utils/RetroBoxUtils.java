@@ -65,11 +65,15 @@ public class RetroBoxUtils {
 	}
 	
 	public static void openWeb(Activity context, String url) {
+		openWeb(context, url, url);
+	}
+	
+	public static void openWeb(Activity context, String url, String name) {
 		try {
 			context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
 		} catch (Exception e) {
 			String msg = context.getString(R.string.no_browser)
-					.replace("{url}", url);
+					.replace("{url}", name);
 			RetroBoxDialog.showAlert(context, msg);
 		}
 	}
