@@ -17,7 +17,8 @@ public class ServiceTest {
 		
 		EmuMoviesService.login(user, pass, apiKey);
 		// EmuMoviesService.getSystems();
-		EmuMoviesService.getMedias();
+		// EmuMoviesService.getMedias();
+		System.out.println(EmuMoviesService.searchSingle("Bomberman '94", "NEC_PC_Engine", "Box"));
 	}
 
 }

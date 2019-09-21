@@ -16,9 +16,10 @@ public class EmuMoviesService {
 	private static final String LOGTAG = EmuMoviesService.class.getSimpleName();
 	
 	private static final String BACKEND = "https://api.gamesdbase.com";
-	private static final String URL_LOGIN = "/login.aspx";
-	private static final String URL_GET_SYSTEMS = "/getsystems.aspx?sessionid={sessionId}";
-	private static final String URL_GET_MEDIAS = "/getmedias.aspx?sessionid={sessionId}";
+	private static final String URL_LOGIN         = "/login.aspx";
+	private static final String URL_GET_SYSTEMS   = "/getsystems.aspx?sessionid={sessionId}";
+	private static final String URL_GET_MEDIAS    = "/getmedias.aspx?sessionid={sessionId}";
+	private static final String URL_SEARCH_SINGLE = "/search.aspx?search={text}&system={system}&media={media}&sessionid={sessionId}";
 	
 	private static final String DATA_LOGIN = "user={user}&api={pass}&product={productId}";
 	private static final String ENCODING = "UTF-8";
@@ -60,6 +61,26 @@ public class EmuMoviesService {
 		Log.d(LOGTAG, new String(DownloadManager.download(url), ENCODING));
 	}
 
+	public static String searchSingle(String text, String system, String mediaType) throws IOException, ParserException {
+		String url = buildURL(URL_SEARCH_SINGLE)
+			.replace("{text}", URLEncoder.encode(text, ENCODING))
+			.replace("{system}", system)
+			.replace("{media}", mediaType);
+		
+		Document xml = SimpleXML.parse(DownloadManager.download(url));
+		Log.d(LOGTAG, new String(SimpleXML.asString(xml.getDocumentElement())));
+
+		Element result = SimpleXML.getElementXpath(xml.getDocumentElement(), "Result");
+
+		boolean found = SimpleXML.getBoolAttribute(result, "Found", false);
+		if (found) {
+			return SimpleXML.getAttribute(result, "URL");
+		} else {
+			return null;
+		}
+
+	}
+	
 	public static class EmuMoviesException extends Exception {
 		private static final long serialVersionUID = 1L;
 
