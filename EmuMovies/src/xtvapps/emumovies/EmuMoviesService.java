@@ -18,6 +18,7 @@ public class EmuMoviesService {
 	private static final String BACKEND = "https://api.gamesdbase.com";
 	private static final String URL_LOGIN = "/login.aspx";
 	private static final String URL_GET_SYSTEMS = "/getsystems.aspx?sessionid={sessionId}";
+	private static final String URL_GET_MEDIAS = "/getmedias.aspx?sessionid={sessionId}";
 	
 	private static final String DATA_LOGIN = "user={user}&api={pass}&product={productId}";
 	private static final String ENCODING = "UTF-8";
@@ -53,7 +54,12 @@ public class EmuMoviesService {
 		String url = buildURL(URL_GET_SYSTEMS);
 		Log.d(LOGTAG, new String(DownloadManager.download(url), ENCODING));
 	}
-	
+
+	public static void getMedias() throws UnsupportedEncodingException, IOException {
+		String url = buildURL(URL_GET_MEDIAS);
+		Log.d(LOGTAG, new String(DownloadManager.download(url), ENCODING));
+	}
+
 	public static class EmuMoviesException extends Exception {
 		private static final long serialVersionUID = 1L;
 

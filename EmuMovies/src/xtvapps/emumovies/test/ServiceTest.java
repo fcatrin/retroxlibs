@@ -16,7 +16,8 @@ public class ServiceTest {
 		String apiKey = prefs.getString("api_key");
 		
 		EmuMoviesService.login(user, pass, apiKey);
-		EmuMoviesService.getSystems();
+		// EmuMoviesService.getSystems();
+		EmuMoviesService.getMedias();
 	}
 
 }
