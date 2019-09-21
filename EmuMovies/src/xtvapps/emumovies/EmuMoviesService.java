@@ -3,6 +3,9 @@ package xtvapps.emumovies;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -19,7 +22,8 @@ public class EmuMoviesService {
 	private static final String URL_LOGIN         = "/login.aspx";
 	private static final String URL_GET_SYSTEMS   = "/getsystems.aspx?sessionid={sessionId}";
 	private static final String URL_GET_MEDIAS    = "/getmedias.aspx?sessionid={sessionId}";
-	private static final String URL_SEARCH_SINGLE = "/search.aspx?search={text}&system={system}&media={media}&sessionid={sessionId}";
+	private static final String URL_SEARCH_SINGLE = "/search.aspx?system={system}&media={media}&sessionid={sessionId}&search={text}";
+	private static final String URL_SEARCH_MULTI  = "/searchbulk.aspx?system={system}&media={media}&sessionid={sessionId}";
 	
 	private static final String DATA_LOGIN = "user={user}&api={pass}&product={productId}";
 	private static final String ENCODING = "UTF-8";
@@ -78,7 +82,35 @@ public class EmuMoviesService {
 		} else {
 			return null;
 		}
+	}
+	
+	public static Map<String, String> searchMulti(List<String> list, String system, String mediaType) throws IOException, ParserException {
+		String url = buildURL(URL_SEARCH_MULTI)
+			.replace("{system}", system)
+			.replace("{media}", mediaType);
+		
+		StringBuffer fileNames = new StringBuffer();
+		for(String s: list) {
+			fileNames.append(s);
+			fileNames.append("\r\n");
+		}
+		
+		String body = "FileNames=" + URLEncoder.encode(fileNames.toString(), ENCODING);
+		Log.d(LOGTAG, body);
+		
+		Document xml = SimpleXML.parse(DownloadManager.postContent(url, null, MIME_FORM_URL, body));
+		Log.d(LOGTAG, new String(SimpleXML.asString(xml.getDocumentElement())));
 
+		List<Element> elements = SimpleXML.getElementsXpath(xml.getDocumentElement(), "Result");
+		
+		Map<String, String> result = new HashMap<String, String>();
+		for(Element element : elements) {
+			String contentId  = SimpleXML.getAttribute(element, "search");
+			String contentURL = SimpleXML.getAttribute(element, "URL");
+			result.put(contentId, contentURL);
+		}
+		
+		return result;
 	}
 	
 	public static class EmuMoviesException extends Exception {
