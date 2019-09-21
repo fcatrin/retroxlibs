@@ -6,7 +6,7 @@ import xtvapps.core.Log;
 import xtvapps.core.SharedPreferences;
 import xtvapps.emumovies.EmuMoviesService;
 
-public class LoginTest {
+public class ServiceTest {
 	public static void main(String args[]) throws Exception {
 		Log.TRACE = true;
 
@@ -15,7 +15,8 @@ public class LoginTest {
 		String pass = prefs.getString("pass");
 		String apiKey = prefs.getString("api_key");
 		
-		System.out.println(EmuMoviesService.login(user, pass, apiKey));
+		EmuMoviesService.login(user, pass, apiKey);
+		EmuMoviesService.getSystems();
 	}
 
 }
