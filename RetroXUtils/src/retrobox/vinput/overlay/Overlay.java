@@ -216,15 +216,30 @@ public class Overlay {
 				Mapper.listener.sendAnalog(firstGamepad, analogControl, 0, 0, 0, 0);
 			} else {
 				for(int event : button.eventIndexes) {
+					if (isPressedInAnotherButton(button, event)) continue;
 					VirtualEvent ev = Mapper.getTargetEventIndex(firstGamepad, event);
-					if (ev!=null) ev.sendEvent(firstGamepad, false);
+					if (ev!=null) {
+						ev.sendEvent(firstGamepad, false);
+					}
 				}
 			}
 		}
 		requiresRedraw = true;
 	}
 	
+	private static boolean isPressedInAnotherButton(OverlayButton button, int event) {
+		for(OverlayButton otherButton : buttons) {
+			if (otherButton == button || !otherButton.isPressed()) continue;
+			
+			for(int otherEvent : otherButton.eventIndexes) {
+				if (otherEvent == event) return true;
+			}
+		}
+		return false;
+	}
+	
 	public static boolean onPointerMove(int pointerId, int x, int y) {
+		Log.d("sendKey", "onPointerMove start");
 		boolean handled = false;
 		for(OverlayButton button : buttons) {
 			if (button.eventIndexes == null) continue;
@@ -243,6 +258,7 @@ public class Overlay {
 				}
 			}
 		}
+		Log.d("sendKey", "onPointerMove end");
 		return handled;
 	}
 	
