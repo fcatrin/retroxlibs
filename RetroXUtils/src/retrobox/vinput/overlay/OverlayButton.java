@@ -44,6 +44,20 @@ public class OverlayButton {
 	float rangeMod = 1.0f;
 	float pct = 1.0f;
 	
+	boolean displayTouchscreenAreas = false;
+	
+	int colors[] = {0x80FF00FF, 0x8000FFFF, 0x80FFFF00, 0x80FFFFFF, 0x8000FF00, 0x80A020A0,
+			0x80A0A020, 0x80A02020, 0x8020A020, 0x802020A0, 0x80808080,
+			0x80A0A0A0, 0x80202020
+	};
+	
+	int colorIndex;
+	static int colorIndexSeq = 0;
+	
+	public OverlayButton() {
+		colorIndex = (colorIndexSeq++) % colors.length;
+	}
+	
 	public static void setTextSize(int textSize) {
 		textPaint.setTextSize(textSize);
 		textPaint.setTextAlign(Align.CENTER);
@@ -86,7 +100,20 @@ public class OverlayButton {
 	}
 
 	public void draw(Canvas canvas, Paint p) {
-		if (bitmap==null) return;
+		Paint pc = new Paint();
+		pc.setColor(colors[colorIndex]);
+		if (bitmap==null) {
+			if (displayTouchscreenAreas) {
+				if (type == ButtonType.CIRCLE) {
+					canvas.drawCircle(x, y, rangeX, pc);
+					canvas.drawCircle(x, y, rangeY, pc);
+				} else {
+					canvas.drawRect(box, pc);
+					
+				}
+			}
+			return;
+		}
 		canvas.drawBitmap(bitmap, src,  dst, p);
 		/*
 		if (label!=null && label.trim().length()>0) {
