@@ -1,5 +1,6 @@
 package retrobox.utils;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -8,6 +9,8 @@ import xtvapps.core.Utils;
 
 public class InfoProgressListener extends NetworkProgressListener {
 	private final static int DETAIL_TIME = 250;
+
+	private static final String LOGTAG = InfoProgressListener.class.getSimpleName();
 	
 	public static boolean operationIsCancelled = false;
 	
@@ -22,7 +25,7 @@ public class InfoProgressListener extends NetworkProgressListener {
 	public InfoProgressListener(TextView textViewInfo, TextView textViewProgress, ProgressBar progressView) {
 		this.textViewInfo     = textViewInfo;
 		this.textViewProgress = textViewProgress;
-		this.progressView      = progressView;
+		this.progressView     = progressView;
 	}
 	
 	public void setInfoTemplate(String infoTemplate) {
@@ -43,6 +46,7 @@ public class InfoProgressListener extends NetworkProgressListener {
 				}
 			}
 			if (textViewProgress!=null) textViewProgress.setText(sizeInfo);
+			progressView.setProgress(progress);
 		} else if (info.endsWith("{count}")) {
 			String countInfo = "";
 			info = info.replace("{count}", "");
@@ -55,18 +59,30 @@ public class InfoProgressListener extends NetworkProgressListener {
 				}
 			}
 			if (textViewProgress!=null) textViewProgress.setText(countInfo);
+			progressView.setProgress(progress+1);
+		} else {
+			progressView.setProgress(progress);
 		}
+		
 		textViewInfo.setText(info);
-		progressView.setProgress(progress);
 		progressView.setMax(total);
+		setVisible(View.VISIBLE);
 	}
 	
 	public void reset() {
-		textViewInfo.setText("");
-		if (textViewProgress!=null) textViewProgress.setText("");
+		progressView.post(new Runnable() {
+			@Override
+			public void run() {
+				setVisible(View.INVISIBLE);
+			}
+		});
+	}
+	
+	public void setVisible(int visibility) {
+		textViewInfo.setVisibility(visibility);
+		if (textViewProgress!=null) textViewProgress.setVisibility(visibility);
 		
-		progressView.setProgress(0);
-		progressView.setMax(0);
+		progressView.setVisibility(visibility);
 	}
 	
 	@Override

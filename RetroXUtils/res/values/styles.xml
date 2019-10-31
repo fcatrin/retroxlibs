@@ -69,10 +69,12 @@
       <item name="android:gravity">left</item>
       <item name="android:ellipsize">middle</item>
    </style>
-   <style name="EmuMoviesProgress">
+   <style name="EmuMoviesProgress" parent="DialogProgressBar">
       <item name="android:layout_width">match_parent</item>
       <item name="android:layout_height">@dimen/spacing_tiny</item>
       <item name="android:layout_marginTop">@dimen/spacing_tiny</item>
+      <item name="android:layout_marginLeft">0dp</item>
+      <item name="android:layout_marginRight">0dp</item>
       <item name="android:progressDrawable">@drawable/loading_bar</item>
    </style>
 </resources>
