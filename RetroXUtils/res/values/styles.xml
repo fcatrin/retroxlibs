@@ -63,10 +63,11 @@
    <style name="EmuMoviesProgressText">
       <item name="android:textColor">@color/pal_text1</item>
       <item name="android:textSize">@dimen/text_normal</item>
-      <item name="android:layout_width">match_parent</item>
+      <item name="android:layout_width">wrap_content</item>
       <item name="android:layout_height">wrap_content</item>
       <item name="android:singleLine">true</item>
-      <item name="android:gravity">center</item>
+      <item name="android:gravity">left</item>
+      <item name="android:ellipsize">middle</item>
    </style>
    <style name="EmuMoviesProgress">
       <item name="android:layout_width">match_parent</item>
