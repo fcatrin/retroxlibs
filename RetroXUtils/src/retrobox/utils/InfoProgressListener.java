@@ -73,6 +73,10 @@ public class InfoProgressListener extends NetworkProgressListener {
 		progressView.post(new Runnable() {
 			@Override
 			public void run() {
+				progressView.setProgress(0);
+				progressView.setMax(0);
+				textViewInfo.setText("");
+				if (textViewProgress!=null) textViewProgress.setText("");
 				setVisible(View.INVISIBLE);
 			}
 		});
