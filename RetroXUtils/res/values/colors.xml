@@ -54,5 +54,12 @@
     <color name="gamepad_press_analog_center">#E00000FF</color>
     <color name="gamepad_press_analog_start">#E0E0E0E0</color>
     <color name="gamepad_press_analog_border">#E04040E0</color>
-				
+			
+    <color name="loading_bar_bg_start">#30FFFFFF</color>
+	<color name="loading_bar_bg_center">#30FFFFFF</color>
+	<color name="loading_bar_bg_end">#30FFFFFF</color>
+	<color name="loading_bar_start">#FFCA7A26</color>
+	<color name="loading_bar_center">#FFCA7A26</color>
+	<color name="loading_bar_end">#FFCA7A26</color>
+    	
 </resources>
