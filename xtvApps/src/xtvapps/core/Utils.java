@@ -54,10 +54,11 @@ public final class Utils {
 	public static String size2human(long size) {
 		if (size > SIZE_GIGABYTE) {
 			DecimalFormat df = new DecimalFormat("#.#");
-			return df.format(((size + SIZE_GIGABYTE/2) / SIZE_GIGABYTE)) + "G";
+			return df.format((float)(size/ SIZE_GIGABYTE)) + "G";
 		}
 		if (size > SIZE_MEGABYTE) {
-			return ((size + SIZE_MEGABYTE/2) / SIZE_MEGABYTE) + "M";
+			DecimalFormat df = new DecimalFormat("#.#");
+			return df.format((float)(size / SIZE_MEGABYTE)) + "M";
 		}
 		return ((size + SIZE_KILOBYTE/2) / SIZE_KILOBYTE) + "K";
 	}
