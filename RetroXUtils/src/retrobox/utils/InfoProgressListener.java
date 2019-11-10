@@ -61,6 +61,7 @@ public class InfoProgressListener extends NetworkProgressListener {
 			if (textViewProgress!=null) textViewProgress.setText(countInfo);
 			progressView.setProgress(progress+1);
 		} else {
+			if (textViewProgress!=null) textViewProgress.setText("");
 			progressView.setProgress(progress);
 		}
 		
