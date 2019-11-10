@@ -427,18 +427,22 @@ public class RetroBoxDialog {
 	}
 	
 	public static void showListDialog(final Activity activity, String title, List<ListOption> options, Callback<KeyValue> callback) {
-		showListDialog(activity, title, new ListOptionAdapter(options), callback, null);
+		showListDialog(activity, title, new ListOptionAdapter(options), callback, null, 0);
+	}
+
+	public static void showListDialog(final Activity activity, String title, List<ListOption> options, int preSelectedItem, Callback<KeyValue> callback) {
+		showListDialog(activity, title, new ListOptionAdapter(options), callback, null, preSelectedItem);
 	}
 
 	public static void showListDialog(final Activity activity, String title, List<ListOption> options, Callback<KeyValue> callback, Callback<String> callbackDismiss) {
-		showListDialog(activity, title, new ListOptionAdapter(options), callback, callbackDismiss);
+		showListDialog(activity, title, new ListOptionAdapter(options), callback, callbackDismiss, 0);
 	}
 
 	public static void showListDialog(final Activity activity, String title, final BaseAdapter adapter, Callback<KeyValue> callback) {
-		showListDialog(activity, title, adapter, callback, null);
+		showListDialog(activity, title, adapter, callback, null, 0);
 	}
 
-	public static void showListDialog(final Activity activity, String title, final BaseAdapter adapter, final Callback<KeyValue> callback, Callback<String> callbackDismiss) {
+	public static void showListDialog(final Activity activity, String title, final BaseAdapter adapter, final Callback<KeyValue> callback, Callback<String> callbackDismiss, final int preSelectedItem) {
 		activity.findViewById(R.id.modal_dialog_list).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -489,7 +493,7 @@ public class RetroBoxDialog {
 		openDialog(activity, R.id.modal_dialog_list, new SimpleCallback() {
 			@Override
 			public void onResult() {
-		        lv.setSelection(0);
+		        lv.setSelection(preSelectedItem);
 		        
 				lv.setFocusable(true);
 				lv.setFocusableInTouchMode(true);
