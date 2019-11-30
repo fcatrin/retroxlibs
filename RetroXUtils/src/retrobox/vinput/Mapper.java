@@ -146,15 +146,13 @@ public class Mapper {
 					gamepadMapping.translatedCodes[i] = keyCode;
 				}
 			}
+			
+			gamepadMapping.axisRx = intent.getIntExtra(prefix + "RX", 0) / 1000;
+			gamepadMapping.axisRy = intent.getIntExtra(prefix + "RY", 0) / 1000;
+			
 			knownGamepadMappings.put(deviceName, gamepadMapping);
 		}
-		
-		for(int player = 0; player<MAX_PLAYERS; player++) { // TODO is this still used??
-	    	String prefix = "j" + (player+1);
-			gamepadDevices[player].axisRx = intent.getIntExtra(prefix + "RX", 0) / 1000;
-			gamepadDevices[player].axisRy = intent.getIntExtra(prefix + "RY", 0) / 1000;
-		}
-		
+
 	}
 	
 	public static int getTranslatedVirtualEvent(GamepadDevice gamepad, int genericCode) {
@@ -211,14 +209,14 @@ public class Mapper {
 	
 	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	public boolean handleKeyEvent(KeyEvent event, int keyCode, boolean down) {
-		GamepadDevice gamepad = resolveGamepad(event.getDevice().getDescriptor(), event.getDeviceId());
+		GamepadDevice gamepad = resolveGamepadByName(event.getDevice().getName(), event.getDeviceId());
 		if (gamepad == null) return false;
 		
 		return handleKeyEvent(gamepad, keyCode, down);
 	}
 	
-	public boolean handleTriggerEvent(String descriptor, int deviceId, boolean left, boolean right) {
-		GamepadDevice gamepad = resolveGamepad(descriptor, deviceId);
+	public boolean handleTriggerEventByDeviceName(String deviceName, int deviceId, boolean left, boolean right) {
+		GamepadDevice gamepad = resolveGamepadByName(deviceName, deviceId);
 		if (gamepad == null) return false;
 		
 		boolean leftChanged  = gamepad.getTriggerState(MotionEvent.AXIS_LTRIGGER) != left;
@@ -331,7 +329,7 @@ public class Mapper {
 	
 	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	public boolean isSystemKey(KeyEvent event, int keyCode) {
-		GamepadDevice gamepad = event==null ? null : resolveGamepad(event.getDevice().getDescriptor(), event.getDeviceId());
+		GamepadDevice gamepad = event==null ? null : resolveGamepadByName(event.getDevice().getName(), event.getDeviceId());
 		if (gamepad!=null && gamepad.getGamepadMapping().getOriginCode(keyCode)!=0) return false;
 		
 		return 
@@ -350,7 +348,7 @@ public class Mapper {
 		if (mDetector!=null) mDetector.onTouchEvent(me);
 	}
 	
-	public static GamepadDevice resolveGamepad(String deviceName, int deviceId) {
+	public static GamepadDevice resolveGamepadByName(String deviceName, int deviceId) {
 		for(int i=0; i<MAX_PLAYERS; i++) {
 			GamepadDevice gamepad = gamepadDevices[i];
 			if (deviceName.equals(gamepad.getDeviceName()) && (joinPorts || gamepad.getDeviceId() == 0 || gamepad.getDeviceId() == deviceId)) {
@@ -362,7 +360,7 @@ public class Mapper {
 	}
 	
 	public static void registerGamepad(String deviceName, int deviceId) {
-		GamepadDevice existingGamepad = resolveGamepad(deviceName, deviceId);
+		GamepadDevice existingGamepad = resolveGamepadByName(deviceName, deviceId);
 		if (existingGamepad != null) return;
 		
 		for(int i=0; i<MAX_PLAYERS; i++) {

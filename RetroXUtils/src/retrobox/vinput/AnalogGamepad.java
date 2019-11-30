@@ -75,7 +75,7 @@ public class AnalogGamepad {
 	
 	public boolean onGenericMotionEvent (final MotionEvent event) {
 		if (event.getAction() == MotionEvent.ACTION_MOVE && (event.getSource() & InputDevice.SOURCE_CLASS_JOYSTICK) == InputDevice.SOURCE_CLASS_JOYSTICK) {
-			GamepadDevice gamepad = Mapper.instance.resolveGamepad(event.getDevice().getDescriptor(), event.getDeviceId());
+			GamepadDevice gamepad = Mapper.resolveGamepadByName(event.getDevice().getName(), event.getDeviceId());
 			
 			if (gamepad == null) {
 				Log.d(LOGTAG, "Event from unknown descriptor " + event.getDevice().getDescriptor());
@@ -85,11 +85,13 @@ public class AnalogGamepad {
 			float axisRx = 0;
 			float axisRy = 0;
 			
-			if (gamepad.axisRx != 0) {
-				axisRx = event.getAxisValue(Math.abs(gamepad.axisRx)) * (gamepad.axisRx > 0 ? 1 : -1);
+			GamepadMapping gamepadMapping = gamepad.getGamepadMapping();
+			
+			if (gamepadMapping.axisRx != 0) {
+				axisRx = event.getAxisValue(Math.abs(gamepadMapping.axisRx)) * (gamepadMapping.axisRx > 0 ? 1 : -1);
 			}
-			if (gamepad.axisRx != 0) {
-				axisRy = event.getAxisValue(Math.abs(gamepad.axisRy)) * (gamepad.axisRy > 0 ? 1 : -1);
+			if (gamepadMapping.axisRx != 0) {
+				axisRy = event.getAxisValue(Math.abs(gamepadMapping.axisRy)) * (gamepadMapping.axisRy > 0 ? 1 : -1);
 			}
 			if (Math.abs(axisRx) < 0.1) {
 				axisRx = 0;

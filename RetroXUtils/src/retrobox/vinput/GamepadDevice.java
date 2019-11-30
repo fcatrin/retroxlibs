@@ -15,9 +15,6 @@ public class GamepadDevice {
 	
 	public File keymapFile;
 	
-	public int axisRx = 0;
-	public int axisRy = 0;
-	
 	private GamepadMapping gamepadMapping;
 	
 	public GamepadDevice() {

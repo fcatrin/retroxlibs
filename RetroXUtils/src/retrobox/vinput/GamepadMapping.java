@@ -43,6 +43,9 @@ public class GamepadMapping {
 	
 	public int translatedCodes[] = new int[originCodes.length];
 
+	public int axisRx = 0;
+	public int axisRy = 0;
+
 	public GamepadMapping(String deviceName) {
 		this.deviceName = deviceName;
 		for(int i=0; i<translatedCodes.length; i++) translatedCodes[i] = originCodes[i];
