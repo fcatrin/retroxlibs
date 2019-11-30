@@ -55,6 +55,13 @@ public class Mapper {
 		KeyTranslator.init();
 		initVirtualEvents(intent);
 		initGenericJoystick(intent);
+		
+		String defaultDeviceName = intent.getStringExtra("defaultGamepadName");
+		int    defaultDeviceId   = intent.getIntExtra("defaultDeviceId", 0);
+		
+		if (defaultDeviceName!=null) {
+			registerGamepad(defaultDeviceName, defaultDeviceId);
+		}
 	}
 	
 	public static void initGestureDetector(Activity activity) {
@@ -374,7 +381,7 @@ public class Mapper {
 				
 				gamepad.setGamepadMapping(gamepadMapping);
 				
-				Log.d(LOGTAG, "Register gamepad for player " + (i+1) + " device:" + deviceName + " deviceId:" + deviceId + " mapping:" + gamepadMapping.getDeviceName());
+				Log.d(LOGTAG, "Register gamepad for player " + (i+1) + " device:" + deviceName + " deviceId:" + deviceId + " mapper:" + gamepadMapping.getDeviceName());
 			}
 		}		
 	}
