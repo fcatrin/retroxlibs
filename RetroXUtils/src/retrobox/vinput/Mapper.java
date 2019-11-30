@@ -2,6 +2,7 @@ package retrobox.vinput;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 import android.annotation.TargetApi;
@@ -17,12 +18,13 @@ import retrobox.utils.RetroBoxUtils;
 
 public class Mapper {
 	
-	public static final int MAX_GAMEPADS = 4;
+	public static final int MAX_PLAYERS = 4;
+	private static final int MAX_MAPPINGS = 100;
+	
 	public enum ShortCut {NONE, LOAD_STATE, SAVE_STATE, SWAP_DISK, MENU, EXIT, SCREENSHOT};
 	private static int keyShortCuts[] = {0, KeyEvent.KEYCODE_BUTTON_L2, KeyEvent.KEYCODE_BUTTON_R2, KeyEvent.KEYCODE_BUTTON_B, KeyEvent.KEYCODE_BUTTON_SELECT, KeyEvent.KEYCODE_BUTTON_L1};
 
 	private static final String LOGTAG = "vinput.Mapper"; 
-	public static GenericGamepad[] genericGamepads = new GenericGamepad[MAX_GAMEPADS];
 	private boolean inShortcutSequence = false;
 	private boolean wasShortcutSent = false;
 	public static VirtualEventDispatcher listener;
@@ -30,9 +32,15 @@ public class Mapper {
 	public static Mapper instance;
 	private static GestureDetector mDetector;
 	public static boolean joinPorts = false;
+
+	private static GamepadMapping defaultGamepadMapping;
+
+	public static GenericGamepad[] genericGamepads = new GenericGamepad[MAX_PLAYERS];
+	public static GamepadKeyMapping[] knownKeyMappings = new GamepadKeyMapping[MAX_PLAYERS];
+	public static Map<String, GamepadMapping> knownMappings = new HashMap<String, GamepadMapping>();
 	
 	static {
-		for(int i=0; i<MAX_GAMEPADS; i++) {
+		for(int i=0; i<MAX_PLAYERS; i++) {
 			genericGamepads[i] = new GenericGamepad();
 			genericGamepads[i].player = i;
 		}
@@ -41,6 +49,9 @@ public class Mapper {
 	public Mapper(Intent intent, VirtualEventDispatcher listener) {
 		Mapper.instance = this;
 		Mapper.listener = listener;
+		
+		defaultGamepadMapping = GamepadMapping.buildDefaultMapping();
+		
 		KeyTranslator.init();
 		initVirtualEvents(intent);
 		initGenericJoystick(intent);
@@ -67,7 +78,7 @@ public class Mapper {
 	
 	private void initVirtualEvents(Intent intent) {
 		Log.d("REMAP", "Intent " + intent.getExtras());
-		for(int player = 0; player<MAX_GAMEPADS; player++) {
+		for(int player = 0; player<MAX_PLAYERS; player++) {
 			
 			// first try to load from file
 			String keymapFileKey = "KEYMAP_" + (player+1);
@@ -83,17 +94,17 @@ public class Mapper {
 			
 			// if anything fails, read the old way
 	    	String prefix = "kmap" + (player+1);
-		    for(int i=0; i<GenericGamepad.eventNames.length; i++) {
-		    	String keyName = GenericGamepad.eventNames[i];
+		    for(int i=0; i<GamepadMapping.eventNames.length; i++) {
+		    	String keyName = GamepadMapping.eventNames[i];
 		    	String keyNameLinux = intent.getStringExtra(prefix + keyName); 
 		    	Log.d("REMAP", "Keyname Linux  " + prefix + keyName + "=" + keyNameLinux);
 		    	
 		    	if (keyNameLinux!=null) {
 		    		Log.d("REMAP", "Key for " + keyName + " is " + keyNameLinux);
 		    		VirtualEvent event = KeyTranslator.translate(keyNameLinux);
-		    		genericGamepads[player].virtualEvents[i] = event;
+		    		knownKeyMappings[player].virtualEvents[i] = event;
 		    		Log.d("REMAP", "Linux key " + keyNameLinux + " mapped to event " + event);
-		    	} else genericGamepads[player].virtualEvents[i] = null;
+		    	} else knownKeyMappings[player].virtualEvents[i] = null;
 		    }
 		}
 	}
@@ -101,8 +112,8 @@ public class Mapper {
 	public static void loadVirtualEvents(int player, File keymapFile) throws IOException {
 		Map<String, String> mapping = RetroBoxUtils.loadMapping(keymapFile);
 		Log.d("KEYMAPFILE", "load " + keymapFile.getAbsolutePath() + " as " + mapping);
-		for(int i=0; i<GenericGamepad.eventNames.length; i++) {
-	    	String keyName = GenericGamepad.eventNames[i];
+		for(int i=0; i<GamepadMapping.eventNames.length; i++) {
+	    	String keyName = GamepadMapping.eventNames[i];
 	    	String keyNameLinux = mapping.get(keyName);
 	    	
 	    	VirtualEvent event = null;
@@ -110,7 +121,7 @@ public class Mapper {
 	    	if (keyNameLinux!=null) {
 	    		event = KeyTranslator.translate(keyNameLinux);
 	    	}
-	    	genericGamepads[player].virtualEvents[i] = event;
+	    	knownKeyMappings[player].virtualEvents[i] = event;
 	    	Log.d("KEYMAPFILE", "Linux key " + keyNameLinux + " mapped to event " + event);
 		}
 		genericGamepads[player].keymapFile = keymapFile;
@@ -121,16 +132,25 @@ public class Mapper {
 	}
 
 	private void initGenericJoystick(Intent intent) {
-		for(int player = 0; player<MAX_GAMEPADS; player++) {
-	    	String prefix = "j" + (player+1);
-			for(int i=0; i<GenericGamepad.eventNames.length; i++) {
-				String eventName = GenericGamepad.eventNames[i];
+		for(int mapping = 0; mapping < MAX_MAPPINGS; mapping++) {
+			String prefix = "gmap_" + mapping;
+			String deviceName = intent.getStringExtra(prefix);
+			if (deviceName == null) return;
+
+			GamepadMapping gamepadMapping = new GamepadMapping(deviceName);
+			for(int i=0; i<GamepadMapping.eventNames.length; i++) {
+				String eventName = GamepadMapping.eventNames[i];
 				Integer keyCode = intent.getIntExtra(prefix + eventName, 0);
 				if (keyCode>0) {
 					Log.d(LOGTAG, "keyCode " +  prefix + " for " + eventName + ":" + keyCode);
-					genericGamepads[player].translatedCodes[i] = keyCode;
+					gamepadMapping.translatedCodes[i] = keyCode;
 				}
 			}
+			knownMappings.put(deviceName, gamepadMapping);
+		}
+		
+		for(int player = 0; player<MAX_PLAYERS; player++) { // TODO is this still used??
+	    	String prefix = "j" + (player+1);
 			genericGamepads[player].axisRx = intent.getIntExtra(prefix + "RX", 0) / 1000;
 			genericGamepads[player].axisRy = intent.getIntExtra(prefix + "RY", 0) / 1000;
 		}
@@ -138,18 +158,15 @@ public class Mapper {
 	}
 	
 	public static int getTranslatedVirtualEvent(GenericGamepad gamepad, int genericCode) {
-		for(int i=0; i<gamepad.originCodes.length; i++) {
-			if (gamepad.originCodes[i] == genericCode) {
-				return gamepad.translatedCodes[i];
-			}
-		}
-		return 0;
+		GamepadMapping gamepadMapping = gamepad.getGamepadMapping();
+		return gamepadMapping.getTranslatedVirtualEvent(genericCode);
 	}
 	
 	public static VirtualEvent getVirtualEvent(GenericGamepad gamepad, int translatedCode) {
-		for(int i=0; i<gamepad.translatedCodes.length; i++) {
-			if (gamepad.translatedCodes[i] == translatedCode) {
-				VirtualEvent ev = gamepad.virtualEvents[i];
+		GamepadMapping gamepadMapping = gamepad.getGamepadMapping();
+		for(int i=0; i<gamepadMapping.translatedCodes.length; i++) {
+			if (gamepadMapping.translatedCodes[i] == translatedCode) {
+				VirtualEvent ev = knownKeyMappings[gamepad.player].virtualEvents[i];
 				return ev;
 			}
 		}
@@ -158,13 +175,14 @@ public class Mapper {
 	
 	
 	public static VirtualEvent getTargetEventIndex(GenericGamepad gamepad, int index) {
-		return gamepad.virtualEvents[index];
+		return knownKeyMappings[gamepad.player].virtualEvents[index];
 	}
 	
 	public static VirtualEvent getTargetEvent(GenericGamepad gamepad, int genericCode) {
-		for(int i=0; i<gamepad.originCodes.length; i++) {
-			if (gamepad.originCodes[i] == genericCode) {
-				VirtualEvent ev = gamepad.virtualEvents[i];
+		GamepadMapping gamepadMapping = gamepad.getGamepadMapping();
+		for(int i=0; i<gamepadMapping.originCodes.length; i++) {
+			if (gamepadMapping.originCodes[i] == genericCode) {
+				VirtualEvent ev = knownKeyMappings[gamepad.player].virtualEvents[i];
 				return ev;
 			}
 		}
@@ -172,9 +190,11 @@ public class Mapper {
 	}
 	
 	public static void setTargetEvent(GenericGamepad gamepad, int genericCode, VirtualEvent ev) {
-		for(int i=0; i<gamepad.originCodes.length; i++) {
-			if (gamepad.originCodes[i] == genericCode) {
-				gamepad.virtualEvents[i] = ev;
+		GamepadMapping gamepadMapping = gamepad.getGamepadMapping();
+
+		for(int i=0; i<gamepadMapping.originCodes.length; i++) {
+			if (gamepadMapping.originCodes[i] == genericCode) {
+				knownKeyMappings[gamepad.player].virtualEvents[i] = ev;
 				return;
 			}
 		}
@@ -261,11 +281,11 @@ public class Mapper {
 	}
 	
 	protected int getOriginCode(GenericGamepad gamepad, int keyCode) {
-		return gamepad.getOriginCode(keyCode);
+		return gamepad.getGamepadMapping().getOriginCode(keyCode);
 	}
 	
 	public static int getOriginCodeByIndex(GenericGamepad gamepad, int index) {
-		return gamepad.originCodes[index];
+		return gamepad.getGamepadMapping().originCodes[index];
 	}
 
 	protected boolean isStartButton(GenericGamepad gamepad, int keyCode) {
@@ -312,7 +332,7 @@ public class Mapper {
 	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	public boolean isSystemKey(KeyEvent event, int keyCode) {
 		GenericGamepad gamepad = event==null ? null : resolveGamepad(event.getDevice().getDescriptor(), event.getDeviceId());
-		if (gamepad!=null && gamepad.getOriginCode(keyCode)!=0) return false;
+		if (gamepad!=null && gamepad.getGamepadMapping().getOriginCode(keyCode)!=0) return false;
 		
 		return 
 			keyCode == KeyEvent.KEYCODE_BACK || 
@@ -330,8 +350,8 @@ public class Mapper {
 		if (mDetector!=null) mDetector.onTouchEvent(me);
 	}
 	
-	public GenericGamepad resolveGamepad(String deviceDescriptor, int deviceId) {
-		for(int i=0; i<MAX_GAMEPADS; i++) {
+	public static GenericGamepad resolveGamepad(String deviceDescriptor, int deviceId) {
+		for(int i=0; i<MAX_PLAYERS; i++) {
 			GenericGamepad gamepad = genericGamepads[i];
 			if (deviceDescriptor.equals(gamepad.deviceDescriptor) && (joinPorts || gamepad.deviceId == 0 || gamepad.deviceId == deviceId)) {
 				gamepad.deviceId = deviceId;
@@ -341,10 +361,24 @@ public class Mapper {
 		return null;
 	}
 	
-	public static void registerGamepad(int player, String deviceDescriptor) {
-		genericGamepads[player].deviceDescriptor = deviceDescriptor;
-		genericGamepads[player].deviceId = 0;
-		Log.d(LOGTAG, "Register gamepad " + player + " descriptor:" + deviceDescriptor);
+	public static void registerGamepad(String deviceName, int deviceId) {
+		GenericGamepad existingGamepad = resolveGamepad(deviceName, deviceId);
+		if (existingGamepad != null) return;
+		
+		for(int i=0; i<MAX_PLAYERS; i++) {
+			GenericGamepad gamepad = genericGamepads[i];
+			if (gamepad.deviceDescriptor == null) {
+				gamepad.deviceDescriptor = deviceName;
+				gamepad.deviceId = deviceId;
+				
+				GamepadMapping gamepadMapping = knownMappings.get(deviceName);
+				if (gamepadMapping == null) gamepadMapping = defaultGamepadMapping;
+				
+				gamepad.setGamepadMapping(gamepadMapping);
+				
+				Log.d(LOGTAG, "Register gamepad for player " + (i+1) + " device:" + deviceName + " deviceId:" + deviceId + " mapping:" + gamepadMapping.getDeviceName());
+			}
+		}		
 	}
 	
 	public static boolean hasGamepads() {

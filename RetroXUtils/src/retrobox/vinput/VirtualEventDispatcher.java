@@ -1,6 +1,6 @@
 package retrobox.vinput;
 
-import retrobox.vinput.GenericGamepad.Analog;
+import retrobox.vinput.GamepadMapping.Analog;
 import retrobox.vinput.Mapper.ShortCut;
 import retrobox.vinput.VirtualEvent.MouseButton;
 

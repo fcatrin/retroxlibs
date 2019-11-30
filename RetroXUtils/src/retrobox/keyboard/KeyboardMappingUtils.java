@@ -21,7 +21,7 @@ public class KeyboardMappingUtils {
 	
 	public static void openKeymapSettings(final Activity activity, final KeyboardLayout keyboardLayout[], final SimpleCallback returnHereCallback) {
 		List<ListOption> options = new ArrayList<ListOption>();
-		for(int i=0; i<Mapper.MAX_GAMEPADS; i++) {
+		for(int i=0; i<Mapper.MAX_PLAYERS; i++) {
 			String gamepadNumber = String.valueOf(i+1);
 			options.add(new ListOption(gamepadNumber, "Gamepad " + gamepadNumber));
 		}

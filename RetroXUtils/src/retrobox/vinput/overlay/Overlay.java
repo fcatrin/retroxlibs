@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import retrobox.vinput.GamepadMapping.Analog;
 import retrobox.vinput.GenericGamepad;
-import retrobox.vinput.GenericGamepad.Analog;
 import retrobox.vinput.Mapper;
 import retrobox.vinput.VirtualEvent;
 import retrobox.vinput.overlay.OverlayButton.ButtonAction;
