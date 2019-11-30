@@ -9,8 +9,8 @@ public class GenericGamepad {
 	
 	SparseBooleanArray triggerState = new SparseBooleanArray();
 
-	String deviceDescriptor;
-	int deviceId;
+	private String deviceName;
+	private int deviceId;
 	public int player;
 	
 	public File keymapFile;
@@ -23,13 +23,17 @@ public class GenericGamepad {
 	public GenericGamepad() {
 	}
 	
-	public String getDeviceDescriptor() {
-		return deviceDescriptor;
+	public String getDeviceName() {
+		return deviceName;
 	}
 
-	public void setDeviceDescriptor(String deviceDescriptor) {
-		this.deviceDescriptor = deviceDescriptor;
+
+
+	public void setDeviceName(String deviceName) {
+		this.deviceName = deviceName;
 	}
+
+
 
 	public int getDeviceId() {
 		return deviceId;
@@ -41,7 +45,7 @@ public class GenericGamepad {
 
 	@Override
 	public String toString() {
-		return "GenericGamepad {descriptor:" + deviceDescriptor + ", deviceId:" + deviceId + "}";
+		return "GenericGamepad {device:" + deviceName + ", deviceId:" + deviceId + "}";
 	}
 
 	public void setTriggerState(int code, boolean down) {

@@ -350,11 +350,11 @@ public class Mapper {
 		if (mDetector!=null) mDetector.onTouchEvent(me);
 	}
 	
-	public static GenericGamepad resolveGamepad(String deviceDescriptor, int deviceId) {
+	public static GenericGamepad resolveGamepad(String deviceName, int deviceId) {
 		for(int i=0; i<MAX_PLAYERS; i++) {
 			GenericGamepad gamepad = genericGamepads[i];
-			if (deviceDescriptor.equals(gamepad.deviceDescriptor) && (joinPorts || gamepad.deviceId == 0 || gamepad.deviceId == deviceId)) {
-				gamepad.deviceId = deviceId;
+			if (deviceName.equals(gamepad.getDeviceName()) && (joinPorts || gamepad.getDeviceId() == 0 || gamepad.getDeviceId() == deviceId)) {
+				gamepad.setDeviceId(deviceId);
 				return gamepad;  
 			}
 		}
@@ -367,9 +367,9 @@ public class Mapper {
 		
 		for(int i=0; i<MAX_PLAYERS; i++) {
 			GenericGamepad gamepad = genericGamepads[i];
-			if (gamepad.deviceDescriptor == null) {
-				gamepad.deviceDescriptor = deviceName;
-				gamepad.deviceId = deviceId;
+			if (gamepad.getDeviceName() == null) {
+				gamepad.setDeviceName(deviceName);
+				gamepad.setDeviceId(deviceId);
 				
 				GamepadMapping gamepadMapping = knownMappings.get(deviceName);
 				if (gamepadMapping == null) gamepadMapping = defaultGamepadMapping;
@@ -386,6 +386,6 @@ public class Mapper {
 	}
 
 	public static boolean hasGamepad(int player) {
-		return genericGamepads[player].deviceDescriptor!=null;
+		return genericGamepads[player].getDeviceName()!=null;
 	}
 }

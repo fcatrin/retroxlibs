@@ -109,7 +109,7 @@ public class AnalogGamepad {
 			
 			listener.onAxisChange(gamepad, axisx, axisy, hatx, haty, axisRx, axisRy);
 			
-			String deviceDescriptor = event.getDevice().getDescriptor();
+			String deviceName = event.getDevice().getName();
 			int deviceId = event.getDevice().getId();
 			
 			float triggerL = event.getAxisValue(MotionEvent.AXIS_LTRIGGER);
@@ -121,7 +121,7 @@ public class AnalogGamepad {
 				triggerR = event.getAxisValue(MotionEvent.AXIS_GAS);
 			}
 			
-			listener.onTriggers(deviceDescriptor, deviceId, Math.abs(triggerL)>=deadzone, Math.abs(triggerR)>=deadzone);
+			listener.onTriggers(deviceName, deviceId, Math.abs(triggerL)>=deadzone, Math.abs(triggerR)>=deadzone);
 			listener.onTriggersAnalog(gamepad, deviceId, triggerL, triggerR);
 
 			return true;
