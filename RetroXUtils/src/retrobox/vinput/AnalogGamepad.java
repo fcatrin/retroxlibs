@@ -78,7 +78,7 @@ public class AnalogGamepad {
 			GamepadDevice gamepad = Mapper.resolveGamepadByName(event.getDevice().getName(), event.getDeviceId());
 			
 			if (gamepad == null) {
-				Log.d(LOGTAG, "Event from unknown descriptor " + event.getDevice().getDescriptor());
+				Log.d(LOGTAG, "Event from unknown device " + event.getDevice().getName());
 				return false;
 			}
 			
