@@ -2,7 +2,7 @@ package retrobox.vinput.overlay;
 
 import android.view.MotionEvent;
 
-public class GamepadController  {
+public class OverlayGamepadController  {
 
     public boolean onTouchEvent(MotionEvent event) {
 

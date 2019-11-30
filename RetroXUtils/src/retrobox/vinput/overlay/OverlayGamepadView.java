@@ -5,12 +5,12 @@ import android.graphics.Canvas;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class GamepadView extends View {
+public class OverlayGamepadView extends View {
 
 	private ViewGroup _viewGroup;
 	private Overlay overlay;
 	
-	public GamepadView(Context context, Overlay overlay) {
+	public OverlayGamepadView(Context context, Overlay overlay) {
 		super(context);
 		this.overlay = overlay;
 	}
