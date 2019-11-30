@@ -3,7 +3,7 @@ package retrobox.vinput.overlay;
 import java.util.ArrayList;
 import java.util.List;
 
-import retrobox.vinput.GenericGamepad;
+import retrobox.vinput.GamepadDevice;
 import retrobox.vinput.KeyTranslator;
 import retrobox.vinput.Mapper;
 import retrobox.vinput.VirtualEvent;
@@ -58,7 +58,7 @@ public class OverlayExtra {
 	}
 
 	public static boolean onExtraButtonPress(int pointerId, int x, int y) {
-		GenericGamepad firstGamepad = Mapper.genericGamepads[0];
+		GamepadDevice firstGamepad = Mapper.genericGamepads[0];
 		for(ExtraButton jb : extraButtons) {
     		if (jb.event!=null && inRect(jb.x, jb.y, jb.w, jb.h, x, y)) {
     			jb.pressed = true;
@@ -72,7 +72,7 @@ public class OverlayExtra {
 	}
 	
 	public static boolean onExtraButtonRelease(int pointerId) {
-		GenericGamepad firstGamepad = Mapper.genericGamepads[0];
+		GamepadDevice firstGamepad = Mapper.genericGamepads[0];
 		for(ExtraButton jb : extraButtons) {
 			if (jb.event!=null && jb.pointerId == pointerId) {
 				jb.pressed = false;

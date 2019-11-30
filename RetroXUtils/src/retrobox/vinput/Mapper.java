@@ -35,13 +35,13 @@ public class Mapper {
 
 	private static GamepadMapping defaultGamepadMapping;
 
-	public static GenericGamepad[] genericGamepads = new GenericGamepad[MAX_PLAYERS];
+	public static GamepadDevice[] genericGamepads = new GamepadDevice[MAX_PLAYERS];
 	public static GamepadKeyMapping[] knownKeyMappings = new GamepadKeyMapping[MAX_PLAYERS];
 	public static Map<String, GamepadMapping> knownMappings = new HashMap<String, GamepadMapping>();
 	
 	static {
 		for(int i=0; i<MAX_PLAYERS; i++) {
-			genericGamepads[i] = new GenericGamepad();
+			genericGamepads[i] = new GamepadDevice();
 			genericGamepads[i].player = i;
 		}
 	}
@@ -157,12 +157,12 @@ public class Mapper {
 		
 	}
 	
-	public static int getTranslatedVirtualEvent(GenericGamepad gamepad, int genericCode) {
+	public static int getTranslatedVirtualEvent(GamepadDevice gamepad, int genericCode) {
 		GamepadMapping gamepadMapping = gamepad.getGamepadMapping();
 		return gamepadMapping.getTranslatedVirtualEvent(genericCode);
 	}
 	
-	public static VirtualEvent getVirtualEvent(GenericGamepad gamepad, int translatedCode) {
+	public static VirtualEvent getVirtualEvent(GamepadDevice gamepad, int translatedCode) {
 		GamepadMapping gamepadMapping = gamepad.getGamepadMapping();
 		for(int i=0; i<gamepadMapping.translatedCodes.length; i++) {
 			if (gamepadMapping.translatedCodes[i] == translatedCode) {
@@ -174,11 +174,11 @@ public class Mapper {
 	}
 	
 	
-	public static VirtualEvent getTargetEventIndex(GenericGamepad gamepad, int index) {
+	public static VirtualEvent getTargetEventIndex(GamepadDevice gamepad, int index) {
 		return knownKeyMappings[gamepad.player].virtualEvents[index];
 	}
 	
-	public static VirtualEvent getTargetEvent(GenericGamepad gamepad, int genericCode) {
+	public static VirtualEvent getTargetEvent(GamepadDevice gamepad, int genericCode) {
 		GamepadMapping gamepadMapping = gamepad.getGamepadMapping();
 		for(int i=0; i<gamepadMapping.originCodes.length; i++) {
 			if (gamepadMapping.originCodes[i] == genericCode) {
@@ -189,7 +189,7 @@ public class Mapper {
 		return null;
 	}
 	
-	public static void setTargetEvent(GenericGamepad gamepad, int genericCode, VirtualEvent ev) {
+	public static void setTargetEvent(GamepadDevice gamepad, int genericCode, VirtualEvent ev) {
 		GamepadMapping gamepadMapping = gamepad.getGamepadMapping();
 
 		for(int i=0; i<gamepadMapping.originCodes.length; i++) {
@@ -201,7 +201,7 @@ public class Mapper {
 	}
 	
 	
-	private void sendKeyPress(GenericGamepad gamepad, int keyCode) {
+	private void sendKeyPress(GamepadDevice gamepad, int keyCode) {
 		listener.sendKey(gamepad, keyCode, true);
 		try {
 			Thread.sleep(100);
@@ -211,14 +211,14 @@ public class Mapper {
 	
 	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	public boolean handleKeyEvent(KeyEvent event, int keyCode, boolean down) {
-		GenericGamepad gamepad = resolveGamepad(event.getDevice().getDescriptor(), event.getDeviceId());
+		GamepadDevice gamepad = resolveGamepad(event.getDevice().getDescriptor(), event.getDeviceId());
 		if (gamepad == null) return false;
 		
 		return handleKeyEvent(gamepad, keyCode, down);
 	}
 	
 	public boolean handleTriggerEvent(String descriptor, int deviceId, boolean left, boolean right) {
-		GenericGamepad gamepad = resolveGamepad(descriptor, deviceId);
+		GamepadDevice gamepad = resolveGamepad(descriptor, deviceId);
 		if (gamepad == null) return false;
 		
 		boolean leftChanged  = gamepad.getTriggerState(MotionEvent.AXIS_LTRIGGER) != left;
@@ -236,7 +236,7 @@ public class Mapper {
 		return true;
 	}
 	
-	public boolean handleKeyEvent(GenericGamepad gamepad, int keyCode, boolean down) {
+	public boolean handleKeyEvent(GamepadDevice gamepad, int keyCode, boolean down) {
 		if (keyCode == KeyEvent.KEYCODE_SEARCH) { // NVIDIA Shield
 			if (!down) {
 				sendShortcutMenu();
@@ -275,27 +275,27 @@ public class Mapper {
 		listener.handleShortcut(ShortCut.MENU, false);
 	}
 	
-	protected void sendStartKeyPress(GenericGamepad gamepad) {
+	protected void sendStartKeyPress(GamepadDevice gamepad) {
 		VirtualEvent ve = getTargetEvent(gamepad, KeyEvent.KEYCODE_BUTTON_START);
 		if (ve!=null) sendKeyPress(gamepad, ve.keyCode);
 	}
 	
-	protected int getOriginCode(GenericGamepad gamepad, int keyCode) {
+	protected int getOriginCode(GamepadDevice gamepad, int keyCode) {
 		return gamepad.getGamepadMapping().getOriginCode(keyCode);
 	}
 	
-	public static int getOriginCodeByIndex(GenericGamepad gamepad, int index) {
+	public static int getOriginCodeByIndex(GamepadDevice gamepad, int index) {
 		return gamepad.getGamepadMapping().originCodes[index];
 	}
 
-	protected boolean isStartButton(GenericGamepad gamepad, int keyCode) {
+	protected boolean isStartButton(GamepadDevice gamepad, int keyCode) {
 		return getOriginCode(gamepad, keyCode) == KeyEvent.KEYCODE_BUTTON_START;
 	}
 	
 	boolean isL3down = false;
 	boolean isR3down = false;
 	
-	public boolean handleShortcut(GenericGamepad gamepad, int keyCode, boolean down) {
+	public boolean handleShortcut(GamepadDevice gamepad, int keyCode, boolean down) {
 		if (gamepad == null) return false;
 		
 		boolean wasScreenshotComboDown = isL3down && isR3down;
@@ -331,7 +331,7 @@ public class Mapper {
 	
 	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	public boolean isSystemKey(KeyEvent event, int keyCode) {
-		GenericGamepad gamepad = event==null ? null : resolveGamepad(event.getDevice().getDescriptor(), event.getDeviceId());
+		GamepadDevice gamepad = event==null ? null : resolveGamepad(event.getDevice().getDescriptor(), event.getDeviceId());
 		if (gamepad!=null && gamepad.getGamepadMapping().getOriginCode(keyCode)!=0) return false;
 		
 		return 
@@ -342,7 +342,7 @@ public class Mapper {
 			keyCode == KeyEvent.KEYCODE_VOLUME_MUTE;
 	}
 
-	public static void sendJoystickAnalogMove(GenericGamepad gamepad, float xval, float yval) {
+	public static void sendJoystickAnalogMove(GamepadDevice gamepad, float xval, float yval) {
 		if (analogListener!=null) analogListener.onAxisChange(gamepad, xval,  yval, xval, yval, 0, 0);
 	}
 	
@@ -350,9 +350,9 @@ public class Mapper {
 		if (mDetector!=null) mDetector.onTouchEvent(me);
 	}
 	
-	public static GenericGamepad resolveGamepad(String deviceName, int deviceId) {
+	public static GamepadDevice resolveGamepad(String deviceName, int deviceId) {
 		for(int i=0; i<MAX_PLAYERS; i++) {
-			GenericGamepad gamepad = genericGamepads[i];
+			GamepadDevice gamepad = genericGamepads[i];
 			if (deviceName.equals(gamepad.getDeviceName()) && (joinPorts || gamepad.getDeviceId() == 0 || gamepad.getDeviceId() == deviceId)) {
 				gamepad.setDeviceId(deviceId);
 				return gamepad;  
@@ -362,11 +362,11 @@ public class Mapper {
 	}
 	
 	public static void registerGamepad(String deviceName, int deviceId) {
-		GenericGamepad existingGamepad = resolveGamepad(deviceName, deviceId);
+		GamepadDevice existingGamepad = resolveGamepad(deviceName, deviceId);
 		if (existingGamepad != null) return;
 		
 		for(int i=0; i<MAX_PLAYERS; i++) {
-			GenericGamepad gamepad = genericGamepads[i];
+			GamepadDevice gamepad = genericGamepads[i];
 			if (gamepad.getDeviceName() == null) {
 				gamepad.setDeviceName(deviceName);
 				gamepad.setDeviceId(deviceId);

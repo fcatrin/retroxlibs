@@ -5,7 +5,7 @@ import java.io.File;
 import android.util.SparseBooleanArray;
 import android.view.KeyEvent;
 
-public class GenericGamepad {
+public class GamepadDevice {
 	
 	SparseBooleanArray triggerState = new SparseBooleanArray();
 
@@ -20,7 +20,7 @@ public class GenericGamepad {
 	
 	private GamepadMapping gamepadMapping;
 	
-	public GenericGamepad() {
+	public GamepadDevice() {
 	}
 	
 	public String getDeviceName() {

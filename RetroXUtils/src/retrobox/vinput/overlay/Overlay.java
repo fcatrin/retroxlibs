@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import retrobox.vinput.GamepadMapping.Analog;
-import retrobox.vinput.GenericGamepad;
+import retrobox.vinput.GamepadDevice;
 import retrobox.vinput.Mapper;
 import retrobox.vinput.VirtualEvent;
 import retrobox.vinput.overlay.OverlayButton.ButtonAction;
@@ -188,7 +188,7 @@ public class Overlay {
 		button.setPressed(true);
 		button.pointerId = pointerId;
 		
-		GenericGamepad firstGamepad = Mapper.genericGamepads[0];
+		GamepadDevice firstGamepad = Mapper.genericGamepads[0];
 		if (button.eventIndexes!=null) {
 			if (button.action == ButtonAction.ANALOG) {
 				button.updateAnalog(x, y);
@@ -208,7 +208,7 @@ public class Overlay {
 		button.setPressed(false);
 		button.pointerId = POINTER_ID_NONE;
 
-		GenericGamepad firstGamepad = Mapper.genericGamepads[0];
+		GamepadDevice firstGamepad = Mapper.genericGamepads[0];
 		if (button.eventIndexes!=null) {
 			if (button.action == ButtonAction.ANALOG) {
 				button.updateAnalog(button.x, button.y);

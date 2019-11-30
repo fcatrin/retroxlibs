@@ -31,7 +31,7 @@ public class VirtualEvent {
 		this(0);
 	}
 	
-	public void sendEvent(GenericGamepad gamepad, boolean down) {
+	public void sendEvent(GamepadDevice gamepad, boolean down) {
 		if (mouseButton==null) {
 			Mapper.listener.sendKey(gamepad, keyCode, down);
 		} else {

@@ -75,7 +75,7 @@ public class AnalogGamepad {
 	
 	public boolean onGenericMotionEvent (final MotionEvent event) {
 		if (event.getAction() == MotionEvent.ACTION_MOVE && (event.getSource() & InputDevice.SOURCE_CLASS_JOYSTICK) == InputDevice.SOURCE_CLASS_JOYSTICK) {
-			GenericGamepad gamepad = Mapper.instance.resolveGamepad(event.getDevice().getDescriptor(), event.getDeviceId());
+			GamepadDevice gamepad = Mapper.instance.resolveGamepad(event.getDevice().getDescriptor(), event.getDeviceId());
 			
 			if (gamepad == null) {
 				Log.d(LOGTAG, "Event from unknown descriptor " + event.getDevice().getDescriptor());
@@ -130,7 +130,7 @@ public class AnalogGamepad {
 		return false;
 	}
 	
-	public void analogToDigital(GenericGamepad gamepad, float x, float y) {
+	public void analogToDigital(GamepadDevice gamepad, float x, float y) {
 		if (Math.abs(x)<deadzone) x = 0;
 		if (Math.abs(y)<deadzone) y = 0;
 		
