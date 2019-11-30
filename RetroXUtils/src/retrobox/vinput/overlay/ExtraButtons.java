@@ -59,7 +59,7 @@ public class ExtraButtons {
 						if (key.equals("BTN_LEFT")) dpadEvent = KeyEvent.KEYCODE_DPAD_LEFT;
 						if (key.equals("BTN_RIGHT")) dpadEvent = KeyEvent.KEYCODE_DPAD_RIGHT;
 						if (dpadEvent>0 && name.equals("_hide_")) {
-							Mapper.setTargetEvent(Mapper.genericGamepads[0], dpadEvent, null);
+							Mapper.setTargetEvent(Mapper.gamepadDevices[0], dpadEvent, null);
 						}
 					} else {
 						OverlayExtra.addExtraButton(OverlayExtra.createExtraButton(name, key, left, top, size));

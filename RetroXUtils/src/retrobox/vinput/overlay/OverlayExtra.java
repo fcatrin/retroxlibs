@@ -58,7 +58,7 @@ public class OverlayExtra {
 	}
 
 	public static boolean onExtraButtonPress(int pointerId, int x, int y) {
-		GamepadDevice firstGamepad = Mapper.genericGamepads[0];
+		GamepadDevice firstGamepad = Mapper.gamepadDevices[0];
 		for(ExtraButton jb : extraButtons) {
     		if (jb.event!=null && inRect(jb.x, jb.y, jb.w, jb.h, x, y)) {
     			jb.pressed = true;
@@ -72,7 +72,7 @@ public class OverlayExtra {
 	}
 	
 	public static boolean onExtraButtonRelease(int pointerId) {
-		GamepadDevice firstGamepad = Mapper.genericGamepads[0];
+		GamepadDevice firstGamepad = Mapper.gamepadDevices[0];
 		for(ExtraButton jb : extraButtons) {
 			if (jb.event!=null && jb.pointerId == pointerId) {
 				jb.pressed = false;

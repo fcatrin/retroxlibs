@@ -188,7 +188,7 @@ public class Overlay {
 		button.setPressed(true);
 		button.pointerId = pointerId;
 		
-		GamepadDevice firstGamepad = Mapper.genericGamepads[0];
+		GamepadDevice firstGamepad = Mapper.gamepadDevices[0];
 		if (button.eventIndexes!=null) {
 			if (button.action == ButtonAction.ANALOG) {
 				button.updateAnalog(x, y);
@@ -208,7 +208,7 @@ public class Overlay {
 		button.setPressed(false);
 		button.pointerId = POINTER_ID_NONE;
 
-		GamepadDevice firstGamepad = Mapper.genericGamepads[0];
+		GamepadDevice firstGamepad = Mapper.gamepadDevices[0];
 		if (button.eventIndexes!=null) {
 			if (button.action == ButtonAction.ANALOG) {
 				button.updateAnalog(button.x, button.y);

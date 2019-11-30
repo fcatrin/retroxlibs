@@ -35,14 +35,14 @@ public class Mapper {
 
 	private static GamepadMapping defaultGamepadMapping;
 
-	public static GamepadDevice[] genericGamepads = new GamepadDevice[MAX_PLAYERS];
+	public static GamepadDevice[] gamepadDevices = new GamepadDevice[MAX_PLAYERS];
 	public static GamepadKeyMapping[] knownKeyMappings = new GamepadKeyMapping[MAX_PLAYERS];
-	public static Map<String, GamepadMapping> knownMappings = new HashMap<String, GamepadMapping>();
+	public static Map<String, GamepadMapping> knownGamepadMappings = new HashMap<String, GamepadMapping>();
 	
 	static {
 		for(int i=0; i<MAX_PLAYERS; i++) {
-			genericGamepads[i] = new GamepadDevice();
-			genericGamepads[i].player = i;
+			gamepadDevices[i] = new GamepadDevice();
+			gamepadDevices[i].player = i;
 		}
 	}
 
@@ -124,11 +124,11 @@ public class Mapper {
 	    	knownKeyMappings[player].virtualEvents[i] = event;
 	    	Log.d("KEYMAPFILE", "Linux key " + keyNameLinux + " mapped to event " + event);
 		}
-		genericGamepads[player].keymapFile = keymapFile;
+		gamepadDevices[player].keymapFile = keymapFile;
 	}
 	
 	public static File getKeymapFile(int player) {
-		return genericGamepads[player-1].keymapFile;
+		return gamepadDevices[player-1].keymapFile;
 	}
 
 	private void initGenericJoystick(Intent intent) {
@@ -146,13 +146,13 @@ public class Mapper {
 					gamepadMapping.translatedCodes[i] = keyCode;
 				}
 			}
-			knownMappings.put(deviceName, gamepadMapping);
+			knownGamepadMappings.put(deviceName, gamepadMapping);
 		}
 		
 		for(int player = 0; player<MAX_PLAYERS; player++) { // TODO is this still used??
 	    	String prefix = "j" + (player+1);
-			genericGamepads[player].axisRx = intent.getIntExtra(prefix + "RX", 0) / 1000;
-			genericGamepads[player].axisRy = intent.getIntExtra(prefix + "RY", 0) / 1000;
+			gamepadDevices[player].axisRx = intent.getIntExtra(prefix + "RX", 0) / 1000;
+			gamepadDevices[player].axisRy = intent.getIntExtra(prefix + "RY", 0) / 1000;
 		}
 		
 	}
@@ -352,7 +352,7 @@ public class Mapper {
 	
 	public static GamepadDevice resolveGamepad(String deviceName, int deviceId) {
 		for(int i=0; i<MAX_PLAYERS; i++) {
-			GamepadDevice gamepad = genericGamepads[i];
+			GamepadDevice gamepad = gamepadDevices[i];
 			if (deviceName.equals(gamepad.getDeviceName()) && (joinPorts || gamepad.getDeviceId() == 0 || gamepad.getDeviceId() == deviceId)) {
 				gamepad.setDeviceId(deviceId);
 				return gamepad;  
@@ -366,12 +366,12 @@ public class Mapper {
 		if (existingGamepad != null) return;
 		
 		for(int i=0; i<MAX_PLAYERS; i++) {
-			GamepadDevice gamepad = genericGamepads[i];
+			GamepadDevice gamepad = gamepadDevices[i];
 			if (gamepad.getDeviceName() == null) {
 				gamepad.setDeviceName(deviceName);
 				gamepad.setDeviceId(deviceId);
 				
-				GamepadMapping gamepadMapping = knownMappings.get(deviceName);
+				GamepadMapping gamepadMapping = knownGamepadMappings.get(deviceName);
 				if (gamepadMapping == null) gamepadMapping = defaultGamepadMapping;
 				
 				gamepad.setGamepadMapping(gamepadMapping);
@@ -386,6 +386,6 @@ public class Mapper {
 	}
 
 	public static boolean hasGamepad(int player) {
-		return genericGamepads[player].getDeviceName()!=null;
+		return gamepadDevices[player].getDeviceName()!=null;
 	}
 }
