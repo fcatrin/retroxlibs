@@ -16,6 +16,7 @@ import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import retrobox.utils.RetroBoxUtils;
+import retrobox.vinput.overlay.Overlay.OverlayControlsMode;
 
 public class Mapper {
 	
@@ -42,6 +43,8 @@ public class Mapper {
 	
 	private static int registeredGamepadDevices = 0;
 	
+	private static OverlayControlsMode overlayControlsMode = OverlayControlsMode.Auto;
+	
 	static {
 		for(int i=0; i<MAX_PLAYERS; i++) {
 			gamepadDevices[i] = new GamepadDevice();
@@ -60,6 +63,15 @@ public class Mapper {
 		KeyTranslator.init();
 		initVirtualEvents(intent);
 		initGamepadMappings(intent);
+		
+		String sOverlayControlsMode = intent.getStringExtra("overlayControlsMode");
+		if (sOverlayControlsMode!=null) {
+			try {
+				overlayControlsMode = OverlayControlsMode.valueOf(sOverlayControlsMode);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 		
 		String defaultDeviceName = intent.getStringExtra("gamepadDeviceName");
 		int    defaultDeviceId   = intent.getIntExtra("gamepadDeviceId", 0);
@@ -389,12 +401,17 @@ public class Mapper {
 		
 		return gamepad;
 	}
+
+	public static boolean mustDisplayOverlayControllers() {
+		return (!hasGamepads() && overlayControlsMode == OverlayControlsMode.Auto)
+			|| overlayControlsMode == OverlayControlsMode.On;
+	}
 	
-	public static boolean hasGamepads() {
+	private static boolean hasGamepads() {
 		return hasGamepad(0) || hasGamepad(1);  // check player one or two
 	}
 
-	public static boolean hasGamepad(int player) {
+	private static boolean hasGamepad(int player) {
 		return gamepadDevices[player].getDeviceName()!=null;
 	}
 }

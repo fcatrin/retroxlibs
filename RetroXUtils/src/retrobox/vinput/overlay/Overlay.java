@@ -27,6 +27,8 @@ public class Overlay {
 	private static final int BUF_SIZE = 256*1024;
 	public static final int POINTER_ID_NONE = -1;
 	
+	public enum OverlayControlsMode {On, Off, Auto}
+
 	static List<OverlayButton> buttons = new ArrayList<OverlayButton>();
 	static Map<String, OverlayButton> knownButtons = new HashMap<String, OverlayButton>();
 	
