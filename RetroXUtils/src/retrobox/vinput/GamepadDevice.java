@@ -12,6 +12,7 @@ public class GamepadDevice {
 	private String deviceName;
 	private int deviceId;
 	public int player;
+	public long lastSeen = 0;
 	
 	public File keymapFile;
 	

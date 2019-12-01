@@ -18,14 +18,16 @@ import retrobox.utils.RetroBoxUtils;
 import retrobox.vinput.overlay.Overlay.OverlayControlsMode;
 
 public class Mapper {
+	private static final String LOGTAG = "vinput.Mapper"; 
 	
 	public static final int MAX_PLAYERS = 4;
 	private static final int MAX_MAPPINGS = 100;
 	
 	public enum ShortCut {NONE, LOAD_STATE, SAVE_STATE, SWAP_DISK, MENU, EXIT, SCREENSHOT};
 	private static int keyShortCuts[] = {0, KeyEvent.KEYCODE_BUTTON_L2, KeyEvent.KEYCODE_BUTTON_R2, KeyEvent.KEYCODE_BUTTON_B, KeyEvent.KEYCODE_BUTTON_SELECT, KeyEvent.KEYCODE_BUTTON_L1};
-
-	private static final String LOGTAG = "vinput.Mapper"; 
+	
+	private static final long LAST_SEEN_TIMEOUT = 60 * 1000;
+	
 	private boolean inShortcutSequence = false;
 	private boolean wasShortcutSent = false;
 	public static VirtualEventDispatcher listener;
@@ -368,12 +370,25 @@ public class Mapper {
 	public static GamepadDevice resolveGamepadByName(String deviceName, int deviceId) {
 		deviceName = deviceName.toLowerCase(Locale.US);
 		
-		for(int i=0; i<MAX_PLAYERS; i++) {
-			GamepadDevice gamepad = gamepadDevices[i];
-			if (deviceName.equals(gamepad.getDeviceName()) && (joinPorts || gamepad.getDeviceId() == 0 || gamepad.getDeviceId() == deviceId)) {
-				gamepad.setDeviceId(deviceId);
-				return gamepad;  
+		long t0 = System.currentTimeMillis();
+		for(int retry = 0; retry < 2; retry++) {
+			for(int i=0; i<MAX_PLAYERS; i++) {
+				GamepadDevice gamepad = gamepadDevices[i];
+				if (deviceName.equals(gamepad.getDeviceName()) && (joinPorts || gamepad.getDeviceId() == 0 || gamepad.getDeviceId() == deviceId)) {
+					gamepad.lastSeen = t0; 
+					gamepad.setDeviceId(deviceId);
+					return gamepad;  
+				}
 			}
+			
+			// if not found, reset deviceId on probably disconnected devices
+			for(int i=0; i<MAX_PLAYERS; i++) {
+				GamepadDevice gamepad = gamepadDevices[i];
+				if (gamepad.lastSeen < t0 - LAST_SEEN_TIMEOUT && gamepad.getDeviceName()!=null) {
+					gamepad.setDeviceId(0);
+					Log.d(LOGTAG, "GamepadDevice " + gamepad.getDeviceName() + ", id:" + gamepad.getDeviceId() + " has been reset");
+				}
+			}			
 		}
 		return registerGamepad(deviceName, deviceId);
 	}
