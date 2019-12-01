@@ -255,7 +255,7 @@ public class Mapper {
 	}
 	
 	public boolean handleKeyEvent(GamepadDevice gamepad, int keyCode, boolean down) {
-		if (keyCode == KeyEvent.KEYCODE_SEARCH) { // NVIDIA Shield
+		if (keyCode == KeyEvent.KEYCODE_SEARCH || keyCode == KeyEvent.KEYCODE_MENU) {
 			if (!down) {
 				sendShortcutMenu();
 			}
@@ -353,7 +353,6 @@ public class Mapper {
 		
 		return 
 			keyCode == KeyEvent.KEYCODE_BACK || 
-			keyCode == KeyEvent.KEYCODE_MENU ||
 			keyCode == KeyEvent.KEYCODE_VOLUME_DOWN || 
 			keyCode == KeyEvent.KEYCODE_VOLUME_UP || 
 			keyCode == KeyEvent.KEYCODE_VOLUME_MUTE;
