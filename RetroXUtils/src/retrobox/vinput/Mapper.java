@@ -40,6 +40,8 @@ public class Mapper {
 	public static GamepadKeyMapping[] knownKeyMappings = new GamepadKeyMapping[MAX_PLAYERS];
 	public static Map<String, GamepadMapping> knownGamepadMappings = new HashMap<String, GamepadMapping>();
 	
+	private static int registeredGamepadDevices = 0;
+	
 	static {
 		for(int i=0; i<MAX_PLAYERS; i++) {
 			gamepadDevices[i] = new GamepadDevice();
@@ -364,30 +366,28 @@ public class Mapper {
 				return gamepad;  
 			}
 		}
-		return null;
+		return registerGamepad(deviceName, deviceId);
 	}
 	
-	public static void registerGamepad(String deviceName, int deviceId) {
-		if (deviceName == null) return;
+	private static GamepadDevice registerGamepad(String deviceName, int deviceId) {
+		if (registeredGamepadDevices == MAX_PLAYERS) return null;
+
+		if (deviceName == null) return null;
 		deviceName = deviceName.toLowerCase(Locale.US);
 		
-		GamepadDevice existingGamepad = resolveGamepadByName(deviceName, deviceId);
-		if (existingGamepad != null) return;
+		GamepadDevice gamepad = gamepadDevices[registeredGamepadDevices];
+		gamepad.setDeviceName(deviceName);
+		gamepad.setDeviceId(deviceId);
 		
-		for(int i=0; i<MAX_PLAYERS; i++) {
-			GamepadDevice gamepad = gamepadDevices[i];
-			if (gamepad.getDeviceName() == null) {
-				gamepad.setDeviceName(deviceName);
-				gamepad.setDeviceId(deviceId);
-				
-				GamepadMapping gamepadMapping = knownGamepadMappings.get(deviceName);
-				if (gamepadMapping == null) gamepadMapping = defaultGamepadMapping;
-				
-				gamepad.setGamepadMapping(gamepadMapping);
-				
-				Log.d(LOGTAG, "Register gamepad for player " + (i+1) + " device:" + deviceName + " deviceId:" + deviceId + " mapper:" + gamepadMapping.getDeviceName());
-			}
-		}		
+		GamepadMapping gamepadMapping = knownGamepadMappings.get(deviceName);
+		if (gamepadMapping == null) gamepadMapping = defaultGamepadMapping;
+		
+		gamepad.setGamepadMapping(gamepadMapping);
+		
+		Log.d(LOGTAG, "Register gamepad for player " + (registeredGamepadDevices) + " device:" + deviceName + " deviceId:" + deviceId + " mapper:" + gamepadMapping.getDeviceName());
+		registeredGamepadDevices++;
+		
+		return gamepad;
 	}
 	
 	public static boolean hasGamepads() {
