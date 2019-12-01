@@ -86,7 +86,7 @@ public class GamepadMapping {
 	}
 	
 	public static boolean isGamepadEvent(int keyCode) {
-		for(int i=0; i<originCodes.length; i++) {
+		for(int i=4; i<originCodes.length; i++) {  // skip dpad to avoid remotes, consider only buttons
 			if (originCodes[i] == keyCode) return true;
 		}
 		return false;
