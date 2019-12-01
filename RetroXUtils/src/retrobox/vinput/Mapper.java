@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
@@ -227,7 +226,6 @@ public class Mapper {
 		listener.sendKey(gamepad, keyCode, false);
 	}
 	
-	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	public boolean handleKeyEvent(KeyEvent event, int keyCode, boolean down) {
 		GamepadDevice gamepad = resolveGamepadByName(event.getDevice().getName(), event.getDeviceId());
 		if (gamepad == null) return false;
@@ -347,7 +345,6 @@ public class Mapper {
 		return false;
 	}
 	
-	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	public boolean isSystemKey(KeyEvent event, int keyCode) {
 		GamepadDevice gamepad = event==null ? null : resolveGamepadByName(event.getDevice().getName(), event.getDeviceId());
 		if (gamepad!=null && gamepad.getGamepadMapping().getOriginCode(keyCode)!=0) return false;

@@ -1,12 +1,9 @@
 package retrobox.vinput;
 
-import android.annotation.TargetApi;
-import android.os.Build;
 import android.util.Log;
 import android.view.InputDevice;
 import android.view.MotionEvent;
 
-@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 public class AnalogGamepad {
 	private static final String LOGTAG = AnalogGamepad.class.getSimpleName();
 	public enum Axis {MIN, CENTER, MAX}
