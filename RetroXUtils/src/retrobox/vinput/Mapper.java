@@ -3,6 +3,7 @@ package retrobox.vinput;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import android.annotation.TargetApi;
@@ -31,7 +32,7 @@ public class Mapper {
 	public static AnalogGamepadListener analogListener;
 	public static Mapper instance;
 	private static GestureDetector mDetector;
-	public static boolean joinPorts = false;
+	private static boolean joinPorts = false;
 
 	private static GamepadMapping defaultGamepadMapping;
 
@@ -43,6 +44,8 @@ public class Mapper {
 		for(int i=0; i<MAX_PLAYERS; i++) {
 			gamepadDevices[i] = new GamepadDevice();
 			gamepadDevices[i].player = i;
+			
+			knownKeyMappings[i] = new GamepadKeyMapping();
 		}
 	}
 
@@ -54,7 +57,7 @@ public class Mapper {
 		
 		KeyTranslator.init();
 		initVirtualEvents(intent);
-		initGenericJoystick(intent);
+		initGamepadMappings(intent);
 		
 		String defaultDeviceName = intent.getStringExtra("gamepadDeviceName");
 		int    defaultDeviceId   = intent.getIntExtra("gamepadDeviceId", 0);
@@ -127,9 +130,9 @@ public class Mapper {
 	    	
 	    	if (keyNameLinux!=null) {
 	    		event = KeyTranslator.translate(keyNameLinux);
+		    	Log.d("KEYMAPFILE", "Linux key " + keyNameLinux + " mapped to event " + event);
 	    	}
 	    	knownKeyMappings[player].virtualEvents[i] = event;
-	    	Log.d("KEYMAPFILE", "Linux key " + keyNameLinux + " mapped to event " + event);
 		}
 		gamepadDevices[player].keymapFile = keymapFile;
 	}
@@ -138,7 +141,9 @@ public class Mapper {
 		return gamepadDevices[player-1].keymapFile;
 	}
 
-	private void initGenericJoystick(Intent intent) {
+	private void initGamepadMappings(Intent intent) {
+		joinPorts = intent.getBooleanExtra("joinPorts", false);
+		
 		for(int mapping = 0; mapping < MAX_MAPPINGS; mapping++) {
 			String prefix = "gmap_" + mapping;
 			String deviceName = intent.getStringExtra(prefix);
@@ -350,6 +355,8 @@ public class Mapper {
 	}
 	
 	public static GamepadDevice resolveGamepadByName(String deviceName, int deviceId) {
+		deviceName = deviceName.toLowerCase(Locale.US);
+		
 		for(int i=0; i<MAX_PLAYERS; i++) {
 			GamepadDevice gamepad = gamepadDevices[i];
 			if (deviceName.equals(gamepad.getDeviceName()) && (joinPorts || gamepad.getDeviceId() == 0 || gamepad.getDeviceId() == deviceId)) {
@@ -361,6 +368,9 @@ public class Mapper {
 	}
 	
 	public static void registerGamepad(String deviceName, int deviceId) {
+		if (deviceName == null) return;
+		deviceName = deviceName.toLowerCase(Locale.US);
+		
 		GamepadDevice existingGamepad = resolveGamepadByName(deviceName, deviceId);
 		if (existingGamepad != null) return;
 		
