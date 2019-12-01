@@ -17,8 +17,7 @@ public class GamepadDevice {
 	
 	private GamepadMapping gamepadMapping;
 	
-	public GamepadDevice() {
-	}
+	public GamepadDevice() {}
 	
 	public String getDeviceName() {
 		return deviceName;

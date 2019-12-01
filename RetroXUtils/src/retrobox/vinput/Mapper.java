@@ -56,8 +56,8 @@ public class Mapper {
 		initVirtualEvents(intent);
 		initGenericJoystick(intent);
 		
-		String defaultDeviceName = intent.getStringExtra("defaultGamepadName");
-		int    defaultDeviceId   = intent.getIntExtra("defaultDeviceId", 0);
+		String defaultDeviceName = intent.getStringExtra("gamepadDeviceName");
+		int    defaultDeviceId   = intent.getIntExtra("gamepadDeviceId", 0);
 		
 		if (defaultDeviceName!=null) {
 			registerGamepad(defaultDeviceName, defaultDeviceId);
