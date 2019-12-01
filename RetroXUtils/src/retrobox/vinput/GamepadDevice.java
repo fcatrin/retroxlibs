@@ -24,13 +24,9 @@ public class GamepadDevice {
 		return deviceName;
 	}
 
-
-
 	public void setDeviceName(String deviceName) {
 		this.deviceName = deviceName;
 	}
-
-
 
 	public int getDeviceId() {
 		return deviceId;

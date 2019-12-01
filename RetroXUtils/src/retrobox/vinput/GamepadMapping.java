@@ -32,15 +32,14 @@ public class GamepadMapping {
 			R.string.gamepad_label_start,
 	};
 
-	public int originCodes[] = {
+	public static final int originCodes[] = {
 			KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_DPAD_DOWN, KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.KEYCODE_DPAD_RIGHT,
 			KeyEvent.KEYCODE_BUTTON_A, KeyEvent.KEYCODE_BUTTON_B, KeyEvent.KEYCODE_BUTTON_X, KeyEvent.KEYCODE_BUTTON_Y,
 			KeyEvent.KEYCODE_BUTTON_L1, KeyEvent.KEYCODE_BUTTON_R1, KeyEvent.KEYCODE_BUTTON_L2, KeyEvent.KEYCODE_BUTTON_R2,
 			KeyEvent.KEYCODE_BUTTON_THUMBL, KeyEvent.KEYCODE_BUTTON_THUMBR, KeyEvent.KEYCODE_BUTTON_SELECT, KeyEvent.KEYCODE_BUTTON_START
 	};
-
-	public String deviceName;
 	
+	public String deviceName;
 	public int translatedCodes[] = new int[originCodes.length];
 
 	public int axisRx = 0;
@@ -48,7 +47,9 @@ public class GamepadMapping {
 
 	public GamepadMapping(String deviceName) {
 		this.deviceName = deviceName;
-		for(int i=0; i<translatedCodes.length; i++) translatedCodes[i] = originCodes[i];
+		for(int i=0; i<originCodes.length; i++) {
+			translatedCodes[i] = originCodes[i];
+		}
 	}
 
 	public static GamepadMapping buildDefaultMapping() {
@@ -82,5 +83,12 @@ public class GamepadMapping {
 
 	public String getDeviceName() {
 		return deviceName;
+	}
+	
+	public static boolean isGamepadEvent(int keyCode) {
+		for(int i=0; i<originCodes.length; i++) {
+			if (originCodes[i] == keyCode) return true;
+		}
+		return false;
 	}
 }

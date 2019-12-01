@@ -178,33 +178,27 @@ public class Mapper {
 		return null;
 	}
 	
-	
 	public static VirtualEvent getTargetEventIndex(GamepadDevice gamepad, int index) {
 		return knownKeyMappings[gamepad.player].virtualEvents[index];
 	}
 	
 	public static VirtualEvent getTargetEvent(GamepadDevice gamepad, int genericCode) {
-		GamepadMapping gamepadMapping = gamepad.getGamepadMapping();
-		for(int i=0; i<gamepadMapping.originCodes.length; i++) {
-			if (gamepadMapping.originCodes[i] == genericCode) {
-				VirtualEvent ev = knownKeyMappings[gamepad.player].virtualEvents[i];
-				return ev;
+		for(int i=0; i<GamepadMapping.originCodes.length; i++) {
+			if (GamepadMapping.originCodes[i] == genericCode) {
+				return knownKeyMappings[gamepad.player].virtualEvents[i];
 			}
 		}
 		return null;
 	}
 	
 	public static void setTargetEvent(GamepadDevice gamepad, int genericCode, VirtualEvent ev) {
-		GamepadMapping gamepadMapping = gamepad.getGamepadMapping();
-
-		for(int i=0; i<gamepadMapping.originCodes.length; i++) {
-			if (gamepadMapping.originCodes[i] == genericCode) {
+		for(int i=0; i<GamepadMapping.originCodes.length; i++) {
+			if (GamepadMapping.originCodes[i] == genericCode) {
 				knownKeyMappings[gamepad.player].virtualEvents[i] = ev;
 				return;
 			}
 		}
 	}
-	
 	
 	private void sendKeyPress(GamepadDevice gamepad, int keyCode) {
 		listener.sendKey(gamepad, keyCode, true);
@@ -289,8 +283,8 @@ public class Mapper {
 		return gamepad.getGamepadMapping().getOriginCode(keyCode);
 	}
 	
-	public static int getOriginCodeByIndex(GamepadDevice gamepad, int index) {
-		return gamepad.getGamepadMapping().originCodes[index];
+	public static int getOriginCodeByIndex(int index) {
+		return GamepadMapping.originCodes[index];
 	}
 
 	protected boolean isStartButton(GamepadDevice gamepad, int keyCode) {
