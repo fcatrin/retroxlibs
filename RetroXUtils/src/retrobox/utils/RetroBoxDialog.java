@@ -370,8 +370,8 @@ public class RetroBoxDialog {
 	}
 	
 	// ingame gamepad dialog has fixed labels, and alwas calls callback on close
-	public static void showGamepadDialogIngame(final Activity activity, GamepadInfoDialog dialog, final SimpleCallback callback) {
-		dialog.updateGamepadVisible(activity);
+	public static void showGamepadDialogIngame(final Activity activity, GamepadInfoDialog dialog, boolean hasGamepad, final SimpleCallback callback) {
+		dialog.updateGamepadVisible(activity, hasGamepad);
 		activity.findViewById(R.id.modal_dialog_gamepad).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -385,7 +385,7 @@ public class RetroBoxDialog {
 	// this is called by retrobox client:
 	// * it can be cancelled
 	// * if it has a callback, call it and then hide the dialog (called when starting a game)
-	public static void showGamepadDialog(final Activity activity, GamepadInfoDialog dialog, String[] labels, String textTop, String textBottom, SimpleCallback callback) {
+	public static void showGamepadDialog(final Activity activity, GamepadInfoDialog dialog, String[] labels, String textTop, String textBottom, boolean hasGamepad, SimpleCallback callback) {
 		cbGamepadDialog = callback;
 		
 		activity.findViewById(R.id.modal_dialog_gamepad).setOnClickListener(new OnClickListener() {
@@ -414,7 +414,7 @@ public class RetroBoxDialog {
 		
 				
 		dialog.setLabels(labels);
-		dialog.updateGamepadVisible(activity);
+		dialog.updateGamepadVisible(activity, hasGamepad);
 		
 		dialog.setInfo(textTop, textBottom);
 		openDialog(activity, R.id.modal_dialog_gamepad, new SimpleCallback() {

@@ -419,7 +419,7 @@ public class Mapper {
 			|| overlayControlsMode == OverlayControlsMode.On;
 	}
 	
-	private static boolean hasGamepads() {
+	public static boolean hasGamepads() {
 		return hasGamepad(0) || hasGamepad(1);  // check player one or two
 	}
 
