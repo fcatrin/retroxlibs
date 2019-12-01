@@ -255,13 +255,6 @@ public class Mapper {
 	}
 	
 	public boolean handleKeyEvent(GamepadDevice gamepad, int keyCode, boolean down) {
-		if (keyCode == KeyEvent.KEYCODE_SEARCH || keyCode == KeyEvent.KEYCODE_MENU) {
-			if (!down) {
-				sendShortcutMenu();
-			}
-			return true;
-		}
-
 		if (gamepad == null) return false;
 		
 		if (handleShortcut(gamepad, keyCode, down)) return true;
@@ -271,6 +264,14 @@ public class Mapper {
 			ev.sendEvent(gamepad, down);
 			return true;
 		}
+		
+		if (keyCode == KeyEvent.KEYCODE_SEARCH || keyCode == KeyEvent.KEYCODE_MENU) {
+			if (!down) {
+				sendShortcutMenu();
+			}
+			return true;
+		}
+
 		return false;
 	}
 	
