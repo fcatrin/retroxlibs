@@ -34,10 +34,10 @@ public class GamepadLayoutManager {
 		labelBoxes[ButtonId.BTN_R1.ordinal()] = new ButtonLabelBox(labelResourceIds[3], 420, 40);
 		labelBoxes[ButtonId.BTN_L3.ordinal()] = new ButtonLabelBox(labelResourceIds[4], 175, 204);
 		labelBoxes[ButtonId.BTN_R3.ordinal()] = new ButtonLabelBox(labelResourceIds[5], 334, 204);
-		labelBoxes[ButtonId.BTN_A.ordinal()]  = new ButtonLabelBox(labelResourceIds[6], 451, 127);
-		labelBoxes[ButtonId.BTN_B.ordinal()]  = new ButtonLabelBox(labelResourceIds[7], 415, 163);
-		labelBoxes[ButtonId.BTN_X.ordinal()]  = new ButtonLabelBox(labelResourceIds[8], 415, 92);
-		labelBoxes[ButtonId.BTN_Y.ordinal()]  = new ButtonLabelBox(labelResourceIds[9], 379, 127);
+		labelBoxes[ButtonId.BTN_A.ordinal()]  = new ButtonLabelBox(labelResourceIds[7], 415, 163);
+		labelBoxes[ButtonId.BTN_B.ordinal()]  = new ButtonLabelBox(labelResourceIds[6], 451, 127);
+		labelBoxes[ButtonId.BTN_X.ordinal()]  = new ButtonLabelBox(labelResourceIds[9], 379, 127);
+		labelBoxes[ButtonId.BTN_Y.ordinal()]  = new ButtonLabelBox(labelResourceIds[8], 415, 92);
 		labelBoxes[ButtonId.BTN_SELECT.ordinal()] = new ButtonLabelBox(labelResourceIds[10], 225, 126);
 		labelBoxes[ButtonId.BTN_START.ordinal()]  = new ButtonLabelBox(labelResourceIds[11], 285, 126);
 		
