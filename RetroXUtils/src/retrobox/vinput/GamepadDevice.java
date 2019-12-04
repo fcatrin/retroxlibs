@@ -14,6 +14,8 @@ public class GamepadDevice {
 	public int player;
 	public long lastSeen = 0;
 	
+	public boolean isOverlay = false;
+	
 	public File keymapFile;
 	
 	private GamepadMapping gamepadMapping;

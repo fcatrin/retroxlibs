@@ -11,17 +11,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import retrobox.vinput.GamepadMapping.Analog;
-import retrobox.vinput.GamepadDevice;
-import retrobox.vinput.Mapper;
-import retrobox.vinput.VirtualEvent;
-import retrobox.vinput.overlay.OverlayButton.ButtonAction;
-import retrobox.vinput.overlay.OverlayButton.ButtonType;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.Log;
+import retrobox.vinput.GamepadDevice;
+import retrobox.vinput.GamepadMapping;
+import retrobox.vinput.GamepadMapping.Analog;
+import retrobox.vinput.Mapper;
+import retrobox.vinput.VirtualEvent;
+import retrobox.vinput.overlay.OverlayButton.ButtonAction;
+import retrobox.vinput.overlay.OverlayButton.ButtonType;
 
 public class Overlay {
 	private static final int BUF_SIZE = 256*1024;
@@ -31,6 +32,8 @@ public class Overlay {
 
 	static List<OverlayButton> buttons = new ArrayList<OverlayButton>();
 	static Map<String, OverlayButton> knownButtons = new HashMap<String, OverlayButton>();
+	
+	private static GamepadDevice overlayGamepadDevice;
 	
 	public static boolean requiresRedraw = false;
 	
@@ -65,7 +68,13 @@ public class Overlay {
 		OverlayButton.setTextSize(height / 40);
 		buttons.clear();
 		knownButtons.clear();
-		//dpads.clear();
+		
+		overlayGamepadDevice = new GamepadDevice();
+		overlayGamepadDevice.setDeviceName("_overlay_");
+		overlayGamepadDevice.setGamepadMapping(new GamepadMapping(overlayGamepadDevice.getDeviceName()));
+		overlayGamepadDevice.isOverlay = true;
+		overlayGamepadDevice.player = 0;
+		overlayGamepadDevice.setDeviceId(0);
 		
 		Properties config = loadConfig(filename);
 		Log.d("OVERLAY", "Using config " + filename + " = " + config);
@@ -190,16 +199,15 @@ public class Overlay {
 		button.setPressed(true);
 		button.pointerId = pointerId;
 		
-		GamepadDevice firstGamepad = Mapper.gamepadDevices[0];
 		if (button.eventIndexes!=null) {
 			if (button.action == ButtonAction.ANALOG) {
 				button.updateAnalog(x, y);
 				Analog analogControl = button.eventIndexes[0] == ANALOG_RIGHT?Analog.RIGHT:Analog.LEFT;
-				Mapper.listener.sendAnalog(firstGamepad, analogControl, button.analogX, button.analogY, 0, 0);
+				Mapper.listener.sendAnalog(overlayGamepadDevice, analogControl, button.analogX, button.analogY, 0, 0);
 			} else {
 				for(int event : button.eventIndexes) {
-					VirtualEvent ev = Mapper.getTargetEventIndex(firstGamepad, event);
-					if (ev!=null) ev.sendEvent(firstGamepad, true);
+					VirtualEvent ev = Mapper.getTargetEventIndex(overlayGamepadDevice, event);
+					if (ev!=null) ev.sendEvent(overlayGamepadDevice, true);
 				}
 			}
 		}
@@ -210,18 +218,17 @@ public class Overlay {
 		button.setPressed(false);
 		button.pointerId = POINTER_ID_NONE;
 
-		GamepadDevice firstGamepad = Mapper.gamepadDevices[0];
 		if (button.eventIndexes!=null) {
 			if (button.action == ButtonAction.ANALOG) {
 				button.updateAnalog(button.x, button.y);
 				Analog analogControl = button.eventIndexes[0] == ANALOG_RIGHT?Analog.RIGHT:Analog.LEFT;
-				Mapper.listener.sendAnalog(firstGamepad, analogControl, 0, 0, 0, 0);
+				Mapper.listener.sendAnalog(overlayGamepadDevice, analogControl, 0, 0, 0, 0);
 			} else {
 				for(int event : button.eventIndexes) {
 					if (isPressedInAnotherButton(button, event)) continue;
-					VirtualEvent ev = Mapper.getTargetEventIndex(firstGamepad, event);
+					VirtualEvent ev = Mapper.getTargetEventIndex(overlayGamepadDevice, event);
 					if (ev!=null) {
-						ev.sendEvent(firstGamepad, false);
+						ev.sendEvent(overlayGamepadDevice, false);
 					}
 				}
 			}
