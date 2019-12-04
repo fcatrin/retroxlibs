@@ -46,6 +46,8 @@ public class Mapper {
 	
 	private static OverlayControlsMode overlayControlsMode = OverlayControlsMode.Auto;
 	
+	private static boolean is8bitdoAuto = true;
+	
 	static {
 		for(int i=0; i<MAX_PLAYERS; i++) {
 			gamepadDevices[i] = new GamepadDevice();
@@ -73,6 +75,8 @@ public class Mapper {
 				e.printStackTrace();
 			}
 		}
+		
+		is8bitdoAuto = intent.getBooleanExtra("8bitdoAutoMap", true);
 		
 		String defaultDeviceName = intent.getStringExtra("gamepadDeviceName");
 		int    defaultDeviceId   = intent.getIntExtra("gamepadDeviceId", 0);
@@ -393,6 +397,10 @@ public class Mapper {
 		return registerGamepad(deviceName, deviceId);
 	}
 	
+	private static boolean is8bitdo(String deviceName) {
+		return deviceName!=null && deviceName.toLowerCase(Locale.US).startsWith("8bitdo n64");
+	}
+	
 	private static GamepadDevice registerGamepad(String deviceName, int deviceId) {
 		if (registeredGamepadDevices == MAX_PLAYERS) return null;
 
@@ -402,9 +410,10 @@ public class Mapper {
 		GamepadDevice gamepad = gamepadDevices[registeredGamepadDevices];
 		gamepad.setDeviceName(deviceName);
 		gamepad.setDeviceId(deviceId);
+		gamepad.is8bitdoAuto = is8bitdoAuto && is8bitdo(deviceName);
 		
 		GamepadMapping gamepadMapping = knownGamepadMappings.get(deviceName);
-		if (gamepadMapping == null) gamepadMapping = defaultGamepadMapping;
+		if (gamepadMapping == null || is8bitdoAuto) gamepadMapping = defaultGamepadMapping;
 		
 		gamepad.setGamepadMapping(gamepadMapping);
 		

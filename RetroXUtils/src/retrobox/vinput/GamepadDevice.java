@@ -15,6 +15,7 @@ public class GamepadDevice {
 	public long lastSeen = 0;
 	
 	public boolean isOverlay = false;
+	public boolean is8bitdoAuto = false;
 	
 	public File keymapFile;
 	
