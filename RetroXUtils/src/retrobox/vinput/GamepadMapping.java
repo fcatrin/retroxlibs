@@ -65,7 +65,7 @@ public class GamepadMapping {
 		return 0;
 	}
 	
-	public int getOriginIndex(int keyCode) {
+	public static int getOriginIndex(int keyCode) {
 		for(int i=0; i<originCodes.length; i++) {
 			if (originCodes[i] == keyCode) return i; 
 		}

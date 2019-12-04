@@ -16,6 +16,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.Log;
+import android.view.KeyEvent;
 import retrobox.vinput.GamepadDevice;
 import retrobox.vinput.GamepadMapping;
 import retrobox.vinput.GamepadMapping.Analog;
@@ -195,6 +196,22 @@ public class Overlay {
 		}
 	}
 	
+	private static int fixupRetroArchSnesStyleButtons(int eventIndex) {
+		int originalGamepadCode = GamepadMapping.originCodes[eventIndex];
+		int fixedGamepadCode = -1;
+		
+		switch (originalGamepadCode) {
+		case KeyEvent.KEYCODE_BUTTON_A: fixedGamepadCode = KeyEvent.KEYCODE_BUTTON_B; break;
+		case KeyEvent.KEYCODE_BUTTON_B: fixedGamepadCode = KeyEvent.KEYCODE_BUTTON_A; break;
+		case KeyEvent.KEYCODE_BUTTON_X: fixedGamepadCode = KeyEvent.KEYCODE_BUTTON_Y; break;
+		case KeyEvent.KEYCODE_BUTTON_Y: fixedGamepadCode = KeyEvent.KEYCODE_BUTTON_X; break;
+		}
+		
+		int newEventIndex = -1;
+		if (fixedGamepadCode>=0) newEventIndex = GamepadMapping.getOriginIndex(fixedGamepadCode);
+		return newEventIndex>=0 ? newEventIndex : eventIndex;
+	}
+	
 	private static void pressButton(OverlayButton button, int pointerId, int x, int y) {
 		button.setPressed(true);
 		button.pointerId = pointerId;
@@ -206,8 +223,11 @@ public class Overlay {
 				Mapper.listener.sendAnalog(overlayGamepadDevice, analogControl, button.analogX, button.analogY, 0, 0);
 			} else {
 				for(int event : button.eventIndexes) {
+					event = fixupRetroArchSnesStyleButtons(event);
 					VirtualEvent ev = Mapper.getTargetEventIndex(overlayGamepadDevice, event);
-					if (ev!=null) ev.sendEvent(overlayGamepadDevice, true);
+					if (ev!=null) {
+						ev.sendEvent(overlayGamepadDevice, true);
+					}
 				}
 			}
 		}
@@ -225,6 +245,8 @@ public class Overlay {
 				Mapper.listener.sendAnalog(overlayGamepadDevice, analogControl, 0, 0, 0, 0);
 			} else {
 				for(int event : button.eventIndexes) {
+					event = fixupRetroArchSnesStyleButtons(event);
+
 					if (isPressedInAnotherButton(button, event)) continue;
 					VirtualEvent ev = Mapper.getTargetEventIndex(overlayGamepadDevice, event);
 					if (ev!=null) {
