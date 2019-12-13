@@ -67,10 +67,19 @@ public class GamepadDevice {
 		
 		GamepadKeyMapping gamepadKeyMapping = Mapper.knownKeyMappings[player];
 		
-		if (leftChanged)  gamepadKeyMapping.virtualEvents[2].sendEvent(this, left);
-		if (rightChanged) gamepadKeyMapping.virtualEvents[3].sendEvent(this, right);
-		if (upChanged)    gamepadKeyMapping.virtualEvents[0].sendEvent(this, up);
-		if (downChanged)  gamepadKeyMapping.virtualEvents[1].sendEvent(this, down);
+		sendDpadEvent(gamepadKeyMapping, upChanged,    0, up);
+		sendDpadEvent(gamepadKeyMapping, downChanged,  1, down);
+		sendDpadEvent(gamepadKeyMapping, leftChanged,  2, left);
+		sendDpadEvent(gamepadKeyMapping, rightChanged, 3, right);
+	}
+	
+	private void sendDpadEvent(GamepadKeyMapping gamepadKeyMapping, boolean changed, int eventIndex, boolean down) {
+		if (!changed) return;
+		
+		VirtualEvent virtualEvent = gamepadKeyMapping.virtualEvents[eventIndex];
+		if (virtualEvent!=null) {
+			virtualEvent.sendEvent(this, down);
+		}
 	}
 
 	public GamepadMapping getGamepadMapping() {
