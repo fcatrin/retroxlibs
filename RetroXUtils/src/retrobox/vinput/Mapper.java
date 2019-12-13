@@ -16,6 +16,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import retrobox.utils.RetroBoxUtils;
 import retrobox.vinput.overlay.Overlay.OverlayControlsMode;
+import xtvapps.core.AndroidCoreUtils;
 
 public class Mapper {
 	private static final String LOGTAG = "vinput.Mapper"; 
@@ -232,10 +233,15 @@ public class Mapper {
 		listener.sendKey(gamepad, keyCode, false);
 	}
 	
-	public boolean handleKeyEvent(KeyEvent event, int keyCode, boolean down) {
+	public boolean handleKeyEvent(Activity activity, KeyEvent event, int keyCode, boolean down) {
 		GamepadDevice gamepad = resolveGamepadByName(event.getDevice().getName(), event.getDeviceId());
 		if (gamepad == null) return false;
 		
+		if (!gamepad.isPlayerKnown) {
+			announceGamepad(activity, event.getDevice().getName(), gamepad);
+			gamepad.isPlayerKnown = true;
+		}
+
 		return handleKeyEvent(gamepad, keyCode, down);
 	}
 	
@@ -256,6 +262,18 @@ public class Mapper {
 			if (ev!=null) ev.sendEvent(gamepad, right);
 		}
 		return true;
+	}
+	
+	private void announceGamepad(final Activity activity, String deviceName, GamepadDevice gamepad) {
+		// gamepad device name is normalized, so we need the original device name here
+		final String msg = "Controller " + deviceName + " is Player " + (gamepad.player + 1);
+		activity.runOnUiThread(new Runnable(){
+
+			@Override
+			public void run() {
+				AndroidCoreUtils.toast(activity, msg);
+			}
+		});
 	}
 	
 	public boolean handleKeyEvent(GamepadDevice gamepad, int keyCode, boolean down) {
