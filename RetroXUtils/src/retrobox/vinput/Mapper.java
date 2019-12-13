@@ -94,7 +94,6 @@ public class Mapper {
 			public void onSwipe(Swipe swipe) {
 				if (swipe == Swipe.Left) sendShortcutMenu();
 			}
-			
 		};
 		
 		DisplayMetrics metrics = new DisplayMetrics();
@@ -168,6 +167,8 @@ public class Mapper {
 			String prefix = "gmap_" + mapping;
 			String deviceName = intent.getStringExtra(prefix);
 			if (deviceName == null) return;
+			
+			deviceName = deviceName.toLowerCase(Locale.US).trim();
 
 			GamepadMapping gamepadMapping = new GamepadMapping(deviceName);
 			for(int i=0; i<GamepadMapping.eventNames.length; i++) {
@@ -390,13 +391,14 @@ public class Mapper {
 	}
 	
 	public static GamepadDevice resolveGamepadByName(String deviceName, int deviceId) {
-		deviceName = deviceName.toLowerCase(Locale.US);
+		deviceName = deviceName.toLowerCase(Locale.US).trim();
 		
 		long t0 = System.currentTimeMillis();
 		for(int retry = 0; retry < 2; retry++) {
 			for(int i=0; i<MAX_PLAYERS; i++) {
 				GamepadDevice gamepad = gamepadDevices[i];
-				if (deviceName.equals(gamepad.getDeviceName()) && (joinPorts || gamepad.getDeviceId() == 0 || gamepad.getDeviceId() == deviceId)) {
+				String gamepadDeviceName = gamepad.getDeviceName().toLowerCase(Locale.US).trim();
+				if (deviceName.equals(gamepadDeviceName) && (joinPorts || gamepad.getDeviceId() == 0 || gamepad.getDeviceId() == deviceId)) {
 					gamepad.lastSeen = t0; 
 					gamepad.setDeviceId(deviceId);
 					return gamepad;  
@@ -423,7 +425,7 @@ public class Mapper {
 		if (registeredGamepadDevices == MAX_PLAYERS) return null;
 
 		if (deviceName == null) return null;
-		deviceName = deviceName.toLowerCase(Locale.US);
+		deviceName = deviceName.toLowerCase(Locale.US).trim();
 		
 		GamepadDevice gamepad = gamepadDevices[registeredGamepadDevices];
 		gamepad.setDeviceName(deviceName);
