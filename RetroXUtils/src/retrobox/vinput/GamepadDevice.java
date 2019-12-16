@@ -42,7 +42,7 @@ public class GamepadDevice {
 
 	@Override
 	public String toString() {
-		return "GenericGamepad {device:" + deviceName + ", deviceId:" + deviceId + "}";
+		return "GenericGamepad {device:" + deviceName + ", deviceId:" + deviceId + ", player:" + player + "}";
 	}
 
 	public void setTriggerState(int code, boolean down) {

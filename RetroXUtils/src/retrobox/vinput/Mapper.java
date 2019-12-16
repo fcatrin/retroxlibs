@@ -41,7 +41,7 @@ public class Mapper {
 
 	public static GamepadDevice[] gamepadDevices = new GamepadDevice[MAX_PLAYERS];
 	public static GamepadKeyMapping[] knownKeyMappings = new GamepadKeyMapping[MAX_PLAYERS];
-	public static Map<String, GamepadMapping> knownGamepadMappings = new HashMap<String, GamepadMapping>();
+	private static Map<String, GamepadMapping> knownGamepadMappings = new HashMap<String, GamepadMapping>();
 	
 	private static int registeredGamepadDevices = 0;
 	
@@ -397,7 +397,10 @@ public class Mapper {
 		for(int retry = 0; retry < 2; retry++) {
 			for(int i=0; i<MAX_PLAYERS; i++) {
 				GamepadDevice gamepad = gamepadDevices[i];
-				String gamepadDeviceName = gamepad.getDeviceName().toLowerCase(Locale.US).trim();
+				String gamepadDeviceName = gamepad.getDeviceName();
+				if (gamepadDeviceName == null) continue;
+				
+				gamepadDeviceName = gamepadDeviceName.toLowerCase(Locale.US).trim();
 				if (deviceName.equals(gamepadDeviceName) && (joinPorts || gamepad.getDeviceId() == 0 || gamepad.getDeviceId() == deviceId)) {
 					gamepad.lastSeen = t0; 
 					gamepad.setDeviceId(deviceId);
@@ -433,11 +436,11 @@ public class Mapper {
 		gamepad.is8bitdoAuto = is8bitdoAuto && is8bitdo(deviceName);
 		
 		GamepadMapping gamepadMapping = knownGamepadMappings.get(deviceName);
-		if (gamepadMapping == null || is8bitdoAuto) gamepadMapping = defaultGamepadMapping;
+		if (gamepadMapping == null || gamepad.is8bitdoAuto) gamepadMapping = defaultGamepadMapping;
 		
 		gamepad.setGamepadMapping(gamepadMapping);
 		
-		Log.d(LOGTAG, "Register gamepad for player " + (registeredGamepadDevices) + " device:" + deviceName + " deviceId:" + deviceId + " mapper:" + gamepadMapping.getDeviceName());
+		Log.d(LOGTAG, "Register gamepad for player " + (registeredGamepadDevices) + " device:" + deviceName + " deviceId:" + deviceId + " mapper:" + gamepadMapping.getDeviceName() + " mappings:" + knownGamepadMappings);
 		registeredGamepadDevices++;
 		
 		return gamepad;
