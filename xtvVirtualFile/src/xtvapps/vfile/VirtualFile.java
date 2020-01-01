@@ -529,5 +529,23 @@ public class VirtualFile {
 	public void setParent(VirtualFile parent) {
 		this.parent = parent;
 	}
-	
+
+	public VirtualFile clone() {
+		VirtualFile vf = new VirtualFile(type, container, path);
+		vf.setIsDirectory(isDirectory);
+		vf.setSize(size);
+		vf.setModified(modified);
+		vf.setFriendlyName(friendlyName);
+		vf.setParent(parent);
+		vf.setHidden(hidden);
+		vf.setIsParent(isParent);
+		vf.setCanRead(canRead);
+		vf.setCanWrite(canWrite);
+		vf.setIsStorage(isStorage);
+		vf.setIconResourceId(iconResourceId);
+		vf.setMountPoint(mountPoint);
+		vf.setNativePath(nativePath);
+		return vf;
+	}
+
 }
