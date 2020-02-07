@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 public final class AndroidCoreUtils {
@@ -37,6 +39,15 @@ public final class AndroidCoreUtils {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	public static void hideSoftKeyboard(Context context, View view) {
+        InputMethodManager imm = (InputMethodManager) context
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        if (imm != null && view!=null) {
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
 	}
 
 }

@@ -34,6 +34,7 @@ import android.widget.TextView;
 import retrobox.content.LoginInfo;
 import retrobox.content.SaveStateInfo;
 import retrobox.fileselector.FilesPanel;
+import xtvapps.core.AndroidCoreUtils;
 import xtvapps.core.AndroidFonts;
 import xtvapps.core.Callback;
 import xtvapps.core.SimpleCallback;
@@ -278,6 +279,7 @@ public class RetroBoxDialog {
 		activity.findViewById(R.id.modal_dialog_login).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				AndroidCoreUtils.hideSoftKeyboard(activity, v);
 				closeDialog(activity, R.id.modal_dialog_login, new SimpleCallback(){
 					@Override
 					public void onResult() {
@@ -290,7 +292,7 @@ public class RetroBoxDialog {
 			}
 		});
 		
-		TextView txtTitle = (TextView)activity.findViewById(R.id.txtDialogLogin);
+		final TextView txtTitle = (TextView)activity.findViewById(R.id.txtDialogLogin);
 		if (Utils.isEmptyString(title)) {
 			txtTitle.setVisibility(View.GONE);
 		} else {
@@ -309,7 +311,6 @@ public class RetroBoxDialog {
 				loginInfo.user     = txtUser.getText().toString();
 				loginInfo.password = txtPass.getText().toString();
 				callback.onResult(loginInfo);
-				callback.onFinally();
 			}
 
 			@Override
@@ -319,6 +320,7 @@ public class RetroBoxDialog {
 
 			@Override
 			public void onFinally() {
+				AndroidCoreUtils.hideSoftKeyboard(activity, txtTitle);
 				callback.onFinally();
 			}
 
