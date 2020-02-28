@@ -60,7 +60,13 @@ public class VirtualFile {
 	}
 
 	public static VirtualFile buildRoot(String type, String friendlyName, int iconResourceId) {
-		VirtualFile vf = new VirtualFile(type + TYPE_SEPARATOR);
+		return buildRoot(type, friendlyName, iconResourceId, null);
+	}
+	
+	public static VirtualFile buildRoot(String type, String friendlyName, int iconResourceId, String path) {
+		String trailingPath = path!=null ? path : "";
+		
+		VirtualFile vf = new VirtualFile(type + TYPE_SEPARATOR + trailingPath);
 		vf.friendlyName = friendlyName;
 		vf.setIconResourceId(iconResourceId);
 		vf.setIsDirectory(true);
@@ -121,15 +127,19 @@ public class VirtualFile {
 	}
 	
 	public VirtualFile getParent() {
+		System.out.println("PARENT Get parent for " + getUrl() + " parent is: " + (parent != null ? parent.getUrl() : "null"));
 		if (parent!=null) return parent;
 		
 		String parentPath = getParentPath();
+		System.out.println("PARENT getParentPath: " + parentPath + " (mountPoint " + mountPoint + ")");
 		if (parentPath == null || parentPath.equals(mountPoint)) {
+			System.out.println("PARENT return getStorageParent " + getStorageParent());
 			return getStorageParent();
 		}
 		
 		parent = new VirtualFile(type, container, parentPath);
 		parent.setIsDirectory(true);
+		System.out.println("PARENT create new parent file " + parent);
 		return parent;
 	}
 	
