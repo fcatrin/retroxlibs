@@ -396,18 +396,7 @@ public class RetroBoxDialog {
 				if (cbGamepadDialog!=null) {
 					cbGamepadDialog.onResult();
 					cbGamepadDialog = null;
-					
-					activity.runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							try {
-								Thread.sleep(2000);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
-							setDialogVisible(activity, R.id.modal_dialog_gamepad, false);
-						}
-					});
+					setDialogVisible(activity, R.id.modal_dialog_gamepad, false);
 				} else {
 					dismissGamepadDialog(activity, null);
 				}
@@ -598,12 +587,12 @@ public class RetroBoxDialog {
 		fadeIn.setInterpolator(new DecelerateInterpolator());
 		fadeIn.setDuration(400);
 		
-		
 		final View view = activity.findViewById(dialogResourceId);
 		fadeIn.setAnimationListener(new AnimationListener() {
 
 			@Override
 			public void onAnimationEnd(Animation animation) {
+				view.clearAnimation();
 				if (callback!=null) callback.onResult();
 			}
 
@@ -611,11 +600,12 @@ public class RetroBoxDialog {
 			public void onAnimationRepeat(Animation animation) {}
 
 			@Override
-			public void onAnimationStart(Animation animation) {
-				view.setVisibility(View.VISIBLE);
-			}
+			public void onAnimationStart(Animation animation) {}
 		});
+		
 		openTimeStart = System.currentTimeMillis();
+		view.setVisibility(View.VISIBLE);
+		view.clearAnimation();
 		view.startAnimation(fadeIn);
 	}
 
@@ -643,6 +633,7 @@ public class RetroBoxDialog {
 			public void onAnimationStart(Animation animation) {}
 		});
 		
+		view.clearAnimation();
 		view.startAnimation(fadeOut);
 	}
 	
