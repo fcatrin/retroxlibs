@@ -18,9 +18,13 @@ import android.os.Environment;
 import android.util.Log;
 
 public class DriveUtils {
-	private static final String validFileSystems[] = {"vfat", "sdcardfs", "fuse", "fuseblk", "ntfs", "esdfs", "smb", "cifs", "tntfs"};
-
 	private static final String LOGTAG = DriveUtils.class.getSimpleName();
+
+	private static final String validFileSystems[] = {"vfat", "sdcardfs", "fuse", "fuseblk", "ntfs", "esdfs", "smb", "cifs", "tntfs"};
+	
+	private static List<MountPoint> cachedMounts = null;
+	private static long cacheExpiration = 0;
+	private static long CACHE_TTL = 30 * 1000;
 	
 	private static boolean isValidFileSystem(String fileSystem) {
 		for(String validFileSystem : validFileSystems) {
@@ -31,6 +35,13 @@ public class DriveUtils {
 
 	@SuppressLint("SdCardPath")
 	public static List<MountPoint> findMounts() {
+		long now = System.currentTimeMillis();
+		if (cachedMounts != null && cacheExpiration > now) {
+			// make this result valid for the next 30 seconds
+			cacheExpiration = now + CACHE_TTL;
+			return cachedMounts;
+		}
+		
 		Set<String> paths = new HashSet<String>();
 		Set<String> signatures = new HashSet<String>();
 		List<MountPoint> mounts = new ArrayList<MountPoint>();
@@ -90,7 +101,8 @@ public class DriveUtils {
 			}
 		}
 		
-		
+		cachedMounts    = mounts;
+		cacheExpiration = now + CACHE_TTL;
 		return mounts;
 	}
 	
