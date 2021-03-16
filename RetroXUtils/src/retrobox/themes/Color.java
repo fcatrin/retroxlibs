@@ -47,10 +47,10 @@ public class Color {
 				spec = spec.substring(1);
 				
 				Color color = new Color();
-				color.a = buildComponent(spec.substring(0));
-				color.r = buildComponent(spec.substring(2));
-				color.g = buildComponent(spec.substring(4));
-				color.b = buildComponent(spec.substring(6));
+				color.a = buildComponent(spec.substring(0, 2));
+				color.r = buildComponent(spec.substring(2, 3));
+				color.g = buildComponent(spec.substring(4, 5));
+				color.b = buildComponent(spec.substring(6, 7));
 				return color;
 			} else {
 				throw new RuntimeException("Unknown color:" + spec);
