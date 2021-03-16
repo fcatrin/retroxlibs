@@ -3,6 +3,7 @@ package retrobox.themes;
 import java.io.File;
 
 import android.app.Activity;
+import android.content.res.ColorStateList;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ClipDrawable;
 import android.graphics.drawable.ColorDrawable;
@@ -17,6 +18,7 @@ import android.util.StateSet;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -186,18 +188,9 @@ public class ThemeUtils {
 				R.id.txtPanelStatus1,
 				R.id.txtPanelStatus2,
 
-				// R.id.gamepadInfo1,
-				// R.id.gamepadInfo2,
-
 				R.id.txtGamepadInfoTop,
 				R.id.txtGamepadInfoBottom,
 
-				// R.id.progress_info,
-				// R.id.progress_size,
-				
-				// R.id.retrobox_logo_login,
-				// R.id.login_info,
-				
 				R.id.txtDialogLogin,
 				R.id.txtDialogLoginUserLabel,
 				R.id.txtDialogLoginUser,
@@ -221,25 +214,12 @@ public class ThemeUtils {
 				"rx_dialog_chooser_info",
 				"rx_dialog_chooser_status1",
 				"rx_dialog_chooser_status2",
-				
-				/* dialog gamepad setup */
-				// "rx_dialog_text",
-				// "rx_dialog_text",
 
 				/* dialog gamepad info */
 				"rx_dialog_text",
 				"rx_dialog_text",
 
-				/* dialog progress */
-				// "rx_dialog_text",
-				// "rx_dialog_text",
-
-				/* dialog login */
-				// "rx_dialog_title",
-				// "rx_dialog_text",
-
 				/* dialog login (LAN) */
-
 				"rx_dialog_title",
 				"rx_dialog_text",
 				"rx_editor_text",
@@ -281,30 +261,24 @@ public class ThemeUtils {
 			applyDefaultListStyles(listView);
 		}
 		
-		// applyDefaultListItemStyles(activity);
-		
-		// ImageView imgGamepadSetup = (ImageView)activity.findViewById(R.id.gamepadImage);
 		ImageView imgGamepadInfo  = (ImageView)activity.findViewById(R.id.gamepadDialogImage);
-		
-		// imgGamepadSetup.setColorFilter(0xC0FFFFFF, PorterDuff.Mode.MULTIPLY);
 		imgGamepadInfo. setColorFilter(0xC0FFFFFF, PorterDuff.Mode.MULTIPLY);
-		
-		/*
-		int progressResIds[] = {
-				R.id.progress_value,
-				R.id.barEmuMoviesPlatforms,
-				R.id.barEmuMoviesFiles,
-				R.id.barEmuMoviesFile,
-		};
-		
-		for(int progressResId : progressResIds) {
-			ProgressBar progressView = (ProgressBar)activity.findViewById(progressResId);
-			applyProgressColors(progressView, null, null);
-		}
-		*/
 	}
 	
-	private static void applyDefaultListStyles(ListView list) {
+	public static void applyDefaultButtonStyles(Activity activity) {
+		int buttonResourceIds[] = {
+			R.id.btnDialogActionPositive, R.id.btnDialogActionNegative,
+			R.id.btnDialogCustomPositive, R.id.btnDialogCustomNegative,
+			R.id.btnDialogLoginPositive, R.id.btnDialogLoginNegative,
+		};
+		
+		for(int resourceId : buttonResourceIds) {
+			ThemeUtils.applyStyleButton((Button)activity.findViewById(resourceId));
+		}
+	}
+
+	
+	public static void applyDefaultListStyles(ListView list) {
 		
 		Color bgColorNormal   = Color.getNamedColor("rx_listitem_background");
 		Color bgColorSelected = Color.getNamedColor("rx_listitem_background_selected");
@@ -327,7 +301,7 @@ public class ThemeUtils {
 	    return res;
 	}
 
-	private static void applyTextStyles(Activity activity, int textResourceIds[], String styleNames[]) {
+	public static void applyTextStyles(Activity activity, int textResourceIds[], String styleNames[]) {
 		for(int i=0; i<textResourceIds.length; i++) {
 			int resourceId = textResourceIds[i];
 			String styleName = styleNames[i];
@@ -357,7 +331,7 @@ public class ThemeUtils {
 		}
 	}
 	
-	private static void applyDialogBackgroundStyles(Activity activity, int viewResourceIds[], String colorNames[], 
+	public static void applyDialogBackgroundStyles(Activity activity, int viewResourceIds[], String colorNames[], 
 			int roundedResourceIds[], int[] roundedTopIds) {
 		
 		for(int i=0; i<viewResourceIds.length; i++) {
@@ -365,29 +339,29 @@ public class ThemeUtils {
 			String colorName = colorNames[i];
 			
 			boolean rounded = false;
-			for(int r=0; r<roundedResourceIds.length && !rounded; r++) {
+			for(int r=0; roundedResourceIds!=null && r<roundedResourceIds.length && !rounded; r++) {
 				rounded = resourceId == roundedResourceIds[r];
 			}
 			
 			boolean roundedTop = false;
-			for(int r=0; r<roundedTopIds.length && !roundedTop; r++) {
+			for(int r=0; roundedTopIds!=null && r<roundedTopIds.length && !roundedTop; r++) {
 				roundedTop = resourceId == roundedTopIds[r];
 			}
 			applyBackgroundColor(activity, resourceId, colorName, rounded, roundedTop);
 		}		
 	}
 
-	private static void applyBackgroundColor(Activity activity, int resourceId, String colorName, boolean rounded, boolean roundedTop) {
+	public static void applyBackgroundColor(Activity activity, int resourceId, String colorName, boolean rounded, boolean roundedTop) {
 		ShapeDrawable background = createBackground(colorName, colorName, rounded, roundedTop);
 		View view = activity.findViewById(resourceId); 
 		view.setBackgroundDrawable(background);	
 	}
 
-	private static ShapeDrawable createBackground(String fillColorName, String strokeColorName, boolean rounded) {
+	public static ShapeDrawable createBackground(String fillColorName, String strokeColorName, boolean rounded) {
 		return createBackground(fillColorName, strokeColorName, rounded, false);
 	}
 
-	private static ShapeDrawable createBackground(String fillColorName, String strokeColorName, boolean rounded, boolean roundedTop) {
+	public static ShapeDrawable createBackground(String fillColorName, String strokeColorName, boolean rounded, boolean roundedTop) {
 		Color fillColor   = Color.getNamedColor(fillColorName);
 		Color strokeColor = Color.getNamedColor(strokeColorName);
 
@@ -419,7 +393,7 @@ public class ThemeUtils {
 		progressBar.setProgressDrawable(barDrawable);
 	}
 
-	private static void setTextEditorStyle(EditText textEditorView) {
+	public static void setTextEditorStyle(EditText textEditorView) {
 		ShapeDrawable normalBackground  = createBackground("rx_editor_background", "rx_editor_stroke", false);
 		ShapeDrawable focusedBackground = createBackground("rx_editor_background_focused", "rx_editor_stroke_focused", false);
 		
@@ -441,6 +415,49 @@ public class ThemeUtils {
 		}
 	}
 	
+	public static void applyStyleButton(TextView button) {
+		
+		applyStyle(button, "rx_button_text");
+		
+		RoundRectShape rs = new RoundRectShape(new float[] { 2, 2, 2, 2, 2, 2, 2, 2 }, null, null);
+		
+		Color buttonBackgroundColorNormal = Color.getNamedColor("rx_button_background");
+		Color buttonStrokeColorNormal = Color.getNamedColor("rx_button_border");
+
+		Color buttonBackgroundColorFocus = Color.getNamedColor("rx_button_background_focus");
+		Color buttonStrokeColorFocus = Color.getNamedColor("rx_button_border_focus");
+
+		ShapeDrawable backgroundNormal = new CustomShapeDrawable(rs, buttonBackgroundColorNormal.asInt(), buttonStrokeColorNormal.asInt(), 2);
+		ShapeDrawable backgroundFocus  = new CustomShapeDrawable(rs, buttonBackgroundColorFocus.asInt(), buttonStrokeColorFocus.asInt(), 2);
+
+		StateListDrawable background = makeBackgroundSelector(backgroundNormal, backgroundFocus);
+		button.setBackgroundDrawable(background);
+		
+		Style normalStyle  = Style.getNamedStyle("rx_button_text");
+		Style focusedStyle = Style.getNamedStyle("rx_button_text_focus");
+		
+		int colorNormal  = normalStyle.getFontColor().asInt();
+		int colorFocused = focusedStyle.getFontColor().asInt();
+		
+		ColorStateList textColor = makeColorSelector(colorNormal, colorFocused);
+		button.setTextColor(textColor);
+	}
+	
+	public static ColorStateList makeColorSelector(int colorNormal, int colorSelected) {
+		return new ColorStateList(
+				new int[][]{
+						new int[]{android.R.attr.state_selected},
+						new int[] {android.R.attr.state_focused},
+						StateSet.WILD_CARD
+				},
+				new int[] {
+						colorSelected,
+						colorSelected,
+						colorNormal
+				}
+	    );
+	}
+
 	public static Style getTextStyle(String styleName) {
 		if (styleName == null) styleName = "default";
 		
