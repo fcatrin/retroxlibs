@@ -19,4 +19,15 @@
     <string name="no_share_title">No share providers</string>
     <string name="no_share_msg">No applications found for sharing.  Please install Twitter, Facebook or another sharing application</string>
     <string name="title_share_default">Share on&#8230;</string>
+    <string name="xtv_not_enough_space_download">
+There is not enough storage space available to download this file\n
+Available: {available}\n
+Required: {required}
+   </string>
+    <string name="xtv_not_enough_space_uncompress">
+There is not enough storage space available to uncompress this file\n
+Available: {available}\n
+Required: {required}
+   </string>
+    
 </resources>

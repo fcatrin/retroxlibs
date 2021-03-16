@@ -1,5 +1,7 @@
 package xtvapps.core;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -15,7 +17,12 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+
+import android.content.Context;
 
 public final class Utils {
 	private static final String LOGTAG = Utils.class.getSimpleName();
@@ -26,9 +33,11 @@ public final class Utils {
 	private static final long SIZE_GIGABYTE = 1024*1024*1024;
 	private static final long SIZE_MEGABYTE = 1024*1024;
 	private static final long SIZE_KILOBYTE = 1024;
-	
-	private Utils() {}
 
+	// less ugly, otherwise it would require a change on all apps
+	public static Context context;
+
+	private Utils() {}
 	
 	public static String size2human(long size) {
 		if (size > SIZE_GIGABYTE) {
@@ -284,6 +293,96 @@ public final class Utils {
 			}
 		}
 		dir.delete();
+	}
+	public static boolean unzip(File file, File dstPath) throws IOException {
+		return unzip(file, dstPath, null);
+	}
+	
+	public static boolean unzip(File file, File dstPath, ProgressListener listener) throws IOException {
+		
+		ZipFile zipFile = null;
+		long max = 0;
+		long pos = 0;
+		
+		boolean hasSizeInfo = true;
+		if (listener!=null) {
+			try {
+				zipFile = new ZipFile(file);
+				Enumeration<? extends ZipEntry> e = zipFile.entries();
+		        while (e.hasMoreElements()) {
+		        	ZipEntry entry = e.nextElement();
+		        	long size = entry.getSize();
+		        	max += size>0?size:0;
+		        }
+	        
+		        if (max == 0) {
+		        	hasSizeInfo = false;
+		        	max = zipFile.size();
+		        }
+			} finally {
+				if (zipFile!=null)	zipFile.close();
+				zipFile = null;
+			}
+	        
+			listener.update(0, (int)max);
+		}
+		
+		dstPath.mkdirs();
+		
+		long maxFileSize = dstPath.getFreeSpace();
+		if (max > maxFileSize) throwNotEnoughStorageException(R.string.xtv_not_enough_space_uncompress, maxFileSize, max);
+		
+		try {
+	        zipFile = new ZipFile(file);
+			int customBufferSize = 0;
+			if (listener!=null) {
+				customBufferSize = listener.getBufferSize((int)max);
+			}
+	        byte buffer[] = new byte[customBufferSize>0?customBufferSize:BUF_SIZE];
+	        boolean cancel = false;
+			Enumeration<? extends ZipEntry> e = zipFile.entries();
+	          while (e.hasMoreElements()) {
+	              ZipEntry entry = e.nextElement();
+	              if (entry.getName().startsWith("._")) continue;
+	              
+	              File destinationPath = new File(dstPath, entry.getName());
+	              destinationPath.getParentFile().mkdirs();
+	              if (entry.isDirectory()) continue;
+	              
+	              BufferedInputStream bis = new BufferedInputStream(zipFile.getInputStream(entry));
+	              int b;
+	              FileOutputStream fos = new FileOutputStream(destinationPath);
+	              BufferedOutputStream bos = new BufferedOutputStream(fos, buffer.length);
+	              bos.flush();
+	              while ((b = bis.read(buffer, 0, buffer.length)) != -1) {
+	                  bos.write(buffer, 0, b);
+	                  
+	                  if (hasSizeInfo && listener!=null) {
+	                      pos+=b;
+	                	  cancel = listener.update((int)pos, (int)max);
+	                	  if (cancel) break;
+	                  }
+	              }
+	              bos.close();
+	              bis.close();
+	              
+	              if (listener!=null && !hasSizeInfo) {
+	            	  pos++;
+	            	  cancel = listener.update((int)pos, (int)max);
+	              }
+	              if (cancel) return false;
+	          }
+	          return true;
+		} finally {
+			if (zipFile!=null) zipFile.close();
+		}
+	}
+
+	public static void throwNotEnoughStorageException(int textResourceId, long available, long required) throws IOException {
+		String msg = context.getString(textResourceId)
+				.replace("{available}", Utils.size2humanDetailed(available))
+				.replace("{required}",  Utils.size2humanDetailed(required));
+		throw new IOException(msg);
 	}
 
 }
