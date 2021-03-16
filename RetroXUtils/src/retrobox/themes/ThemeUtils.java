@@ -1,13 +1,20 @@
 package retrobox.themes;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.res.AssetManager;
 import android.content.res.ColorStateList;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ClipDrawable;
@@ -32,6 +39,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import retrobox.utils.R;
+import xtvapps.core.AndroidCoreUtils;
 import xtvapps.core.AndroidFonts;
 import xtvapps.core.Utils;
 import xtvapps.core.xml.SimpleXML;
@@ -62,6 +70,48 @@ public class ThemeUtils {
 		Log.d(LOGTAG, "screen " + screenWidth +"x" + screenHeight);
 	}
 
+	public static void unpackThemes(Activity activity, File baseDir) throws IOException {
+		baseDir.mkdirs();
+		
+		String dir = "themes";
+		AssetManager assets = activity.getAssets();
+		String[] files = assets.list(dir);
+		
+		// always uncompress root files
+		// save folder (themes) for later
+		List<String> themeDirs = new ArrayList<String>();
+		for(String file : files) {
+			String fileName = dir + "/" + file;
+			try {
+				InputStream is = assets.open(fileName);
+				File dstFile = new File(baseDir, file);
+				Utils.copyFile(is, new FileOutputStream(dstFile));
+			} catch (FileNotFoundException e) {
+				themeDirs.add(file);
+			}
+		}
+		
+		// now for each theme, skip if versions are the same except in development mode 
+		for(String themeDir : themeDirs) {
+			File themeFile = new File(baseDir, themeDir +"/theme.xml");
+			try {
+				if (themeFile.exists()) {
+					Document xmlAsset   = SimpleXML.parse(assets.open(dir + "/" + themeDir + "/theme.xml"));
+					if (!SimpleXML.getBoolAttribute(xmlAsset.getDocumentElement(), "development", false)) {
+						Document xmlCurrent = SimpleXML.parse(themeFile);
+						int versionCurrent = SimpleXML.getIntAttribute(xmlCurrent.getDocumentElement(), "version", 1);
+						int versionAsset   = SimpleXML.getIntAttribute(xmlAsset.getDocumentElement(), "version", 1);
+						if (versionAsset == versionCurrent) continue;
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			AndroidCoreUtils.unpackAssets(activity, dir + "/" + themeDir, baseDir.getParentFile());
+		}
+	}
+	
 	public static void applyDefaultColors(Activity activity) {
 		int viewResourceIds[] = new int[] {
 				R.id.modal_dialog_actions,

@@ -1,7 +1,5 @@
 package xtvapps.core;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -12,31 +10,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.Provider;
-import java.security.Security;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Properties;
-import java.util.Set;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-
-import org.json.JSONArray;
-
-import android.util.Log;
 
 public final class Utils {
 	private static final String LOGTAG = Utils.class.getSimpleName();
@@ -264,5 +243,47 @@ public final class Utils {
 		return s == null || s.trim().length() == 0;
 	}
 	
+	public static void copyFile(File src, File dst) throws IOException {
+		copyFile(src, dst, null);
+	}
+	
+	public static void copyFile(File src, File dst, ProgressListener progressListener) throws IOException {
+		FileInputStream is = new FileInputStream(src);
+		FileOutputStream os = new FileOutputStream(dst);
+		copyFile(is, os, progressListener, src.length());
+	}
+	
+	public static void copyFile(InputStream is, OutputStream os) throws IOException {
+		copyFile(is, os, null, 0);
+	}
+	
+	public static void copyFile(InputStream is, OutputStream os, ProgressListener progressListener, long max) throws IOException {
+        byte buffer[] = new byte[BUF_SIZE];
+		int bufferLength = 0;
+
+		if (progressListener!=null) progressListener.update(0, (int)max);
+		try {
+			int pos = 0;
+			while ((bufferLength = is.read(buffer)) > 0) {
+				os.write(buffer, 0, bufferLength);
+				pos += bufferLength;
+				if (progressListener!=null) progressListener.update(pos, (int)max);
+			}
+		} finally {
+			is.close();
+			os.close();
+		}
+	}
+	
+	public static void delTree(File dir) {
+		if (!dir.exists() || !dir.isDirectory()) return;
+		if (dir.listFiles() != null) {
+			for(File f : dir.listFiles()) {
+				if (f.isDirectory()) delTree(f);
+				else f.delete();
+			}
+		}
+		dir.delete();
+	}
 
 }

@@ -1,10 +1,14 @@
 package xtvapps.core;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.net.Uri;
 import android.util.Log;
 import android.view.View;
@@ -48,6 +52,35 @@ public final class AndroidCoreUtils {
         if (imm != null && view!=null) {
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+	}
+
+	public static void unpackAssets(Context ctx, String dir, File dstDir) throws IOException {
+		unpackAssets(ctx, dir, dstDir, null);
+	}
+	
+	public static void unpackAssets(Context ctx, String dir, File dstDir, ProgressListener progressListener) throws IOException {
+		File unpackDir = new File (dstDir, dir);
+		if (unpackDir.exists()) Utils.delTree(unpackDir);
+		unpackDir.mkdirs();
+
+		AssetManager assets = ctx.getAssets();
+		String[] files = assets.list(dir);
+		
+		int filesMax = files.length;
+		int filesProgress = 0;
+		
+		for(String file : files) {
+			String fileName = dir + "/" + file;
+			if (progressListener!=null) progressListener.update(filesProgress++, filesMax);
+			try {
+				InputStream is = assets.open(fileName);
+				File dstFile = new File(dstDir, fileName);
+				Utils.copyFile(is, new FileOutputStream(dstFile));
+			} catch (FileNotFoundException e) {
+				// this is a folder
+				unpackAssets(ctx, fileName, dstDir, progressListener);
+			}
+		}
 	}
 
 }
