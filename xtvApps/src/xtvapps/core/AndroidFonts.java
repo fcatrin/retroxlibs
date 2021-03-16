@@ -20,6 +20,14 @@ public final class AndroidFonts {
 	private AndroidFonts() {
 	}
 	
+	public static void clearNamedFonts() {
+		namedFonts.clear();
+	}
+	
+	public static void clearKnownFonts() {
+		knownFonts.clear();
+	}
+	
 	public static void addNamedFont(String name, String spec) {
 		namedFonts.put(name, spec);
 	}

@@ -13,6 +13,10 @@ public class Shadow {
 	public String colorName;
 	
 	private static Map<String, Shadow> namedShadows = new HashMap<String, Shadow>();
+
+	public static void clearNamedShadows() {
+		namedShadows.clear();
+	}
 	
 	public static void addNamedShadow(String name, Shadow shadow) {
 		if (shadow!=null) namedShadows.put(name, shadow);

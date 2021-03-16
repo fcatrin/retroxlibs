@@ -1,7 +1,12 @@
 package retrobox.themes;
 
 import java.io.File;
+import java.util.List;
+import java.util.Map;
 
+import org.w3c.dom.Element;
+
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.res.ColorStateList;
 import android.graphics.PorterDuff;
@@ -13,6 +18,8 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.graphics.drawable.shapes.RectShape;
 import android.graphics.drawable.shapes.RoundRectShape;
+import android.os.Build;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.StateSet;
 import android.util.TypedValue;
@@ -26,7 +33,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import retrobox.utils.R;
 import xtvapps.core.AndroidFonts;
-
+import xtvapps.core.Utils;
+import xtvapps.core.xml.SimpleXML;
 
 public class ThemeUtils {
 	private static final String LOGTAG = ThemeUtils.class.getSimpleName();
@@ -34,10 +42,25 @@ public class ThemeUtils {
 	public static ThemeResourceLocator resourceLocator = null;
 
 	public static int width, height;
-	public static int screenWidth;
-	public static int screenHeight;
+	private static int screenWidth;
+	private static int screenHeight;
 	
 	private ThemeUtils() {}
+	
+	@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+	public static void initScreenSize(Activity activity) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+	        DisplayMetrics metrics = new DisplayMetrics();
+	        activity.getWindowManager().getDefaultDisplay().getRealMetrics(metrics);
+	        screenWidth = metrics.widthPixels;
+	        screenHeight = metrics.heightPixels;
+	    } else {
+			DisplayMetrics dm = activity.getApplicationContext().getResources().getDisplayMetrics();
+			screenWidth = dm.widthPixels;
+			screenHeight = dm.heightPixels;
+	    }
+		Log.d(LOGTAG, "screen " + screenWidth +"x" + screenHeight);
+	}
 
 	public static void applyDefaultColors(Activity activity) {
 		int viewResourceIds[] = new int[] {
@@ -494,5 +517,148 @@ public class ThemeUtils {
 		return (int)(y * screenHeight / height);
 	}
 	
+	public static void clearNamedObjects() {
+		Color.clearNamedColors();
+		Shadow.clearNamedShadows();
+		Style.clearNamedStyles();
+		AndroidFonts.clearNamedFonts();
+		AndroidFonts.clearKnownFonts();
+	}
+	
+	public static void readNamedColors(Element root) {
+		Element rootColors = SimpleXML.getElement(root, "colors");
+		
+		if (rootColors != null) {
+			List<Element> namedColorElements = SimpleXML.getElements(rootColors, "color");
+			for(Element namedColorElement : namedColorElements) {
+				String name = namedColorElement.getAttribute("name");
+				String spec = namedColorElement.getTextContent();
+				Color.addNamedColor(name, spec);
+			}
+		}
+	}
+	
+	public static void readNamedShadows(Element root) {
+		Element rootColors = SimpleXML.getElement(root, "shadows");
+		
+		if (rootColors != null) {
+			List<Element> namedShadowElements = SimpleXML.getElements(rootColors, "shadow");
+			for(Element namedShadowElement : namedShadowElements) {
+				Shadow shadow = buildShadow(namedShadowElement);
+				Shadow.addNamedShadow(shadow.getName(), shadow);
+			}
+		}
+	}
+	
+	public static void readNamedFonts(Element root) {
+		Element rootFonts = SimpleXML.getElement(root, "fonts");
+		
+		if (rootFonts != null) {
+			List<Element> rootFontElements = SimpleXML.getElements(rootFonts, "font");
+			for(Element namedColorElement : rootFontElements) {
+				String name = namedColorElement.getAttribute("name");
+				String spec = namedColorElement.getTextContent();
+				AndroidFonts.addNamedFont(name, spec);
+			}
+		}
+	}
+
+	public static Shadow buildShadow(Element node) {
+		Shadow shadow = new Shadow();
+		
+		shadow.name = SimpleXML.getAttribute(node, "name");
+		shadow.radius = SimpleXML.getFloat(node, "radius");
+		shadow.dx  = SimpleXML.getFloat(node, "dx");
+		shadow.dy  = SimpleXML.getFloat(node, "dy");
+		shadow.colorName = SimpleXML.getText(node, "color");
+		
+		return shadow;
+	}
+
+	public static void readStyles(Element root) {
+		Element styleElementContainer = SimpleXML.getElement(root, "styles");
+		List<Element> styleElements = SimpleXML.getElements(styleElementContainer, "style");
+		
+		for(Element styleElement : styleElements) {
+			Style style = buildStyle(styleElement);
+			Style defaultStyle = Style.getNamedStyle(style.getName());
+			
+			if (defaultStyle!=null) {
+				style.merge(defaultStyle);
+			}
+			Style.addNamedStyle(style.getName(), style);
+		}
+	}
+
+	private static void mergeStyle(Style defaultStyle, Style style) {
+		Style parentStyle = defaultStyle;
+		String parentName = style.getParentName();
+		if (parentName != null) {
+			parentStyle = Style.getNamedStyle(parentName);
+			if (parentStyle == null) {
+				throw new RuntimeException("Unknown parent " + parentName + " for style " + style.getName());
+			}
+		}
+		style.merge(parentStyle);
+	}
+	
+	public static void mergeStyles() {
+		// prepare default style
+		Style defaultStyle = Style.getNamedStyle("default"); 
+		if (defaultStyle == null) {
+			defaultStyle =	buildStyleDefault();
+		}
+		
+		Map<String, Style> namedStyles = Style.getNamedStyles();
+		
+		// inheritance is processed in declared order for now
+		Log.d("STYLES", "non merged: " + namedStyles);
+
+		for(Style style : namedStyles.values()) {
+			mergeStyle(defaultStyle, style);
+		}
+		
+		Log.d("STYLES", "merged: " + namedStyles);
+	}
+
+	private static Style buildStyleDefault() {
+		Style style = new Style();
+		style.fontSize = buildDimension("12px");
+		style.colorName = "#FFFFFFFF";
+		style.fontWeight = Style.FontWeight.Normal;
+		//style.width  = SIZE_WRAP;
+		//style.height = SIZE_WRAP;
+		return style;
+	}	
+	
+	private static Style buildStyle(Element element) {
+		Style style = new Style();
+		style.name = SimpleXML.getAttribute(element, "name");
+		if (style.name == null) {
+			throw new RuntimeException("There is a style element without a name " + SimpleXML.asString(element));
+		}
+		style.parentName = SimpleXML.getAttribute(element, "parent");
+		style.fontName =  SimpleXML.getText(element, "font");
+		style.fontSize = buildDimension(SimpleXML.getText(element, "size"));
+		style.colorName = SimpleXML.getText(element, "color");
+		style.shadowName = SimpleXML.getText(element, "shadow");
+		// TODO font weight
+		return style;
+	}
+
+	public static int buildDimension(String value) {
+		if (value != null) {
+			if (value.endsWith("px")) {
+				value = value.replace("px", "");
+				return Utils.str2i(value);
+			} else {
+				int n = Utils.str2i(value);
+				if (String.valueOf(n).equals(value)) return n;
+			}
+			throw new RuntimeException("Invalid dimension " + value);
+		}
+		return 0;
+	}
+
 
 }

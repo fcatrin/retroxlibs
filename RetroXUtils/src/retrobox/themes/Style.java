@@ -113,6 +113,10 @@ public class Style {
 		this.fontName = fontName;
 	}
 
+	public static void clearNamedStyles() {
+		namedStyles.clear();
+	}
+	
 	public static void addNamedStyle(String name, Style style) {
 		namedStyles.put(name, style);
 	}

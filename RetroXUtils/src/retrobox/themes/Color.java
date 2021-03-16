@@ -14,6 +14,10 @@ public class Color {
 	public int b;
 	public int a;
 
+	public static void clearNamedColors() {
+		namedColors.clear();
+	}
+
 	public static void addNamedColor(String name, String spec) {
 		if (name == null || spec == null) {
 			throw new RuntimeException("Invalid named color name:" + name + ", spec:" + spec);
@@ -80,4 +84,5 @@ public class Color {
 		newColor.b = color.b;
 		return newColor;
 	}
+
 }
