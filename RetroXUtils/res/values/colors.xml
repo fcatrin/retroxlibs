@@ -36,6 +36,7 @@
 	<color name="pal_base5">#FF4C4C4C</color>
    	
 	<color name="pal_text_disabled">#30FFFFFF</color>
+	<color name="pal_text_dim3">#40FFFFFF</color>
 	<color name="pal_text_dim2">#80FFFFFF</color>
 	<color name="pal_text_dim">#90FFFFFF</color>
 	<color name="pal_text1">#B0FFFFFF</color>
