@@ -1,13 +1,17 @@
 package retrobox.themes;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import xtvapps.core.Utils;
 
 public class Color {
 	private static final String LOGTAG = Color.class.getSimpleName();
+	private static final String PRIOR_PREFIX = "prior_";
 	private static Map<String, Color> namedColors = new HashMap<String, Color>();
+	private static Set<String> priorColors = new HashSet<String>();
 	
 	public int r;
 	public int g;
@@ -16,12 +20,21 @@ public class Color {
 
 	public static void clearNamedColors() {
 		namedColors.clear();
+		priorColors.clear();
 	}
 
 	public static void addNamedColor(String name, String spec) {
 		if (name == null || spec == null) {
 			throw new RuntimeException("Invalid named color name:" + name + ", spec:" + spec);
 		}
+		
+		if (priorColors.contains(name)) return;
+		
+		if (name.startsWith(PRIOR_PREFIX)) {
+			name = name.substring(PRIOR_PREFIX.length());
+			priorColors.add(name);
+		}
+		
 		Color color = build(spec);
 		if (color!=null) namedColors.put(name, color);
 	}
