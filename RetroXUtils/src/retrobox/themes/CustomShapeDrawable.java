@@ -20,11 +20,13 @@ public class CustomShapeDrawable extends ShapeDrawable {
 		super(s);
         fillPaint = new Paint(this.getPaint());
         fillPaint.setColor(fillColor);
-        strokePaint = new Paint(fillPaint);
-        strokePaint.setStyle(Paint.Style.STROKE);
-        strokePaint.setStrokeWidth(strokeWidth);
-        strokePaint.setColor(strokeColor);
-        this.strokeWidth = strokeWidth;
+        if (strokeColor != fillColor) {
+	        strokePaint = new Paint(fillPaint);
+	        strokePaint.setStyle(Paint.Style.STROKE);
+	        strokePaint.setStrokeWidth(strokeWidth);
+	        strokePaint.setColor(strokeColor);
+	        this.strokeWidth = strokeWidth;
+        }
 	}
 
 	public CustomShapeDrawable(Shape s) {
@@ -47,7 +49,9 @@ public class CustomShapeDrawable extends ShapeDrawable {
 	            Matrix.ScaleToFit.FILL);
 	    
 	    canvas.concat(matrix);
-	    shape.draw(canvas, strokePaint);
+	    if (strokePaint != null) {
+	    	shape.draw(canvas, strokePaint);
+	    }
 	    
 	    canvas.restore();
 	}
