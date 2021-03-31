@@ -28,6 +28,15 @@ public class Color {
 			throw new RuntimeException("Invalid named color name:" + name + ", spec:" + spec);
 		}
 		
+		Color color = build(spec);
+		addNamedColor(name, color);
+	}
+
+	public static void addNamedColor(String name, Color color) {
+		if (name == null || color == null) {
+			throw new RuntimeException("Invalid named color name:" + name + ", color:" + color);
+		}
+		
 		if (priorColors.contains(name)) return;
 		
 		if (name.startsWith(PRIOR_PREFIX)) {
@@ -35,16 +44,24 @@ public class Color {
 			priorColors.add(name);
 		}
 		
-		Color color = build(spec);
 		if (color!=null) namedColors.put(name, color);
 	}
-	
+
 	public static Color getNamedColor(String name) {
 		Color color = namedColors.get(name);
 		if (color == null) {
 			throw new RuntimeException("Unknown color:" + name );
 		}
 		return color;
+	}
+	
+	public static Color build(int color) {
+		Color c = new Color();
+		c.b = color & 0xFF;
+		c.g = (color & 0xFF00) >> 8;
+		c.r = (color & 0xFF0000) >> 16;
+		c.a = (color & 0xFF000000) >> 24;
+		return c;
 	}
 	
 	public static Color build(String spec, Color defaultColor) {
