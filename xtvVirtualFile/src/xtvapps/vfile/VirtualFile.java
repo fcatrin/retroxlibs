@@ -127,19 +127,15 @@ public class VirtualFile {
 	}
 	
 	public VirtualFile getParent() {
-		System.out.println("PARENT Get parent for " + getUrl() + " parent is: " + (parent != null ? parent.getUrl() : "null"));
 		if (parent!=null) return parent;
 		
 		String parentPath = getParentPath();
-		System.out.println("PARENT getParentPath: " + parentPath + " (mountPoint " + mountPoint + ")");
 		if (parentPath == null || parentPath.equals(mountPoint)) {
-			System.out.println("PARENT return getStorageParent " + getStorageParent());
 			return getStorageParent();
 		}
 		
 		parent = new VirtualFile(type, container, parentPath);
 		parent.setIsDirectory(true);
-		System.out.println("PARENT create new parent file " + parent);
 		return parent;
 	}
 	
