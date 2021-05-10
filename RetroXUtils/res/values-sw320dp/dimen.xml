@@ -6,6 +6,7 @@
     <dimen name="text_normal_pad">6dp</dimen> <!-- (text_big - text_normal) / 2 used for button padding -->
     <dimen name="text_medium">11dp</dimen>
     <dimen name="text_small">10dp</dimen>
+    <dimen name="spacing_bigger">24dp</dimen>
     <dimen name="spacing_big">16dp</dimen>
     <dimen name="spacing_normal">8dp</dimen>
     <dimen name="spacing_small">4dp</dimen>
