@@ -1,0 +1,4 @@
+<resources>
+    <string name="image_loading_id" translatable="false">loading</string>
+    <string name="image_loaded_id" translatable="false">loaded</string>
+</resources>

@@ -1,0 +1,7 @@
+<resources>
+    <string name="msg_default_ok">OK</string>
+    <string name="msg_default_cancel">Cancel</string>
+    <string name="no_share_title">No se puede compartir</string>
+    <string name="title_share_default">Compartir en&#8230;</string>
+    <string name="no_browser">Tu dispositivo no parece tener un navegador\n\nPor favor abre\n{url}\nen otro dispositivo</string>
+</resources>

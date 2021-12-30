@@ -1,0 +1,7 @@
+<resources>
+    <string name="msg_default_ok">OK</string>
+    <string name="msg_default_cancel">Cancel</string>
+    <string name="no_share_title">No share providers</string>
+    <string name="title_share_default">Share on&#8230;</string>
+    <string name="no_browser">Your device doesn\'t seem to have a web browser\n\nPlease open\n{url}\nin any other device</string>
+</resources>
