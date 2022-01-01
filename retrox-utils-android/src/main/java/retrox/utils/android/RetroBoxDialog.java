@@ -443,12 +443,13 @@ public class RetroBoxDialog extends AndroidStandardDialogs {
 		});
 	}
 	
-	public static void cancelDialog(Activity activity) {
+	public static boolean cancelDialog(Activity activity) {
 		View dialog = getVisibleDialog(activity);
 		
-		if (dialog == null) return;
+		if (dialog == null) return false;
 		
 		dialog.performClick();
+		return true;
 	}
 	
 	private static boolean isVisible(View v) {
