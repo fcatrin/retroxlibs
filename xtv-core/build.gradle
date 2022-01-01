@@ -22,8 +22,6 @@ afterEvaluate {
     }
 }
 
-task install(dependsOn: publishToMavenLocal)
-
 dependencies {
     implementation 'org.json:json:20210307'
 }
