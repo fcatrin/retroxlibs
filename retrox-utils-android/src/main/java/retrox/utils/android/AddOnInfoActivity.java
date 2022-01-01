@@ -39,7 +39,7 @@ public abstract class AddOnInfoActivity extends Activity {
 				String msg1 = getString(R.string.addon_rbx_missing_msg);
 				String optYes = getString(R.string.addon_rbx_missing_yes);
 				String optNo  = getString(R.string.addon_rbx_missing_no);
-				RetroBoxDialog.confirm(AddOnInfoActivity.this, msg1, optYes, optNo, new SimpleCallback() {
+				RetroXDialogs.confirm(AddOnInfoActivity.this, msg1, optYes, optNo, new SimpleCallback() {
 
 					@Override
 					public void onResult() {

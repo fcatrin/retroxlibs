@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Locale;
 
 import retrox.utils.android.R;
-import retrox.utils.android.RetroBoxDialog;
+import retrox.utils.android.RetroXDialogs;
 import xtvapps.core.Callback;
 import xtvapps.core.CoreUtils;
 import xtvapps.core.SimpleBackgroundTask;
@@ -34,7 +34,7 @@ public class FilesPanel {
 	protected boolean focused = false;
 	private VirtualFile currentParent;
 	private final VirtualFile sysRoot;
-	private final RetroBoxDialog.FileChooserConfig config;
+	private final RetroXDialogs.FileChooserConfig config;
 
 	@SuppressWarnings("unused")
 	static class FolderInfo {
@@ -47,7 +47,7 @@ public class FilesPanel {
 	}
 	
 	public FilesPanel(Activity activity, VirtualFile sysRoot, ListView listView, TextView txtStorage, ImageView iconStorage, TextView txtPanelStatus1, TextView txtPanelStatus2,
-			final Callback<VirtualFile> openCallback, final RetroBoxDialog.FileChooserConfig config) {
+			final Callback<VirtualFile> openCallback, final RetroXDialogs.FileChooserConfig config) {
 		this.activity = activity;
 		this.lv = listView;
 		this.txtStorage = txtStorage;
@@ -193,9 +193,9 @@ public class FilesPanel {
 				lv.requestFocus();
 
 				if (folderInfo.error != null) {
-					RetroBoxDialog.message(activity, folderInfo.error);
+					RetroXDialogs.message(activity, folderInfo.error);
 				} else if (folderInfo.e != null) {
-					RetroBoxDialog.showException(activity, folderInfo.e, null);
+					RetroXDialogs.showException(activity, folderInfo.e, null);
 				}
 			}
 		};

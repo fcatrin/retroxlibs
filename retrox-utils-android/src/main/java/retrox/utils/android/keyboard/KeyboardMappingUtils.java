@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import retrox.utils.android.RetroBoxDialog;
+import retrox.utils.android.RetroXDialogs;
 import retrox.utils.android.vinput.Mapper;
 import xtvapps.core.Callback;
 import xtvapps.core.CoreUtils;
@@ -27,7 +27,7 @@ public class KeyboardMappingUtils {
 		}
 		
 		
-		RetroBoxDialog.select(activity, "Select gamepad to map", options, new Callback<String>() {
+		RetroXDialogs.select(activity, "Select gamepad to map", options, new Callback<String>() {
 			@Override
 			public void onResult(String index) {
 				final int gamepad = CoreUtils.str2i(index);

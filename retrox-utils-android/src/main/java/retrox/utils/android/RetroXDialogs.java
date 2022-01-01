@@ -43,8 +43,8 @@ import xtvapps.core.android.AndroidStandardDialogs;
 import xtvapps.core.content.KeyValue;
 import xtvapps.vfile.VirtualFile;
 
-public class RetroBoxDialog extends AndroidStandardDialogs {
-	protected static final String LOGTAG = RetroBoxDialog.class.getSimpleName();
+public class RetroXDialogs extends AndroidStandardDialogs {
+	protected static final String LOGTAG = RetroXDialogs.class.getSimpleName();
 	
 	private static final int DIALOG_OPENING_THRESHOLD = 800;
 	private static SimpleCallback cbListDialogDismiss = null;
@@ -806,7 +806,7 @@ public class RetroBoxDialog extends AndroidStandardDialogs {
 	public void confirm(LocalContext context, String title, String message, String optYes, String optNo, SimpleCallback callback) {
 		if (context instanceof AndroidLocalContext) {
 			Activity activity = ((AndroidLocalContext)context).getActivity();
-			RetroBoxDialog.confirm(activity, title, message, optYes, optNo, callback, null);
+			RetroXDialogs.confirm(activity, title, message, optYes, optNo, callback, null);
 		}
 	}
 
@@ -814,7 +814,7 @@ public class RetroBoxDialog extends AndroidStandardDialogs {
 	public void message(LocalContext context, String title, String message, SimpleCallback callback) {
 		if (context instanceof AndroidLocalContext) {
 			Activity activity = ((AndroidLocalContext)context).getActivity();
-			RetroBoxDialog.message(activity, title, message, callback);
+			RetroXDialogs.message(activity, title, message, callback);
 		}
 	}
 
@@ -822,7 +822,7 @@ public class RetroBoxDialog extends AndroidStandardDialogs {
 	public void select(LocalContext context, String title, List<ListOption> options, Callback<String> callback, SimpleCallback dismissCallback) {
 		if (context instanceof AndroidLocalContext) {
 			Activity activity = ((AndroidLocalContext)context).getActivity();
-			RetroBoxDialog.select(activity, title, options, callback, dismissCallback);
+			RetroXDialogs.select(activity, title, options, callback, dismissCallback);
 		}
 	}
 

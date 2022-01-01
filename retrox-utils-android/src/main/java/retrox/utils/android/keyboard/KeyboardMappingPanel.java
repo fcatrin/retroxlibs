@@ -13,7 +13,7 @@ import java.util.Map;
 import retrox.utils.android.GamepadView;
 
 import retrox.utils.android.R;
-import retrox.utils.android.RetroBoxDialog;
+import retrox.utils.android.RetroXDialogs;
 import retrox.utils.android.RetroXUtils;
 import xtvapps.core.CoreUtils;
 import xtvapps.core.SimpleCallback;
@@ -90,7 +90,7 @@ public class KeyboardMappingPanel {
                 callback.onResult();
             } catch(Exception e) {
                 String msg = "There was an error trying to save the keymap: " + e.getMessage();
-                RetroBoxDialog.message(activity, msg);
+                RetroXDialogs.message(activity, msg);
             }
         });
 		
