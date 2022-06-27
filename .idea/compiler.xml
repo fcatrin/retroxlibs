@@ -6,6 +6,8 @@
       <module name="retroxlibs.retrox-utils-android" target="11" />
       <module name="retroxlibs.xtv-core-android" target="11" />
       <module name="retroxlibs.xtv-vfile" target="1.8" />
+      <module name="retroxlibs.xtv-vfile.main" target="1.8" />
+      <module name="retroxlibs.xtv-vfile.test" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

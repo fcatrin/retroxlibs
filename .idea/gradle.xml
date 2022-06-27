@@ -13,10 +13,10 @@
             <option value="$PROJECT_DIR$/retrox-utils-android" />
             <option value="$PROJECT_DIR$/xtv-core" />
             <option value="$PROJECT_DIR$/xtv-core-android" />
+            <option value="$PROJECT_DIR$/xtv-core-desktop" />
             <option value="$PROJECT_DIR$/xtv-vfile" />
           </set>
         </option>
-        <option name="resolveModulePerSourceSet" value="false" />
       </GradleProjectSettings>
     </option>
   </component>
