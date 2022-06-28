@@ -23,7 +23,7 @@ public class DesktopLocalContext extends LocalContext {
 
     @Override
     public File getLocalStorage() {
-        return null;
+        return homeDir;
     }
 
     @Override
