@@ -1,10 +1,18 @@
 package xtvapps.core;
 
-public interface Preferences {
-    String getString(String key, String defaultValue);
-    boolean getBoolean(String key, boolean defaultValue);
+public abstract class Preferences {
+    public String getString(String key) {
+        return getString(key, null);
+    }
 
-    PreferencesEditor edit();
+    public boolean getBoolean(String key) {
+        return getBoolean(key, false);
+    }
+
+    public abstract String getString(String key, String defaultValue);
+    public abstract boolean getBoolean(String key, boolean defaultValue);
+
+    public abstract PreferencesEditor edit();
 }
 
 

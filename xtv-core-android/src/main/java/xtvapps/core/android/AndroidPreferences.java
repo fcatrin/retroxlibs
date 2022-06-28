@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 import xtvapps.core.Preferences;
 import xtvapps.core.PreferencesEditor;
 
-public class AndroidPreferences implements Preferences {
+public class AndroidPreferences extends Preferences {
     private final SharedPreferences sharedPreferences;
 
     public AndroidPreferences(SharedPreferences sharedPreferences) {
