@@ -7,6 +7,14 @@ import xtvapps.core.Preferences;
 import xtvapps.core.SimpleCallback;
 
 public class DesktopLocalContext extends LocalContext {
+    File dataDir;
+    File homeDir;
+
+    public DesktopLocalContext(String appName) {
+        homeDir = new File(System.getProperty("user.home"));
+        dataDir = new File(homeDir, ".local/share/xtv/" + appName);
+        dataDir.mkdirs();
+    }
 
     @Override
     public void toast(String message) {
@@ -20,7 +28,7 @@ public class DesktopLocalContext extends LocalContext {
 
     @Override
     public Preferences getPreferences(String name) {
-        return null;
+        return new DesktopPreferences(new File(dataDir, name + ".json"));
     }
 
     @Override
