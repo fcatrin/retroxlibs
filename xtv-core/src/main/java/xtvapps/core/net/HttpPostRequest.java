@@ -9,7 +9,7 @@ public class HttpPostRequest extends HttpRequest {
 
     InputStream body;
     int knownSize;
-    String mime;
+    public String mime;
 
     public HttpPostRequest(String url) {
         super(url);
