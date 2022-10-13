@@ -99,6 +99,12 @@ public class BitmapWorkerTaskPersistent extends SimpleBackgroundTask {
 		imageView.setTag(R.string.image_loaded_id, tag);
 	}
 
+	public static void resetImage(ImageView imageView) {
+		imageView.setImageBitmap(null);
+		imageView.setTag(R.string.image_loading_id, "");
+		imageView.setTag(R.string.image_loaded_id, "");
+	}
+
 	private String getLoadingTag() {
 		ImageView imageView = imageViewReference.get();
 		return (String)imageView.getTag(R.string.image_loading_id);
