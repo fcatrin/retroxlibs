@@ -153,10 +153,81 @@ public class RetroXDialogs extends AndroidStandardDialogs {
 				activeButton.requestFocus();
 			}
 		});
-
 	}
 
-	public static void showAlertCustom(final Activity activity, int viewResourceId, 
+	public static void custom(final Activity activity, View view,
+							  String optYes, String optNo,
+							  final SimpleCallback callback) {
+
+		activity.findViewById(R.id.modal_dialog_custom).setOnClickListener(v -> closeDialog(activity, R.id.modal_dialog_custom, new SimpleCallback() {
+			@Override
+			public void onResult() {
+				if (callback != null) {
+					callback.onError();
+					callback.onFinally();
+				}
+			}
+		}));
+
+		ViewGroup container = activity.findViewById(R.id.modal_dialog_custom_container);
+		container.removeAllViews();
+		container.addView(view);
+
+		final Button btnYes = activity.findViewById(R.id.btnDialogCustomPositive);
+		final Button btnNo = activity.findViewById(R.id.btnDialogCustomNegative);
+
+		final boolean hasNoButton = !CoreUtils.isEmptyString(optNo);
+		final boolean hasButtons = optYes != null || optNo != null;
+
+		View actions = activity.findViewById(R.id.modal_dialog_custom_buttons);
+		if (!hasButtons) {
+			actions.setVisibility(View.GONE);
+		} else {
+			actions.setVisibility(View.VISIBLE);
+
+			if (CoreUtils.isEmptyString(optYes)) optYes = "OK";
+
+			btnYes.setText(optYes);
+
+			btnYes.setOnClickListener(v -> closeDialog(activity, R.id.modal_dialog_custom, new SimpleCallback() {
+				@Override
+				public void onResult() {
+					if (callback != null) {
+						callback.onResult();
+						callback.onFinally();
+					}
+				}
+			}));
+
+			if (hasNoButton) {
+				btnNo.setVisibility(View.VISIBLE);
+				btnNo.setText(optNo);
+				btnNo.setOnClickListener(v -> closeDialog(activity, R.id.modal_dialog_custom, new SimpleCallback() {
+					@Override
+					public void onResult() {
+						if (callback != null) callback.onError();
+						if (callback != null) callback.onFinally();
+					}
+				}));
+			} else {
+				btnNo.setVisibility(View.GONE);
+			}
+		}
+
+		openDialog(activity, R.id.modal_dialog_custom, new SimpleCallback() {
+			@Override
+			public void onResult() {
+				if (hasButtons) {
+					Button activeButton = hasNoButton ? btnNo : btnYes;
+					activeButton.setFocusable(true);
+					activeButton.setFocusableInTouchMode(true);
+					activeButton.requestFocus();
+				}
+			}
+		});
+	}
+
+	public static void custom(final Activity activity, int viewResourceId,
 			Callback<View> customViewCallback, 
 			final Callback<View> customViewFocusCallback, 
 			String optYes, String optNo, 
