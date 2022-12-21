@@ -24,6 +24,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -449,5 +450,11 @@ public final class CoreUtils {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static String strCapitalizeFirst(String s) {
+		if (s == null) return s;
+		if (s.length() == 1) return s.toUpperCase(Locale.ROOT);
+		return s.substring(0, 1).toUpperCase(Locale.ROOT) + s.substring(1);
 	}
 }
