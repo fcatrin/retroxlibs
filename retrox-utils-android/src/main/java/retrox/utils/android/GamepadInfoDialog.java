@@ -83,9 +83,9 @@ public class GamepadInfoDialog {
 		return false;
 	}
 	
-	public void updateGamepadVisible(Activity activity, boolean hasGamepad) {
-		boolean hasLabels = hasLabels(activity) && hasGamepad;
-		activity.findViewById(R.id.gamepadDialogFrame).setVisibility(hasLabels?View.VISIBLE:View.GONE);
+	public void updateGamepadVisible(Activity activity) {
+		boolean hasLabels = hasLabels(activity);
+		activity.findViewById(R.id.gamepadDialogFrame).setVisibility(hasLabels ? View.VISIBLE : View.GONE);
 	}
 	
 	public void setInfo(String textTop, String textBottom) {

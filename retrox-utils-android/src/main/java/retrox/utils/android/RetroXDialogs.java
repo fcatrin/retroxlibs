@@ -400,8 +400,8 @@ public class RetroXDialogs extends AndroidStandardDialogs {
 	}
 	
 	// ingame gamepad dialog has fixed labels, and alwas calls callback on close
-	public static void showGamepadDialogIngame(final Activity activity, GamepadInfoDialog dialog, boolean hasGamepad, final SimpleCallback callback) {
-		dialog.updateGamepadVisible(activity, hasGamepad);
+	public static void showGamepadDialogIngame(final Activity activity, GamepadInfoDialog dialog, final SimpleCallback callback) {
+		dialog.updateGamepadVisible(activity);
 		activity.findViewById(R.id.modal_dialog_gamepad).setOnClickListener(v -> dismissGamepadDialog(activity, callback));
 		
 		openDialog(activity, R.id.modal_dialog_gamepad, null);
@@ -425,7 +425,7 @@ public class RetroXDialogs extends AndroidStandardDialogs {
 		
 				
 		dialog.setLabels(labels);
-		dialog.updateGamepadVisible(activity, hasGamepad);
+		dialog.updateGamepadVisible(activity);
 		
 		dialog.setInfo(textTop, textBottom);
 		openDialog(activity, R.id.modal_dialog_gamepad, new SimpleCallback() {
