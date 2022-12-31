@@ -46,6 +46,7 @@
                 android:numColumns="3"
                 android:rowCount="2"
                 android:stretchMode="columnWidth"
+                android:visibility="invisible"
                 android:verticalSpacing="@dimen/spacing_small" />
 
             <LinearLayout
@@ -73,6 +74,7 @@
                     android:id="@id/btnSaveStateCancel"
                     style="@style/ActionButton"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_weight="0"
                     android:paddingLeft="@dimen/spacing_normal"
                     android:paddingRight="@dimen/spacing_normal"

@@ -1,12 +1,15 @@
 package retrox.utils.android;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,11 +26,13 @@ import xtvapps.core.android.AndroidFonts;
 public class SaveStateSelectorAdapter extends BaseAdapter {
 	private static final String LOGTAG = SaveStateSelectorAdapter.class.getSimpleName();
 	final List<SaveStateInfo> content;
-	private final Context context;
+	private final Activity activity;
+	public static boolean isCRT = false;
+	public static int shotFontSize = 0;
 	
-	public SaveStateSelectorAdapter(Context context, List<SaveStateInfo> content, int selected) {
+	public SaveStateSelectorAdapter(Activity activity, List<SaveStateInfo> content, int selected) {
+		this.activity = activity;
 		this.content = content;
-		this.context = context;
 
 		List<SaveStateInfo> ordered = new ArrayList<>(content);
 		
@@ -47,18 +52,18 @@ public class SaveStateSelectorAdapter extends BaseAdapter {
 			info.setSelected(i==selected);
 			info.setSlotInfo("Slot " + (i+1) + ":");
 			
-			String infoText = context.getString(R.string.slot_empty);
+			String infoText = activity.getString(R.string.slot_empty);
 			long ts = info.getTimestamp();
 			if (ts!=0) {
 				DateFormat df = DateFormat.getDateTimeInstance();
 				infoText = df.format(new Date(ts));
 				if (info.getOrder() == 0) {
-					infoText += " (" + 
-							context.getString(R.string.slot_latest) 
+					infoText += " (" +
+							activity.getString(R.string.slot_latest)
 							+  ")";
 				} else {
-					infoText += " (" + 
-							context.getString(R.string.slot_latest_n).replace("{n}", String.valueOf(info.getOrder()))
+					infoText += " (" +
+							activity.getString(R.string.slot_latest_n).replace("{n}", String.valueOf(info.getOrder()))
 							+ ")";
 				}
 			}
@@ -117,6 +122,18 @@ public class SaveStateSelectorAdapter extends BaseAdapter {
 		ImageView imageScreenshot = view.findViewById(R.id.savestate_image);
 		TextView textView = view.findViewById(R.id.savestate_label);
 
+		if (isCRT) {
+			int imageWidth = (int)(activity.getResources().getDimensionPixelSize(R.dimen.screenshot_width) *  4.0f / 3.0f);
+			((ViewGroup.MarginLayoutParams)imageScreenshot.getLayoutParams()).width = imageWidth;
+
+			int textWidth = (int)(activity.getResources().getDimensionPixelSize(R.dimen.text_normal) *  4.0f / 3.0f);
+			((ViewGroup.MarginLayoutParams)textView.getLayoutParams()).width = textWidth;
+
+			textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, shotFontSize);
+		}
+
+		updateGridSize(view);
+
 		final SaveStateInfo info = (SaveStateInfo)getItem(position);
 		
 		imageScreenshot.setImageBitmap(null);
@@ -129,15 +146,34 @@ public class SaveStateSelectorAdapter extends BaseAdapter {
 		}
 		
 		if (!info.exists()) {
-			textView.setText(context.getString(R.string.slot_v_empty));
+			textView.setText(activity.getString(R.string.slot_v_empty));
 		} else if (info.getOrder() == 0) {
-			textView.setText(context.getString(R.string.slot_v_latest));
+			textView.setText(activity.getString(R.string.slot_v_latest));
 		} else {
-			String chars = context.getString(R.string.slot_v_latest_n);
+			String chars = activity.getString(R.string.slot_v_latest_n);
 			textView.setText(chars.substring(0,  (info.getOrder())*2));
 		}
 
 		return view;
+	}
+
+	private boolean gridSizeUpdated = false;
+	private void updateGridSize(View view) {
+		if (gridSizeUpdated) return;
+		gridSizeUpdated = true;
+
+		GridView grid = (GridView)activity.findViewById(R.id.savestates_grid);
+
+		int padding = view.getPaddingLeft() + view.getPaddingRight();
+		int imageWidth = view.findViewById(R.id.savestate_image).getLayoutParams().width;
+		int textWidth  = view.findViewById(R.id.savestate_label).getLayoutParams().width;
+		int separator = grid.getHorizontalSpacing();
+		int cellWidth = imageWidth + textWidth + padding;
+		int columns = grid.getNumColumns();
+
+		int width = columns * cellWidth + (columns-1) * separator;
+		grid.getLayoutParams().width = width;
+		grid.setVisibility(View.VISIBLE);
 	}
 
 }
