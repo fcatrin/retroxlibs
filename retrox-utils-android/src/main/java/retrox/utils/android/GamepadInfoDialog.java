@@ -27,7 +27,11 @@ public class GamepadInfoDialog {
 			R.id.gamepadLabelX,
 			R.id.gamepadLabelY,
 			R.id.gamepadLabelSELECT,
-			R.id.gamepadLabelSTART 
+			R.id.gamepadLabelSTART,
+			R.id.gamepadLabelLeft,
+			R.id.gamepadLabelRight,
+			R.id.gamepadLabelUp,
+			R.id.gamepadLabelDown,
 	};
 	
 	public GamepadInfoDialog(Activity activity) {

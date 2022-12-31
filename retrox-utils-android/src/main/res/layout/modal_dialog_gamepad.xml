@@ -27,12 +27,26 @@
 
         <ImageView
             android:id="@+id/gamepadDialogImage"
-            android:layout_width="@dimen/gamepad_width"
-            android:layout_height="@dimen/gamepad_height"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:alpha="0.8"
             android:src="@drawable/gamepad"
+            android:scaleType="fitXY"
             tools:ignore="ContentDescription" />
+        <TextView
+            android:id="@+id/gamepadLabelLeft"
+            style="@style/GamepadLabel" />
+        <TextView
+            android:id="@+id/gamepadLabelRight"
+            style="@style/GamepadLabel" />
 
+        <TextView
+            android:id="@+id/gamepadLabelUp"
+            style="@style/GamepadLabel" />
+
+        <TextView
+            android:id="@+id/gamepadLabelDown"
+            style="@style/GamepadLabel" />
         <TextView
             android:id="@+id/gamepadLabelL2"
             style="@style/GamepadLabel" />
